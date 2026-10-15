@@ -1,0 +1,281 @@
+ranking,scenario,k,model,best_model,level_lo,level_hi,gain_lo,gain_hi,d_vs_best,d_vs_best_lo,d_vs_best_hi
+expected_profit,P1,0.3,Logistic Regression,CatBoost,716596.4,787050.8,351639.4,402327.9,-6312.6,-15663.2,2814.8
+expected_profit,P1,0.3,Decision Tree,CatBoost,705592.9,776123.9,341842.9,393097.6,-15546.8,-26916.9,-5074.2
+expected_profit,P1,0.3,Random Forest,CatBoost,703379.9,772797.2,338539.3,389240.3,-19355.5,-32449.7,-6228.1
+expected_profit,P1,0.3,Gradient Boosting,CatBoost,717044.1,787036.2,353985.0,404399.8,-4280.6,-13279.2,4506.0
+expected_profit,P1,0.3,XGBoost,CatBoost,715977.2,786288.7,352331.6,402870.7,-6376.7,-15257.1,2431.6
+expected_profit,P1,0.3,LightGBM,CatBoost,717613.8,787118.6,353757.4,403429.9,-4041.7,-12720.8,4776.5
+expected_profit,P1,0.3,CatBoost,CatBoost,724046.3,791530.5,359180.5,408447.1,0.0,0.0,0.0
+expected_profit,P1,0.3,AdaBoost,CatBoost,719467.3,788388.2,355004.1,405342.0,-2951.3,-11818.7,5249.5
+expected_profit,P1,0.3,Extra Trees,CatBoost,706248.1,774330.2,341040.4,391401.4,-16814.2,-29024.8,-5657.6
+expected_profit,P1,0.3,Neural Network,CatBoost,721331.5,787951.4,355463.1,404069.8,-3319.4,-13079.1,6889.4
+expected_profit,P1,0.4,Logistic Regression,XGBoost,845420.0,916356.0,360549.9,404974.9,9637.7,464.0,19353.4
+expected_profit,P1,0.4,Decision Tree,XGBoost,828926.1,900601.6,343857.1,389588.5,-6878.7,-17554.8,3518.9
+expected_profit,P1,0.4,Random Forest,XGBoost,821614.3,894674.9,335478.0,382597.8,-14140.5,-25618.8,-2110.4
+expected_profit,P1,0.4,Gradient Boosting,XGBoost,842363.0,912741.1,357047.2,402060.7,5844.8,-961.3,13298.4
+expected_profit,P1,0.4,XGBoost,XGBoost,836128.2,907456.2,350514.5,396134.5,0.0,0.0,0.0
+expected_profit,P1,0.4,LightGBM,XGBoost,837748.1,909335.4,352046.5,398439.5,2181.7,-4732.3,9128.4
+expected_profit,P1,0.4,CatBoost,XGBoost,841693.8,912878.0,356305.0,401189.2,5270.1,-3134.7,13267.5
+expected_profit,P1,0.4,AdaBoost,XGBoost,833186.1,905742.5,348546.6,394200.1,-1795.7,-11854.0,7744.1
+expected_profit,P1,0.4,Extra Trees,XGBoost,824879.9,897806.3,339819.1,385982.3,-10510.2,-23460.2,1305.9
+expected_profit,P1,0.4,Neural Network,XGBoost,834137.4,905217.0,347970.7,393078.0,-2630.6,-13438.6,7498.1
+expected_profit,P1,0.5,Logistic Regression,XGBoost,941436.3,1014941.5,334833.1,375744.1,10869.3,2612.2,19531.3
+expected_profit,P1,0.5,Decision Tree,XGBoost,931472.6,1003192.8,325307.2,364272.4,-656.1,-10363.3,8906.5
+expected_profit,P1,0.5,Random Forest,XGBoost,927922.4,1001906.1,321060.7,361669.3,-3728.2,-13574.8,7141.2
+expected_profit,P1,0.5,Gradient Boosting,XGBoost,940769.1,1011846.9,333443.4,372961.4,8122.4,1834.6,14672.6
+expected_profit,P1,0.5,XGBoost,XGBoost,931670.7,1003513.4,324663.0,364095.3,0.0,0.0,0.0
+expected_profit,P1,0.5,LightGBM,XGBoost,934799.6,1007051.1,329017.5,368351.3,3600.3,-3037.0,10019.9
+expected_profit,P1,0.5,CatBoost,XGBoost,939487.3,1012769.2,332111.6,372273.6,7404.7,252.9,14536.4
+expected_profit,P1,0.5,AdaBoost,XGBoost,936755.6,1009428.7,330999.5,369659.0,5452.4,-3702.4,14228.7
+expected_profit,P1,0.5,Extra Trees,XGBoost,929407.5,1002712.6,321899.8,362460.3,-3640.5,-14273.3,6769.2
+expected_profit,P1,0.5,Neural Network,XGBoost,934342.6,1007604.8,328042.4,368277.8,3470.9,-5546.1,13088.7
+expected_profit,P1,0.6,Logistic Regression,CatBoost,1022359.0,1097628.0,295190.4,329739.0,-5601.7,-12680.5,1811.6
+expected_profit,P1,0.6,Decision Tree,CatBoost,1014187.5,1088508.7,286321.3,320546.7,-14226.5,-23627.6,-4527.0
+expected_profit,P1,0.6,Random Forest,CatBoost,1018693.6,1093525.1,290105.1,324952.6,-9853.0,-19538.5,-262.9
+expected_profit,P1,0.6,Gradient Boosting,CatBoost,1028680.7,1102582.2,301449.6,334917.0,100.6,-6578.1,7251.3
+expected_profit,P1,0.6,XGBoost,CatBoost,1026877.9,1101192.6,298392.5,332599.4,-1634.3,-7793.3,5058.0
+expected_profit,P1,0.6,LightGBM,CatBoost,1023333.4,1096879.3,295212.7,328396.7,-5617.4,-12184.9,1338.5
+expected_profit,P1,0.6,CatBoost,CatBoost,1029226.6,1103130.1,300472.8,333714.4,0.0,0.0,0.0
+expected_profit,P1,0.6,AdaBoost,CatBoost,1026567.3,1098990.4,299435.3,332058.2,-2263.3,-9888.9,5389.4
+expected_profit,P1,0.6,Extra Trees,CatBoost,1010821.1,1084572.7,282435.7,316524.2,-18200.9,-27573.4,-7136.0
+expected_profit,P1,0.6,Neural Network,CatBoost,1020416.0,1094627.3,293499.6,326729.4,-7538.1,-16448.8,1013.8
+expected_profit,P1,0.7,Logistic Regression,Gradient Boosting,1097249.3,1171146.1,248838.6,274419.1,608.4,-6446.3,7460.6
+expected_profit,P1,0.7,Decision Tree,Gradient Boosting,1081241.0,1156452.9,232755.5,258539.2,-15396.0,-23637.7,-6842.8
+expected_profit,P1,0.7,Random Forest,Gradient Boosting,1086221.1,1161470.5,236933.7,264707.1,-9930.1,-18483.0,-902.5
+expected_profit,P1,0.7,Gradient Boosting,Gradient Boosting,1096688.1,1170259.7,247310.3,273874.4,0.0,0.0,0.0
+expected_profit,P1,0.7,XGBoost,Gradient Boosting,1095171.2,1170336.7,246763.4,274150.0,-241.7,-5805.5,5247.5
+expected_profit,P1,0.7,LightGBM,Gradient Boosting,1092585.3,1168617.0,245003.2,272124.0,-1995.7,-8364.1,3254.6
+expected_profit,P1,0.7,CatBoost,Gradient Boosting,1097696.9,1171858.3,248681.0,274508.8,516.5,-6118.6,7099.5
+expected_profit,P1,0.7,AdaBoost,Gradient Boosting,1093896.4,1166457.3,245364.7,271824.5,-2704.8,-10524.8,5001.8
+expected_profit,P1,0.7,Extra Trees,Gradient Boosting,1082099.7,1155921.5,231744.4,259212.7,-15182.0,-24294.3,-5478.2
+expected_profit,P1,0.7,Neural Network,Gradient Boosting,1092917.3,1167706.4,244384.4,272053.0,-3009.4,-11550.6,4828.6
+expected_profit,P1,0.8,Logistic Regression,LightGBM,1148913.2,1225113.1,179715.7,198956.2,1509.5,-5253.4,8440.5
+expected_profit,P1,0.8,Decision Tree,LightGBM,1135242.8,1211411.7,165725.5,185139.3,-12761.0,-20829.5,-4462.6
+expected_profit,P1,0.8,Random Forest,LightGBM,1141699.2,1218056.6,171592.6,191758.4,-5997.5,-13349.6,1788.1
+expected_profit,P1,0.8,Gradient Boosting,LightGBM,1149865.8,1224146.4,178154.8,198342.4,875.2,-4856.0,6414.4
+expected_profit,P1,0.8,XGBoost,LightGBM,1148474.7,1224046.6,178423.1,198933.9,927.0,-3770.7,5690.2
+expected_profit,P1,0.8,LightGBM,LightGBM,1147095.1,1223634.6,177751.1,197782.9,0.0,0.0,0.0
+expected_profit,P1,0.8,CatBoost,LightGBM,1146530.1,1222661.7,176840.6,196192.3,-1474.6,-7909.0,5630.0
+expected_profit,P1,0.8,AdaBoost,LightGBM,1145895.7,1220217.0,175601.2,194991.7,-2882.6,-10107.5,4795.2
+expected_profit,P1,0.8,Extra Trees,LightGBM,1136951.5,1211868.1,167428.2,187234.6,-10711.1,-18588.2,-1879.2
+expected_profit,P1,0.8,Neural Network,LightGBM,1145725.2,1220608.1,174823.8,196131.7,-1912.8,-9259.0,5681.3
+expected_profit,P1,0.9,Logistic Regression,LightGBM,1186661.5,1262473.4,96222.7,107380.7,1563.0,-4691.9,7525.7
+expected_profit,P1,0.9,Decision Tree,LightGBM,1177509.0,1252563.4,87125.1,98193.5,-7910.8,-15182.2,-945.4
+expected_profit,P1,0.9,Random Forest,LightGBM,1182737.4,1258153.6,91438.4,104912.1,-2345.4,-9208.8,4392.0
+expected_profit,P1,0.9,Gradient Boosting,LightGBM,1188178.0,1262261.0,95664.3,109006.0,1672.3,-3082.2,6464.0
+expected_profit,P1,0.9,XGBoost,LightGBM,1185473.1,1260665.0,93941.1,107538.4,354.6,-3779.7,4628.5
+expected_profit,P1,0.9,LightGBM,LightGBM,1184472.6,1260554.8,93463.7,108088.3,0.0,0.0,0.0
+expected_profit,P1,0.9,CatBoost,LightGBM,1187261.4,1262282.9,96393.0,109295.9,1805.8,-3997.6,7525.6
+expected_profit,P1,0.9,AdaBoost,LightGBM,1181173.5,1256064.2,90884.0,102477.6,-4043.1,-10710.7,2416.7
+expected_profit,P1,0.9,Extra Trees,LightGBM,1180946.3,1255965.0,89532.8,102468.8,-4836.0,-12191.3,2302.0
+expected_profit,P1,0.9,Neural Network,LightGBM,1185865.2,1260223.1,93077.0,108433.2,-341.4,-7076.0,6668.2
+expected_profit,P2_3%,0.3,Logistic Regression,CatBoost,454585.5,517337.6,237613.6,282484.6,-4651.1,-15004.3,4644.1
+expected_profit,P2_3%,0.3,Decision Tree,CatBoost,431814.3,495641.1,214896.6,260821.5,-26225.5,-38605.3,-14207.0
+expected_profit,P2_3%,0.3,Random Forest,CatBoost,443061.3,504714.1,225836.0,270510.5,-16404.8,-30367.4,-2885.9
+expected_profit,P2_3%,0.3,Gradient Boosting,CatBoost,458637.8,520804.2,241235.8,286380.7,-671.1,-9356.8,9025.8
+expected_profit,P2_3%,0.3,XGBoost,CatBoost,454635.9,517393.3,238342.0,282791.8,-3924.8,-12963.7,5281.7
+expected_profit,P2_3%,0.3,LightGBM,CatBoost,453201.8,515082.8,234938.3,280953.7,-6243.8,-15840.3,3555.2
+expected_profit,P2_3%,0.3,CatBoost,CatBoost,458760.0,523202.6,242456.3,287915.2,0.0,0.0,0.0
+expected_profit,P2_3%,0.3,AdaBoost,CatBoost,448179.0,512457.3,230359.2,277773.2,-10763.9,-20631.6,-1126.2
+expected_profit,P2_3%,0.3,Extra Trees,CatBoost,443876.9,504239.1,225870.4,270521.3,-15603.0,-28807.4,-2405.9
+expected_profit,P2_3%,0.3,Neural Network,CatBoost,459433.6,519980.4,241389.1,285451.9,-1117.3,-11664.1,9597.5
+expected_profit,P2_3%,0.4,Logistic Regression,XGBoost,530587.0,594615.7,240871.2,281714.5,-3186.8,-13973.1,7217.3
+expected_profit,P2_3%,0.4,Decision Tree,XGBoost,507784.3,573708.5,218607.7,259576.4,-25115.0,-37275.6,-12867.0
+expected_profit,P2_3%,0.4,Random Forest,XGBoost,506151.2,571492.8,215377.0,258241.1,-27328.9,-40522.1,-13979.2
+expected_profit,P2_3%,0.4,Gradient Boosting,XGBoost,528189.8,594204.4,239193.0,280312.8,-4068.4,-12182.6,3591.5
+expected_profit,P2_3%,0.4,XGBoost,XGBoost,532665.0,598070.4,243744.8,284972.5,0.0,0.0,0.0
+expected_profit,P2_3%,0.4,LightGBM,XGBoost,525361.7,589077.1,235283.8,276185.7,-8536.1,-16480.2,-951.7
+expected_profit,P2_3%,0.4,CatBoost,XGBoost,529586.2,593747.5,239571.3,281997.7,-4209.4,-13352.7,4735.7
+expected_profit,P2_3%,0.4,AdaBoost,XGBoost,527220.7,592861.7,237703.4,278717.3,-5502.4,-15843.0,4569.5
+expected_profit,P2_3%,0.4,Extra Trees,XGBoost,507210.0,571150.7,216066.6,257997.0,-27751.4,-41141.5,-14263.0
+expected_profit,P2_3%,0.4,Neural Network,XGBoost,524155.9,588079.7,234153.3,275394.5,-9391.8,-20013.9,1273.2
+expected_profit,P2_3%,0.5,Logistic Regression,XGBoost,582128.9,650010.4,220898.9,257554.8,3204.2,-7147.4,13431.8
+expected_profit,P2_3%,0.5,Decision Tree,XGBoost,565550.9,634183.8,203610.7,240969.0,-14267.7,-25804.1,-2668.0
+expected_profit,P2_3%,0.5,Random Forest,XGBoost,564205.3,630254.8,201800.5,239690.7,-16550.7,-28712.4,-3143.3
+expected_profit,P2_3%,0.5,Gradient Boosting,XGBoost,580776.4,647083.3,219058.0,256232.8,613.7,-6608.0,7952.0
+expected_profit,P2_3%,0.5,XGBoost,XGBoost,578878.6,645410.2,216847.4,254099.0,0.0,0.0,0.0
+expected_profit,P2_3%,0.5,LightGBM,XGBoost,577519.1,642553.2,215964.4,251777.4,-2706.5,-10208.4,4307.4
+expected_profit,P2_3%,0.5,CatBoost,XGBoost,582443.0,649149.9,220489.4,257663.0,3577.0,-5100.9,11652.2
+expected_profit,P2_3%,0.5,AdaBoost,XGBoost,585840.7,651721.6,224233.6,259766.5,6161.8,-4227.3,16402.2
+expected_profit,P2_3%,0.5,Extra Trees,XGBoost,563676.8,631939.7,201296.8,239099.1,-16015.8,-28771.6,-3424.8
+expected_profit,P2_3%,0.5,Neural Network,XGBoost,576159.7,643045.7,214764.3,250907.0,-3238.7,-13262.7,7310.4
+expected_profit,P2_3%,0.6,Logistic Regression,XGBoost,624513.2,692799.7,191294.2,222400.4,-4140.6,-14234.2,5756.4
+expected_profit,P2_3%,0.6,Decision Tree,XGBoost,609738.8,680843.7,177282.0,208577.3,-18072.1,-29430.6,-6861.5
+expected_profit,P2_3%,0.6,Random Forest,XGBoost,609486.4,677879.8,175071.5,206849.3,-19722.8,-30996.1,-7636.2
+expected_profit,P2_3%,0.6,Gradient Boosting,XGBoost,628481.6,694926.7,193729.1,224944.1,-1938.8,-8856.6,5724.9
+expected_profit,P2_3%,0.6,XGBoost,XGBoost,627796.4,697101.6,194293.2,226849.9,0.0,0.0,0.0
+expected_profit,P2_3%,0.6,LightGBM,XGBoost,623252.5,689255.6,188229.9,220554.4,-6889.2,-14852.2,-50.0
+expected_profit,P2_3%,0.6,CatBoost,XGBoost,629427.1,697846.8,195242.2,227352.9,747.0,-6913.1,9299.2
+expected_profit,P2_3%,0.6,AdaBoost,XGBoost,631263.5,697229.7,197318.1,227595.2,1991.4,-8165.4,12378.2
+expected_profit,P2_3%,0.6,Extra Trees,XGBoost,605725.5,674448.4,170301.9,203893.8,-23972.9,-36183.0,-12001.6
+expected_profit,P2_3%,0.6,Neural Network,XGBoost,621048.7,687714.0,186613.7,218046.0,-9097.6,-18207.8,253.2
+expected_profit,P2_3%,0.7,Logistic Regression,CatBoost,658558.7,728981.1,153516.0,180327.1,-9793.8,-18720.3,-1951.6
+expected_profit,P2_3%,0.7,Decision Tree,CatBoost,644329.5,714702.6,139510.4,164958.9,-25081.7,-35246.2,-14195.0
+expected_profit,P2_3%,0.7,Random Forest,CatBoost,649761.0,719197.0,143810.1,169544.1,-20286.1,-31149.2,-8847.1
+expected_profit,P2_3%,0.7,Gradient Boosting,CatBoost,666841.6,734394.7,159794.0,186227.7,-3941.9,-12160.4,4242.2
+expected_profit,P2_3%,0.7,XGBoost,CatBoost,663998.4,732631.4,158050.2,184881.0,-5365.7,-12389.7,2859.1
+expected_profit,P2_3%,0.7,LightGBM,CatBoost,661386.2,729964.4,154450.9,181746.5,-8852.7,-17075.7,-507.4
+expected_profit,P2_3%,0.7,CatBoost,CatBoost,670660.4,738245.6,163027.9,189511.5,0.0,0.0,0.0
+expected_profit,P2_3%,0.7,AdaBoost,CatBoost,665463.2,734518.2,160866.6,185546.0,-3672.2,-12780.3,5111.5
+expected_profit,P2_3%,0.7,Extra Trees,CatBoost,645802.1,714338.1,138712.7,164627.9,-24692.5,-35934.8,-13547.9
+expected_profit,P2_3%,0.7,Neural Network,CatBoost,662168.0,729060.8,154401.4,181685.0,-9167.3,-18553.1,2.8
+expected_profit,P2_3%,0.8,Logistic Regression,XGBoost,691286.5,759521.0,112137.2,133295.8,2201.9,-6590.2,10826.5
+expected_profit,P2_3%,0.8,Decision Tree,XGBoost,673187.4,742822.8,95394.7,114799.5,-16173.1,-25591.4,-6243.7
+expected_profit,P2_3%,0.8,Random Forest,XGBoost,677159.2,747864.6,98407.2,120005.6,-11786.3,-21666.3,-911.1
+expected_profit,P2_3%,0.8,Gradient Boosting,XGBoost,692377.7,761444.4,113405.9,135571.0,3702.2,-2458.7,10703.5
+expected_profit,P2_3%,0.8,XGBoost,XGBoost,688415.8,758053.3,109313.4,131760.7,0.0,0.0,0.0
+expected_profit,P2_3%,0.8,LightGBM,XGBoost,686218.7,756247.6,107095.7,128453.1,-2718.6,-9506.1,4002.3
+expected_profit,P2_3%,0.8,CatBoost,XGBoost,691340.7,759133.4,111341.3,131734.7,1088.8,-6289.8,8435.3
+expected_profit,P2_3%,0.8,AdaBoost,XGBoost,688200.8,756607.8,109120.1,129793.1,-1172.6,-10562.4,8205.9
+expected_profit,P2_3%,0.8,Extra Trees,XGBoost,672601.8,743163.6,95237.5,115496.9,-15839.3,-25463.0,-6094.6
+expected_profit,P2_3%,0.8,Neural Network,XGBoost,686868.0,756153.8,107293.2,131207.6,-1628.8,-10405.1,7571.3
+expected_profit,P2_3%,0.9,Logistic Regression,XGBoost,709262.6,780252.3,58489.5,74142.2,3360.6,-4309.1,10829.4
+expected_profit,P2_3%,0.9,Decision Tree,XGBoost,699353.9,769703.7,49395.5,62424.7,-7474.5,-16334.9,790.2
+expected_profit,P2_3%,0.9,Random Forest,XGBoost,704741.8,773461.9,52457.0,69553.2,-2365.1,-11116.4,7418.4
+expected_profit,P2_3%,0.9,Gradient Boosting,XGBoost,711109.8,778734.3,57719.1,75165.8,3501.3,-2524.5,9231.3
+expected_profit,P2_3%,0.9,XGBoost,XGBoost,706354.4,775877.1,54209.6,72023.4,0.0,0.0,0.0
+expected_profit,P2_3%,0.9,LightGBM,XGBoost,704182.5,775169.9,52100.9,69430.9,-1722.2,-7932.4,4153.2
+expected_profit,P2_3%,0.9,CatBoost,XGBoost,709319.6,778616.1,57342.8,73283.8,2423.1,-4346.2,8929.5
+expected_profit,P2_3%,0.9,AdaBoost,XGBoost,703883.2,773047.8,52723.4,66913.4,-3280.9,-11866.3,5125.2
+expected_profit,P2_3%,0.9,Extra Trees,XGBoost,701099.0,770358.9,49661.2,65349.5,-5793.6,-14987.1,3218.6
+expected_profit,P2_3%,0.9,Neural Network,XGBoost,706314.7,776244.1,53248.0,73077.3,-130.9,-7751.0,8078.8
+score,P1,0.3,Logistic Regression,Random Forest,313231.3,340603.6,-62986.4,-32488.5,-26059.6,-38353.2,-13714.0
+score,P1,0.3,Decision Tree,Random Forest,318706.2,347504.6,-56373.9,-26017.1,-19110.4,-33320.9,-5412.3
+score,P1,0.3,Random Forest,Random Forest,338854.0,366983.7,-37873.9,-6118.0,0.0,0.0,0.0
+score,P1,0.3,Gradient Boosting,Random Forest,316564.6,343205.1,-58939.5,-29308.3,-22308.4,-34103.7,-10754.8
+score,P1,0.3,XGBoost,Random Forest,317929.5,343120.3,-57120.6,-28578.9,-21261.1,-32611.4,-10267.4
+score,P1,0.3,LightGBM,Random Forest,317838.8,343647.5,-57976.3,-28404.3,-21524.3,-33429.7,-9435.4
+score,P1,0.3,CatBoost,Random Forest,318015.9,344327.5,-58398.9,-28488.8,-21499.9,-33735.5,-9612.5
+score,P1,0.3,AdaBoost,Random Forest,318512.5,344756.4,-56987.2,-28341.8,-20689.8,-33303.2,-8102.4
+score,P1,0.3,Extra Trees,Random Forest,335319.3,362714.2,-40309.3,-10676.6,-3697.9,-15810.5,8668.3
+score,P1,0.3,Neural Network,Random Forest,326111.6,353614.0,-50647.3,-19556.9,-12674.4,-24131.9,-368.6
+score,P1,0.4,Logistic Regression,Random Forest,433997.5,468354.0,-65999.9,-30190.0,-24430.0,-39054.1,-10450.5
+score,P1,0.4,Decision Tree,Random Forest,427408.0,464011.6,-71148.9,-35699.2,-29346.2,-45337.4,-14272.2
+score,P1,0.4,Random Forest,Random Forest,459075.1,492614.8,-42003.2,-5704.2,0.0,0.0,0.0
+score,P1,0.4,Gradient Boosting,Random Forest,425635.3,457395.1,-76381.4,-39386.8,-33868.1,-47523.8,-19964.3
+score,P1,0.4,XGBoost,Random Forest,423651.8,456085.0,-77369.9,-40525.4,-34553.0,-47474.2,-21258.1
+score,P1,0.4,LightGBM,Random Forest,429448.1,461971.2,-73066.9,-34995.3,-29594.9,-43277.9,-15369.5
+score,P1,0.4,CatBoost,Random Forest,430772.2,464337.3,-70167.3,-33595.3,-27942.8,-41815.3,-14460.0
+score,P1,0.4,AdaBoost,Random Forest,425178.4,458725.1,-76021.8,-38907.3,-33643.5,-47509.2,-19602.8
+score,P1,0.4,Extra Trees,Random Forest,444583.1,479189.0,-55824.0,-19141.4,-14768.3,-29122.3,-490.9
+score,P1,0.4,Neural Network,Random Forest,435834.0,470497.1,-65699.7,-27709.7,-22295.0,-37318.0,-8873.8
+score,P1,0.5,Logistic Regression,Random Forest,550382.8,589101.1,-74582.5,-33273.3,-24498.3,-40416.6,-8875.1
+score,P1,0.5,Decision Tree,Random Forest,547600.3,589535.6,-76598.1,-35631.9,-25922.8,-43474.7,-8849.5
+score,P1,0.5,Random Forest,Random Forest,574422.9,615272.2,-49307.0,-9584.6,0.0,0.0,0.0
+score,P1,0.5,Gradient Boosting,Random Forest,544268.2,582873.2,-81664.9,-41134.5,-31199.4,-47236.0,-15275.8
+score,P1,0.5,XGBoost,Random Forest,547319.3,584904.6,-79917.1,-37308.3,-28872.2,-44920.4,-13218.3
+score,P1,0.5,LightGBM,Random Forest,545203.2,584494.6,-80077.4,-38324.4,-30096.7,-45879.1,-14055.3
+score,P1,0.5,CatBoost,Random Forest,550747.1,590712.4,-74276.4,-32946.9,-24249.1,-40139.6,-9115.0
+score,P1,0.5,AdaBoost,Random Forest,551931.5,589526.7,-73710.0,-31945.7,-23683.8,-39801.5,-8195.1
+score,P1,0.5,Extra Trees,Random Forest,565689.9,606365.2,-57645.9,-16496.4,-8789.1,-25999.8,7280.0
+score,P1,0.5,Neural Network,Random Forest,547742.8,587192.4,-76844.7,-36842.4,-27132.4,-43673.9,-11968.9
+score,P1,0.6,Logistic Regression,Random Forest,664684.9,710789.0,-83103.6,-37569.2,-25763.6,-43252.0,-8361.4
+score,P1,0.6,Decision Tree,Random Forest,649881.4,696253.0,-97680.4,-54111.4,-39796.4,-59594.1,-23122.3
+score,P1,0.6,Random Forest,Random Forest,690011.5,736599.2,-57634.8,-13411.3,0.0,0.0,0.0
+score,P1,0.6,Gradient Boosting,Random Forest,663624.2,708024.3,-84771.1,-40776.7,-27266.2,-43336.1,-11404.4
+score,P1,0.6,XGBoost,Random Forest,659553.8,704036.9,-89618.9,-44612.8,-31632.2,-47627.6,-15554.6
+score,P1,0.6,LightGBM,Random Forest,665782.3,710093.5,-84188.4,-38516.5,-25078.9,-41118.8,-8182.9
+score,P1,0.6,CatBoost,Random Forest,666134.1,711077.9,-82283.6,-37157.4,-24368.4,-41510.2,-7728.0
+score,P1,0.6,AdaBoost,Random Forest,677569.9,723417.1,-70274.8,-25788.8,-13006.4,-30566.1,3915.3
+score,P1,0.6,Extra Trees,Random Forest,684457.4,730029.0,-64068.9,-19224.4,-5658.3,-23142.8,11524.7
+score,P1,0.6,Neural Network,Random Forest,662703.4,708532.3,-83586.7,-40743.6,-26905.1,-43229.3,-9737.8
+score,P1,0.7,Logistic Regression,Random Forest,779207.8,829539.3,-90494.5,-43854.3,-30152.8,-48713.9,-11610.6
+score,P1,0.7,Decision Tree,Random Forest,779663.5,832418.9,-89568.9,-45146.3,-29044.5,-49472.2,-10447.0
+score,P1,0.7,Random Forest,Random Forest,807414.2,861935.5,-60125.4,-15903.8,0.0,0.0,0.0
+score,P1,0.7,Gradient Boosting,Random Forest,792638.5,841752.2,-80030.0,-33985.5,-18453.4,-35021.8,-1487.2
+score,P1,0.7,XGBoost,Random Forest,783767.9,833972.8,-88947.9,-40494.6,-26341.7,-41872.1,-10054.3
+score,P1,0.7,LightGBM,Random Forest,783461.3,833554.0,-87735.3,-41574.2,-26730.3,-42457.2,-10200.3
+score,P1,0.7,CatBoost,Random Forest,783786.7,834246.9,-86714.5,-40089.5,-25518.3,-42695.3,-8731.3
+score,P1,0.7,AdaBoost,Random Forest,799781.3,852798.4,-69847.6,-23590.7,-8335.9,-26571.8,8599.3
+score,P1,0.7,Extra Trees,Random Forest,801674.1,853929.4,-66978.3,-22229.5,-6384.4,-24713.2,11088.1
+score,P1,0.7,Neural Network,Random Forest,785833.5,835605.5,-83251.0,-38692.5,-23612.1,-39812.1,-7117.4
+score,P1,0.8,Logistic Regression,Random Forest,904851.9,962043.0,-86427.4,-41154.5,-38936.5,-57303.1,-20639.6
+score,P1,0.8,Decision Tree,Random Forest,923278.3,982012.4,-66280.5,-24006.2,-18556.9,-38326.6,797.2
+score,P1,0.8,Random Forest,Random Forest,941941.0,1002167.6,-46492.0,-3909.1,0.0,0.0,0.0
+score,P1,0.8,Gradient Boosting,Random Forest,916675.5,975433.7,-74124.0,-29169.3,-25796.3,-42363.5,-9775.9
+score,P1,0.8,XGBoost,Random Forest,918345.2,978719.6,-71756.1,-27002.1,-22993.6,-39721.7,-6823.4
+score,P1,0.8,LightGBM,Random Forest,913835.1,971595.1,-77668.6,-31898.4,-28852.5,-46578.5,-12890.6
+score,P1,0.8,CatBoost,Random Forest,923285.5,979242.0,-69099.1,-24160.7,-20947.4,-38731.5,-3830.0
+score,P1,0.8,AdaBoost,Random Forest,932071.1,991307.4,-56946.1,-12500.6,-8938.2,-27446.9,9311.0
+score,P1,0.8,Extra Trees,Random Forest,931252.2,989394.3,-59238.2,-17318.6,-12185.2,-29809.3,6094.2
+score,P1,0.8,Neural Network,Random Forest,928888.8,986396.0,-60108.9,-16600.0,-12635.4,-29172.4,5876.8
+score,P1,0.9,Logistic Regression,AdaBoost,1043273.6,1107787.1,-67377.0,-27820.9,-26159.6,-40301.5,-11902.3
+score,P1,0.9,Decision Tree,AdaBoost,1063019.7,1128571.7,-45755.4,-9592.2,-5844.2,-23175.5,11821.0
+score,P1,0.9,Random Forest,AdaBoost,1067560.0,1134195.0,-41070.6,-4026.4,-964.7,-18774.1,17074.2
+score,P1,0.9,Gradient Boosting,AdaBoost,1072910.3,1138663.9,-35000.3,3546.3,4713.3,-8973.4,18667.6
+score,P1,0.9,XGBoost,AdaBoost,1071828.1,1136411.9,-37177.2,2444.3,2831.9,-10929.1,16700.0
+score,P1,0.9,LightGBM,AdaBoost,1070836.9,1136207.8,-38663.7,892.8,2545.6,-11993.9,16623.1
+score,P1,0.9,CatBoost,AdaBoost,1057902.5,1122738.1,-51069.6,-12065.3,-10268.5,-22068.3,1477.9
+score,P1,0.9,AdaBoost,AdaBoost,1067106.3,1132489.8,-39128.0,-3327.9,0.0,0.0,0.0
+score,P1,0.9,Extra Trees,AdaBoost,1060855.9,1127451.2,-47629.3,-10073.2,-7072.1,-24585.0,10910.1
+score,P1,0.9,Neural Network,AdaBoost,1072496.6,1139167.4,-35574.7,2178.8,4290.1,-10563.5,20126.1
+score,P2_3%,0.3,Logistic Regression,Random Forest,171515.1,196120.8,-56950.2,-29294.3,-22501.1,-33656.3,-11359.0
+score,P2_3%,0.3,Decision Tree,Random Forest,174687.4,200829.0,-52117.4,-24822.0,-17333.3,-29634.1,-4781.3
+score,P2_3%,0.3,Random Forest,Random Forest,192784.5,218077.1,-34798.0,-6584.1,0.0,0.0,0.0
+score,P2_3%,0.3,Gradient Boosting,Random Forest,173289.7,196489.0,-54831.6,-28198.1,-20282.4,-30930.6,-10079.4
+score,P2_3%,0.3,XGBoost,Random Forest,175926.4,198591.6,-51542.8,-25396.8,-18085.8,-28291.0,-8421.9
+score,P2_3%,0.3,LightGBM,Random Forest,175126.8,197840.3,-52678.7,-26931.2,-19059.3,-29931.3,-8501.8
+score,P2_3%,0.3,CatBoost,Random Forest,172005.6,196234.2,-55956.9,-28693.8,-21352.5,-31713.3,-10461.7
+score,P2_3%,0.3,AdaBoost,Random Forest,175763.2,198920.2,-52453.3,-25843.8,-18300.0,-29318.3,-7110.0
+score,P2_3%,0.3,Extra Trees,Random Forest,190944.0,215427.4,-36353.6,-9985.1,-2614.3,-13173.1,8635.7
+score,P2_3%,0.3,Neural Network,Random Forest,181738.4,206052.7,-46720.5,-19260.2,-12100.1,-22591.3,-957.1
+score,P2_3%,0.4,Logistic Regression,Random Forest,245683.6,276451.4,-57633.1,-24545.6,-20829.1,-33852.2,-8341.6
+score,P2_3%,0.4,Decision Tree,Random Forest,235571.5,269218.8,-65581.5,-33400.8,-28816.2,-43435.7,-15742.3
+score,P2_3%,0.4,Random Forest,Random Forest,266463.9,297843.6,-37274.4,-4359.4,0.0,0.0,0.0
+score,P2_3%,0.4,Gradient Boosting,Random Forest,237397.6,265964.2,-67062.8,-33777.7,-29692.4,-42174.4,-17495.7
+score,P2_3%,0.4,XGBoost,Random Forest,237539.8,266523.5,-66117.8,-33227.5,-28811.5,-41150.3,-17139.7
+score,P2_3%,0.4,LightGBM,Random Forest,241252.6,270484.1,-63233.9,-29147.2,-25346.4,-38119.8,-12852.7
+score,P2_3%,0.4,CatBoost,Random Forest,240017.5,269730.6,-63709.1,-31001.5,-26828.8,-39294.2,-14486.1
+score,P2_3%,0.4,AdaBoost,Random Forest,235754.2,266540.4,-68015.1,-34830.4,-30594.8,-43533.1,-17417.1
+score,P2_3%,0.4,Extra Trees,Random Forest,253989.7,285398.6,-48169.4,-15340.6,-12257.7,-25426.3,879.0
+score,P2_3%,0.4,Neural Network,Random Forest,246453.0,277516.6,-57438.3,-23255.8,-19620.6,-33678.3,-7457.4
+score,P2_3%,0.5,Logistic Regression,Random Forest,315739.4,351625.3,-62702.1,-24994.9,-21450.8,-35980.8,-7495.3
+score,P2_3%,0.5,Decision Tree,Random Forest,308834.0,347238.6,-67957.9,-31733.8,-26897.9,-43078.2,-11601.3
+score,P2_3%,0.5,Random Forest,Random Forest,336609.2,374213.7,-40471.5,-3384.2,0.0,0.0,0.0
+score,P2_3%,0.5,Gradient Boosting,Random Forest,310706.9,346404.8,-68355.4,-31650.2,-27117.3,-41743.9,-12446.7
+score,P2_3%,0.5,XGBoost,Random Forest,315265.0,349617.3,-65205.7,-26877.0,-23335.0,-37931.8,-8965.3
+score,P2_3%,0.5,LightGBM,Random Forest,312282.0,348914.4,-66582.3,-28828.3,-25612.5,-39556.9,-11074.3
+score,P2_3%,0.5,CatBoost,Random Forest,314710.4,350813.6,-63397.5,-25927.6,-22762.9,-36713.1,-8913.1
+score,P2_3%,0.5,AdaBoost,Random Forest,315227.3,350665.4,-63285.6,-24605.9,-22193.5,-37111.6,-7595.7
+score,P2_3%,0.5,Extra Trees,Random Forest,329246.6,366916.7,-48316.1,-10214.1,-7437.0,-23415.7,6980.2
+score,P2_3%,0.5,Neural Network,Random Forest,314128.7,350637.9,-63368.8,-27386.2,-23098.2,-38206.7,-8926.8
+score,P2_3%,0.6,Logistic Regression,Random Forest,384540.9,426831.9,-66684.7,-26140.9,-23274.5,-39857.8,-7477.1
+score,P2_3%,0.6,Decision Tree,Random Forest,368817.7,410846.7,-82998.7,-43181.8,-38816.4,-56695.6,-23661.5
+score,P2_3%,0.6,Random Forest,Random Forest,407765.9,450852.6,-44329.9,-3201.4,0.0,0.0,0.0
+score,P2_3%,0.6,Gradient Boosting,Random Forest,385158.5,426993.3,-67167.8,-27144.9,-23057.0,-37813.1,-8326.3
+score,P2_3%,0.6,XGBoost,Random Forest,382896.4,423504.1,-70859.0,-29752.8,-26237.9,-41252.3,-11845.3
+score,P2_3%,0.6,LightGBM,Random Forest,387504.6,429036.3,-65591.0,-24403.6,-21035.6,-35774.2,-6036.4
+score,P2_3%,0.6,CatBoost,Random Forest,385354.9,426436.2,-68186.4,-26434.2,-23103.5,-39059.1,-8338.2
+score,P2_3%,0.6,AdaBoost,Random Forest,394847.9,436598.4,-57096.2,-15794.4,-13643.8,-30608.0,2271.2
+score,P2_3%,0.6,Extra Trees,Random Forest,400508.8,443223.7,-50610.9,-9667.7,-6110.0,-22823.2,9582.4
+score,P2_3%,0.6,Neural Network,Random Forest,384444.1,426461.8,-66880.4,-27405.6,-23376.5,-38566.1,-8339.8
+score,P2_3%,0.7,Logistic Regression,Random Forest,453322.9,500649.6,-71432.7,-27734.0,-26556.1,-44132.1,-9535.0
+score,P2_3%,0.7,Decision Tree,Random Forest,451354.9,500192.9,-72669.7,-31543.6,-27563.8,-46083.9,-10482.7
+score,P2_3%,0.7,Random Forest,Random Forest,478046.0,528161.1,-44051.4,-4375.4,0.0,0.0,0.0
+score,P2_3%,0.7,Gradient Boosting,Random Forest,466173.5,511425.1,-60975.2,-18423.9,-14956.6,-30144.5,187.1
+score,P2_3%,0.7,XGBoost,Random Forest,460362.9,505752.8,-67596.3,-22704.0,-20825.4,-35790.9,-5742.2
+score,P2_3%,0.7,LightGBM,Random Forest,458335.0,503910.9,-68087.8,-25282.4,-21894.1,-36982.7,-6401.0
+score,P2_3%,0.7,CatBoost,Random Forest,457258.1,503241.3,-68387.2,-24904.4,-22679.3,-38430.0,-6994.8
+score,P2_3%,0.7,AdaBoost,Random Forest,470881.8,517820.9,-54586.1,-12816.5,-8823.9,-25489.6,7446.5
+score,P2_3%,0.7,Extra Trees,Random Forest,471813.1,520354.1,-52263.3,-10808.1,-7047.7,-23627.1,8564.0
+score,P2_3%,0.7,Neural Network,Random Forest,461058.4,507592.5,-62737.3,-22010.8,-18823.2,-33611.1,-3953.4
+score,P2_3%,0.8,Logistic Regression,Random Forest,530181.3,582881.9,-67476.3,-25393.1,-35195.2,-52138.3,-18936.9
+score,P2_3%,0.8,Decision Tree,Random Forest,542501.9,597084.7,-52249.2,-13113.7,-20422.9,-38386.2,-2637.9
+score,P2_3%,0.8,Random Forest,Random Forest,563409.4,618715.6,-30886.5,6993.7,0.0,0.0,0.0
+score,P2_3%,0.8,Gradient Boosting,Random Forest,543769.0,597796.8,-53271.9,-11227.4,-20444.7,-35718.3,-5318.8
+score,P2_3%,0.8,XGBoost,Random Forest,546276.7,600623.3,-50896.2,-8324.0,-17275.9,-32804.1,-1663.1
+score,P2_3%,0.8,LightGBM,Random Forest,540927.1,594433.7,-56258.6,-13615.9,-23298.3,-39275.2,-8573.2
+score,P2_3%,0.8,CatBoost,Random Forest,546986.8,600383.0,-50890.8,-8416.1,-18147.0,-34691.7,-2666.7
+score,P2_3%,0.8,AdaBoost,Random Forest,551682.6,606420.2,-43433.2,-2039.9,-11284.3,-28105.8,4681.6
+score,P2_3%,0.8,Extra Trees,Random Forest,552382.9,606404.4,-43603.8,-4244.2,-12101.4,-28378.7,4049.0
+score,P2_3%,0.8,Neural Network,Random Forest,553634.0,607069.4,-42017.5,-1798.9,-9875.3,-24854.9,7060.0
+score,P2_3%,0.9,Logistic Regression,Random Forest,615644.2,675922.2,-52070.4,-15470.0,-22966.5,-39746.8,-7795.5
+score,P2_3%,0.9,Decision Tree,Random Forest,632552.2,693427.0,-33419.0,129.9,-6388.2,-22939.7,9759.9
+score,P2_3%,0.9,Random Forest,Random Forest,639006.5,700142.7,-27365.0,7105.1,0.0,0.0,0.0
+score,P2_3%,0.9,Gradient Boosting,Random Forest,644704.7,706319.3,-20846.3,15466.9,6598.9,-8222.0,22030.8
+score,P2_3%,0.9,XGBoost,Random Forest,643713.4,702939.4,-22971.1,13712.1,4476.7,-9440.6,18438.5
+score,P2_3%,0.9,LightGBM,Random Forest,643158.6,703550.5,-23559.2,12545.8,4545.4,-10554.6,18850.9
+score,P2_3%,0.9,CatBoost,Random Forest,629517.3,689646.0,-36310.8,262.5,-8744.7,-24157.6,5960.9
+score,P2_3%,0.9,AdaBoost,Random Forest,633890.5,695670.3,-29895.1,3458.3,-3001.2,-19415.3,13077.7
+score,P2_3%,0.9,Extra Trees,Random Forest,630074.0,692080.1,-35734.1,-699.8,-7439.6,-24100.7,7348.0
+score,P2_3%,0.9,Neural Network,Random Forest,645288.4,706052.6,-21036.8,14898.9,6517.5,-9706.2,21623.8

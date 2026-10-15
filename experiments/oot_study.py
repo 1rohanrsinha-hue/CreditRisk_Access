@@ -24,9 +24,25 @@ from creditrisk import thresholds as T_
 
 MODELS = ['Logistic Regression', 'Random Forest', 'LightGBM', 'XGBoost', 'CatBoost']
 FOLDS = [2013, 2014, 2015]
-SCEN = ['P1', 'P2_5%']
-OOT_DIR = CACHE_DIR / "oot"
+SCEN = ['P1', 'P2_3%']
+OOT_DIR = CACHE_DIR / "oot3b"
 SEED = 42
+MISSING_MAX = 0.50          # drop features missing in >50% of the training window
+
+
+def fold_indices(Tyr, yr, tm):
+    keep = np.ones(len(yr), bool) if Tyr < 2015 else (tm == 36)
+    tr = np.where(keep & (yr <= Tyr - 2))[0]
+    ca = np.where(keep & (yr == Tyr - 1))[0]
+    te = np.where(keep & (yr == Tyr))[0]
+    if len(tr) > 400_000:
+        tr = np.sort(np.random.RandomState(SEED).choice(tr, 400_000, replace=False))
+    return tr, ca, te
+
+
+def usable_columns(X, tr):
+    miss = X.iloc[tr].isna().mean()
+    return [c for c in X.columns if miss[c] <= MISSING_MAX], [c for c in X.columns if miss[c] > MISSING_MAX]
 
 
 def make_data():
@@ -35,7 +51,7 @@ def make_data():
     d['term_m'] = term_months(d).values
     d = d[d.year <= 2015]                      # vintages >= 2016 dropped from headline
     X, y, _ = build_frame(d, True, 'fico')
-    P = {'P1': profit_p1(d).values, 'P2_5%': profit_p2(d, 0.05).values}
+    P = {'P1': profit_p1(d).values, 'P2_3%': profit_p2(d, 0.03).values}
     return X, y.values, P, d.year.values, d.term_m.values
 
 
@@ -47,22 +63,19 @@ def auc_ci(y, s, n=200, seed=0):
     return float(np.quantile(v, .025)), float(np.quantile(v, .975))
 
 
-def run_unit(Tyr, model, X, y, P, yr, tm, n_jobs):
-    path = OOT_DIR / f"{Tyr}_{model.replace(' ', '_')}.pkl"
+def run_unit(Tyr, model, X, y, P, yr, tm, n_jobs, seed=SEED):
+    path = OOT_DIR / f"{Tyr}_{model.replace(' ', '_')}_s{seed}.pkl"
     if path.exists():
         return pickle.load(open(path, 'rb'))
     t0 = time.time()
-    keep = np.ones(len(y), bool) if Tyr < 2015 else (tm == 36)
-    tr = np.where(keep & (yr <= Tyr - 2))[0]
-    ca = np.where(keep & (yr == Tyr - 1))[0]
-    te = np.where(keep & (yr == Tyr))[0]
-    if len(tr) > 400_000:
-        tr = np.sort(np.random.RandomState(SEED).choice(tr, 400_000, replace=False))
-    m = fit_model(model, X.iloc[tr], pd.Series(y[tr]), 'none', SEED, n_jobs)
+    tr, ca, te = fold_indices(Tyr, yr, tm)
+    cols, dropped = usable_columns(X, tr)
+    X = X[cols]
+    m = fit_model(model, X.iloc[tr], pd.Series(y[tr]), 'none', seed, n_jobs)
     s_ca, s_te = m.predict_proba(X.iloc[ca])[:, 1], m.predict_proba(X.iloc[te])[:, 1]
     # in-time reference: random 80/20 inside the test vintage
     a, b = train_test_split(te, test_size=0.2, random_state=SEED, stratify=y[te])
-    m2 = fit_model(model, X.iloc[a], pd.Series(y[a]), 'none', SEED, n_jobs)
+    m2 = fit_model(model, X.iloc[a], pd.Series(y[a]), 'none', seed, n_jobs)
     auc_in = roc_auc_score(y[b], m2.predict_proba(X.iloc[b])[:, 1])
     cal = make_calibrators(s_ca, y[ca])['isotonic']
     pi_tr, pi_ca, pi_te = y[tr].mean(), y[ca].mean(), y[te].mean()
@@ -75,7 +88,7 @@ def run_unit(Tyr, model, X, y, P, yr, tm, n_jobs):
         jm_te, flat_te = T_.youden_flatness(y[te], c_te)
         flag = c_te >= t_ca
         j_stale = float(flag[y[te] == 1].mean() - flag[y[te] == 0].mean())
-        fold.append(dict(T=Tyr, model=model, calib=cname, n_train=len(tr), n_cal=len(ca), n_test=len(te),
+        fold.append(dict(T=Tyr, model=model, seed=seed, dropped='|'.join(dropped), calib=cname, n_train=len(tr), n_cal=len(ca), n_test=len(te),
                          pi_train=pi_tr, pi_cal=pi_ca, pi_test=pi_te,
                          AUC_oot=roc_auc_score(y[te], c_te), AUC_oot_lo=lo, AUC_oot_hi=hi,
                          AUC_intime=auc_in, AUC_cal_year=roc_auc_score(y[ca], c_ca),
@@ -97,7 +110,7 @@ def run_unit(Tyr, model, X, y, P, yr, tm, n_jobs):
                 o = T_.policy_outcome(c_te, t, y[te], p_te)
                 d = p_te * (c_te < t) * 1000
                 _, plo, phi, _ = paired_mean_diff_ci(d, 300, seed=1)
-                rules.append(dict(T=Tyr, model=model, calib=cname, scenario=sc, rule=r, threshold=t,
+                rules.append(dict(T=Tyr, model=model, seed=seed, calib=cname, scenario=sc, rule=r, threshold=t,
                                   profit_per_1000=o['profit_per_1000'], profit_lo=plo, profit_hi=phi,
                                   accept_rate=o['accept_rate'], bad_rate_approved=o['bad_rate_approved']))
     out = (pd.DataFrame(fold), pd.DataFrame(rules))
@@ -107,19 +120,27 @@ def run_unit(Tyr, model, X, y, P, yr, tm, n_jobs):
     return out
 
 
-def main(n_jobs=8):
+def main(n_jobs=8, seeds=(42,), models=None, tag="phase3b_oot"):
     X, y, P, yr, tm = make_data()
     F, R = [], []
     for Tyr in FOLDS:
-        for model in MODELS:
-            f, r = run_unit(Tyr, model, X, y, P, yr, tm, n_jobs)
-            F.append(f); R.append(r)
+        tr, _, _ = fold_indices(Tyr, yr, tm)
+        _, dropped = usable_columns(X, tr)
+        print(f"[hygiene] T={Tyr}: features missing in >50% of training window: {dropped or 'none'}", flush=True)
+        for model in (models or MODELS):
+            for sd in seeds:
+                f, r = run_unit(Tyr, model, X, y, P, yr, tm, n_jobs, sd)
+                F.append(f); R.append(r)
     F, R = pd.concat(F, ignore_index=True), pd.concat(R, ignore_index=True)
-    F.round(5).to_csv(RESULTS_DIR / "phase3a_oot_fold_metrics.csv", index=False)
-    R.round(3).to_csv(RESULTS_DIR / "phase3a_oot.csv", index=False)
+    F.round(5).to_csv(RESULTS_DIR / f"{tag}_fold_metrics.csv", index=False)
+    R.round(3).to_csv(RESULTS_DIR / f"{tag}.csv", index=False)
     print("done", F.shape, R.shape)
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--n-jobs", type=int, default=8)
-    main(ap.parse_args().n_jobs)
+    ap.add_argument("--seeds", type=int, nargs="+", default=[42])
+    ap.add_argument("--models", nargs="*", default=None)
+    ap.add_argument("--tag", default="phase3b_oot")
+    a = ap.parse_args()
+    main(a.n_jobs, tuple(a.seeds), a.models, a.tag)

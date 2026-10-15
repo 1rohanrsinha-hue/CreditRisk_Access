@@ -25,14 +25,14 @@ def verdict(frac, strong=0.8, weak=0.5):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dataset", choices=["D1", "D2"], default="D2")
+    ap.add_argument("--dataset", choices=["D1", "D2", "D3"], default="D2")
     ap.add_argument("--repeats", type=int, default=None)
     ap.add_argument("--n-boot", type=int, default=1000)
     ap.add_argument("--tol", type=float, default=0.05, help="|t*-target| tolerance for hypotheses")
     a = ap.parse_args()
     ds = a.dataset
-    reps = list(range(a.repeats or (10 if ds == "D2" else 5)))
-    _, C = analyse(ds, reps, with_profit=(ds == "D2"))
+    reps = list(range(a.repeats or (5 if ds == "D1" else 10)))
+    _, C = analyse(ds, reps, with_profit=(ds in ("D2", "D3")))
     C['dev_pi'] = C.t_star - C.pi
     C['dev_half'] = C.t_star - 0.5
     S = summarize(C, ['dataset', 'model', 'weighting', 'calib'], COLS)

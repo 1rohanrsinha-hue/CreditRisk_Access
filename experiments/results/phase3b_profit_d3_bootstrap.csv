@@ -1,0 +1,481 @@
+scenario,model,rule,vs,d_profit_per_1000,ci_lo,ci_hi,p
+P1,Logistic Regression,approve_all,youden,595325.8,561803.9,628387.8,0.0
+P1,Logistic Regression,fixed_0.5,approve_all,-606.5,-1922.2,454.4,0.3
+P1,Logistic Regression,fixed_0.5,youden,594719.3,560509.0,628111.6,0.0
+P1,Logistic Regression,youden,approve_all,-595325.8,-628387.8,-561803.9,0.0
+P1,Logistic Regression,f1_max,approve_all,-528569.8,-561590.2,-495503.1,0.0
+P1,Logistic Regression,f1_max,youden,66756.0,57488.9,75725.8,0.0
+P1,Logistic Regression,recall_0.70,approve_all,-712478.3,-746368.0,-677540.0,0.0
+P1,Logistic Regression,recall_0.70,youden,-117152.6,-128774.0,-105452.2,0.0
+P1,Logistic Regression,recall_0.80,approve_all,-809091.4,-844697.8,-772244.4,0.0
+P1,Logistic Regression,recall_0.80,youden,-213765.6,-228190.8,-199417.1,0.0
+P1,Logistic Regression,elkan,approve_all,-57321.6,-71361.7,-41411.3,0.0
+P1,Logistic Regression,elkan,youden,538004.2,506235.7,568252.0,0.0
+P1,Logistic Regression,profit_max,approve_all,0.0,0.0,0.0,1.0
+P1,Logistic Regression,profit_max,youden,595325.8,561803.9,628387.8,0.0
+P1,Logistic Regression,expected_profit,approve_all,-922.0,-3254.8,1579.6,0.4
+P1,Logistic Regression,expected_profit,youden,594403.8,561169.9,628061.7,0.0
+P2_0%,Logistic Regression,approve_all,youden,579723.5,545773.0,613811.4,0.0
+P2_0%,Logistic Regression,fixed_0.5,approve_all,-550.7,-1892.4,551.0,0.4
+P2_0%,Logistic Regression,fixed_0.5,youden,579172.8,544364.9,613015.6,0.0
+P2_0%,Logistic Regression,youden,approve_all,-579723.5,-613811.4,-545773.0,0.0
+P2_0%,Logistic Regression,f1_max,approve_all,-514240.2,-547650.9,-480903.2,0.0
+P2_0%,Logistic Regression,f1_max,youden,65483.3,56137.3,74488.0,0.0
+P2_0%,Logistic Regression,recall_0.70,approve_all,-694671.6,-729539.0,-658822.2,0.0
+P2_0%,Logistic Regression,recall_0.70,youden,-114948.1,-126813.4,-102962.6,0.0
+P2_0%,Logistic Regression,recall_0.80,approve_all,-789937.0,-826083.5,-752865.3,0.0
+P2_0%,Logistic Regression,recall_0.80,youden,-210213.5,-224730.8,-195761.4,0.0
+P2_0%,Logistic Regression,elkan,approve_all,-54978.4,-69258.0,-39071.6,0.0
+P2_0%,Logistic Regression,elkan,youden,524745.0,493792.0,554788.2,0.0
+P2_0%,Logistic Regression,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_0%,Logistic Regression,profit_max,youden,579723.5,545773.0,613811.4,0.0
+P2_0%,Logistic Regression,expected_profit,approve_all,-1404.0,-3642.3,1249.8,0.3
+P2_0%,Logistic Regression,expected_profit,youden,578319.5,545119.6,611718.6,0.0
+P2_2%,Logistic Regression,approve_all,youden,438542.3,406640.3,470637.0,0.0
+P2_2%,Logistic Regression,fixed_0.5,approve_all,-436.6,-1703.3,647.2,0.4
+P2_2%,Logistic Regression,fixed_0.5,youden,438105.7,405740.7,470395.9,0.0
+P2_2%,Logistic Regression,youden,approve_all,-438542.3,-470637.0,-406640.3,0.0
+P2_2%,Logistic Regression,f1_max,approve_all,-389084.2,-420153.2,-357166.9,0.0
+P2_2%,Logistic Regression,f1_max,youden,49458.1,40825.0,57757.9,0.0
+P2_2%,Logistic Regression,recall_0.70,approve_all,-523989.2,-556739.8,-490015.8,0.0
+P2_2%,Logistic Regression,recall_0.70,youden,-85447.0,-96586.0,-74413.3,0.0
+P2_2%,Logistic Regression,recall_0.80,approve_all,-595597.5,-629746.2,-561243.4,0.0
+P2_2%,Logistic Regression,recall_0.80,youden,-157055.2,-170722.9,-143573.7,0.0
+P2_2%,Logistic Regression,elkan,approve_all,-111202.4,-130608.3,-90484.0,0.0
+P2_2%,Logistic Regression,elkan,youden,327339.8,301371.5,352778.9,0.0
+P2_2%,Logistic Regression,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_2%,Logistic Regression,profit_max,youden,438542.3,406640.3,470637.0,0.0
+P2_2%,Logistic Regression,expected_profit,approve_all,-1442.0,-5553.6,3078.8,0.5
+P2_2%,Logistic Regression,expected_profit,youden,437100.3,405554.8,469098.1,0.0
+P2_3%,Logistic Regression,approve_all,youden,370919.9,339650.4,402447.6,0.0
+P2_3%,Logistic Regression,fixed_0.5,approve_all,-381.8,-1609.9,666.8,0.5
+P2_3%,Logistic Regression,fixed_0.5,youden,370538.1,339324.8,402287.8,0.0
+P2_3%,Logistic Regression,youden,approve_all,-370919.9,-402447.6,-339650.4,0.0
+P2_3%,Logistic Regression,f1_max,approve_all,-329151.3,-360210.6,-297685.4,0.0
+P2_3%,Logistic Regression,f1_max,youden,41768.6,33516.3,49779.9,0.0
+P2_3%,Logistic Regression,recall_0.70,approve_all,-442208.0,-474173.1,-409312.3,0.0
+P2_3%,Logistic Regression,recall_0.70,youden,-71288.1,-82080.5,-60645.5,0.0
+P2_3%,Logistic Regression,recall_0.80,approve_all,-502461.7,-535665.7,-468978.3,0.0
+P2_3%,Logistic Regression,recall_0.80,youden,-131541.7,-144750.1,-118361.7,0.0
+P2_3%,Logistic Regression,elkan,approve_all,-95353.2,-114931.0,-75811.2,0.0
+P2_3%,Logistic Regression,elkan,youden,275566.7,250132.5,299960.8,0.0
+P2_3%,Logistic Regression,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_3%,Logistic Regression,profit_max,youden,370919.9,339650.4,402447.6,0.0
+P2_3%,Logistic Regression,expected_profit,approve_all,-1517.9,-7054.3,4322.1,0.6
+P2_3%,Logistic Regression,expected_profit,youden,369402.0,337793.0,400429.7,0.0
+P2_5%,Logistic Regression,approve_all,youden,241215.7,211535.6,271661.7,0.0
+P2_5%,Logistic Regression,fixed_0.5,approve_all,-276.6,-1444.6,763.5,0.6
+P2_5%,Logistic Regression,fixed_0.5,youden,240939.1,210802.9,271948.1,0.0
+P2_5%,Logistic Regression,youden,approve_all,-241215.7,-271661.7,-211535.6,0.0
+P2_5%,Logistic Regression,f1_max,approve_all,-214221.4,-244439.6,-183895.8,0.0
+P2_5%,Logistic Regression,f1_max,youden,26994.3,19480.0,34482.6,0.0
+P2_5%,Logistic Regression,recall_0.70,approve_all,-285294.0,-316238.9,-254045.6,0.0
+P2_5%,Logistic Regression,recall_0.70,youden,-44078.3,-54460.9,-34380.0,0.0
+P2_5%,Logistic Regression,recall_0.80,approve_all,-323726.3,-355659.3,-290761.1,0.0
+P2_5%,Logistic Regression,recall_0.80,youden,-82510.5,-95011.1,-70222.9,0.0
+P2_5%,Logistic Regression,elkan,approve_all,-135815.5,-159381.6,-109927.6,0.0
+P2_5%,Logistic Regression,elkan,youden,105400.2,88332.8,124040.6,0.0
+P2_5%,Logistic Regression,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_5%,Logistic Regression,profit_max,youden,241215.7,211535.6,271661.7,0.0
+P2_5%,Logistic Regression,expected_profit,approve_all,5942.2,-4755.4,15785.3,0.3
+P2_5%,Logistic Regression,expected_profit,youden,247157.9,216894.8,276456.2,0.0
+P2_8%,Logistic Regression,approve_all,youden,59442.0,31212.3,88316.0,0.0
+P2_8%,Logistic Regression,fixed_0.5,approve_all,-128.7,-1165.5,863.9,0.8
+P2_8%,Logistic Regression,fixed_0.5,youden,59313.3,30934.7,88459.8,0.0
+P2_8%,Logistic Regression,youden,approve_all,-59442.0,-88316.0,-31212.3,0.0
+P2_8%,Logistic Regression,f1_max,approve_all,-53208.9,-81042.5,-24763.5,0.0
+P2_8%,Logistic Regression,f1_max,youden,6233.1,-912.5,13069.0,0.1
+P2_8%,Logistic Regression,recall_0.70,approve_all,-65271.1,-95172.8,-35499.8,0.0
+P2_8%,Logistic Regression,recall_0.70,youden,-5829.1,-15660.8,3137.0,0.2
+P2_8%,Logistic Regression,recall_0.80,approve_all,-73027.6,-103409.5,-42441.4,0.0
+P2_8%,Logistic Regression,recall_0.80,youden,-13585.6,-25021.3,-1882.1,0.0
+P2_8%,Logistic Regression,elkan,approve_all,-56918.4,-84960.4,-27994.7,0.0
+P2_8%,Logistic Regression,elkan,youden,2523.6,-2791.6,7231.0,0.3
+P2_8%,Logistic Regression,profit_max,approve_all,2569.6,-1884.0,7030.0,0.3
+P2_8%,Logistic Regression,profit_max,youden,62011.6,33535.9,90841.6,0.0
+P2_8%,Logistic Regression,expected_profit,approve_all,110462.6,91201.8,129505.7,0.0
+P2_8%,Logistic Regression,expected_profit,youden,169904.6,144767.4,196070.9,0.0
+P1,LightGBM,approve_all,youden,553928.5,522377.5,587201.5,0.0
+P1,LightGBM,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P1,LightGBM,fixed_0.5,youden,553928.5,522377.5,587201.5,0.0
+P1,LightGBM,youden,approve_all,-553928.5,-587201.5,-522377.5,0.0
+P1,LightGBM,f1_max,approve_all,-457525.6,-488271.1,-427234.2,0.0
+P1,LightGBM,f1_max,youden,96402.9,84729.0,108372.2,0.0
+P1,LightGBM,recall_0.70,approve_all,-664138.4,-698754.3,-629142.8,0.0
+P1,LightGBM,recall_0.70,youden,-110210.0,-120300.4,-99457.7,0.0
+P1,LightGBM,recall_0.80,approve_all,-792597.5,-828547.6,-756207.2,0.0
+P1,LightGBM,recall_0.80,youden,-238669.0,-254502.1,-221862.6,0.0
+P1,LightGBM,elkan,approve_all,-61117.4,-76152.1,-45510.2,0.0
+P1,LightGBM,elkan,youden,492811.0,464737.8,524355.9,0.0
+P1,LightGBM,profit_max,approve_all,0.0,0.0,0.0,1.0
+P1,LightGBM,profit_max,youden,553928.5,522377.5,587201.5,0.0
+P1,LightGBM,expected_profit,approve_all,-100.2,-3962.4,3973.1,1.0
+P1,LightGBM,expected_profit,youden,553828.3,523048.9,587207.1,0.0
+P2_0%,LightGBM,approve_all,youden,538976.1,506965.4,572385.3,0.0
+P2_0%,LightGBM,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_0%,LightGBM,fixed_0.5,youden,538976.1,506965.4,572385.3,0.0
+P2_0%,LightGBM,youden,approve_all,-538976.1,-572385.3,-506965.4,0.0
+P2_0%,LightGBM,f1_max,approve_all,-444523.2,-474955.4,-414134.4,0.0
+P2_0%,LightGBM,f1_max,youden,94452.9,82628.8,106622.5,0.0
+P2_0%,LightGBM,recall_0.70,approve_all,-647362.1,-681948.6,-612711.7,0.0
+P2_0%,LightGBM,recall_0.70,youden,-108386.0,-118608.4,-97420.9,0.0
+P2_0%,LightGBM,recall_0.80,approve_all,-773624.6,-809828.0,-737281.0,0.0
+P2_0%,LightGBM,recall_0.80,youden,-234648.6,-250547.4,-217721.1,0.0
+P2_0%,LightGBM,elkan,approve_all,-58218.6,-73558.9,-42426.6,0.0
+P2_0%,LightGBM,elkan,youden,480757.5,452216.5,512910.6,0.0
+P2_0%,LightGBM,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_0%,LightGBM,profit_max,youden,538976.1,506965.4,572385.3,0.0
+P2_0%,LightGBM,expected_profit,approve_all,-4916.0,-9545.4,-328.9,0.0
+P2_0%,LightGBM,expected_profit,youden,534060.1,501980.2,568032.1,0.0
+P2_2%,LightGBM,approve_all,youden,406525.6,375801.7,437762.4,0.0
+P2_2%,LightGBM,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_2%,LightGBM,fixed_0.5,youden,406525.6,375801.7,437762.4,0.0
+P2_2%,LightGBM,youden,approve_all,-406525.6,-437762.4,-375801.7,0.0
+P2_2%,LightGBM,f1_max,approve_all,-335506.0,-365269.6,-306118.2,0.0
+P2_2%,LightGBM,f1_max,youden,71019.6,59974.2,82555.5,0.0
+P2_2%,LightGBM,recall_0.70,approve_all,-489238.8,-521873.9,-456477.5,0.0
+P2_2%,LightGBM,recall_0.70,youden,-82713.2,-92078.0,-72611.0,0.0
+P2_2%,LightGBM,recall_0.80,approve_all,-583788.5,-618269.1,-549159.0,0.0
+P2_2%,LightGBM,recall_0.80,youden,-177262.9,-192418.1,-161350.9,0.0
+P2_2%,LightGBM,elkan,approve_all,-69735.4,-87402.4,-52144.8,0.0
+P2_2%,LightGBM,elkan,youden,336790.2,311329.5,363930.1,0.0
+P2_2%,LightGBM,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_2%,LightGBM,profit_max,youden,406525.6,375801.7,437762.4,0.0
+P2_2%,LightGBM,expected_profit,approve_all,-5307.0,-11406.9,932.5,0.1
+P2_2%,LightGBM,expected_profit,youden,401218.6,371349.8,432581.0,0.0
+P2_3%,LightGBM,approve_all,youden,343104.6,312470.1,374383.6,0.0
+P2_3%,LightGBM,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_3%,LightGBM,fixed_0.5,youden,343104.6,312470.1,374383.6,0.0
+P2_3%,LightGBM,youden,approve_all,-343104.6,-374383.6,-312470.1,0.0
+P2_3%,LightGBM,f1_max,approve_all,-283319.2,-312330.6,-254252.7,0.0
+P2_3%,LightGBM,f1_max,youden,59785.4,49007.0,71071.6,0.0
+P2_3%,LightGBM,recall_0.70,approve_all,-413495.6,-445649.3,-381759.3,0.0
+P2_3%,LightGBM,recall_0.70,youden,-70391.0,-79607.0,-60565.1,0.0
+P2_3%,LightGBM,recall_0.80,approve_all,-492826.1,-526507.8,-458980.5,0.0
+P2_3%,LightGBM,recall_0.80,youden,-149721.4,-164186.3,-134234.2,0.0
+P2_3%,LightGBM,elkan,approve_all,-79830.1,-99611.6,-59956.3,0.0
+P2_3%,LightGBM,elkan,youden,263274.6,240187.3,287972.9,0.0
+P2_3%,LightGBM,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_3%,LightGBM,profit_max,youden,343104.6,312470.1,374383.6,0.0
+P2_3%,LightGBM,expected_profit,approve_all,-5341.4,-12337.9,1586.5,0.1
+P2_3%,LightGBM,expected_profit,youden,337763.2,308518.0,369078.5,0.0
+P2_5%,LightGBM,approve_all,youden,221494.5,192827.3,251206.9,0.0
+P2_5%,LightGBM,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_5%,LightGBM,fixed_0.5,youden,221494.5,192827.3,251206.9,0.0
+P2_5%,LightGBM,youden,approve_all,-221494.5,-251206.9,-192827.3,0.0
+P2_5%,LightGBM,f1_max,approve_all,-183275.7,-211174.5,-154893.7,0.0
+P2_5%,LightGBM,f1_max,youden,38218.8,27900.7,49162.9,0.0
+P2_5%,LightGBM,recall_0.70,approve_all,-268204.1,-299768.3,-237701.6,0.0
+P2_5%,LightGBM,recall_0.70,youden,-46709.6,-55642.3,-37435.1,0.0
+P2_5%,LightGBM,recall_0.80,approve_all,-318289.2,-350298.9,-286524.4,0.0
+P2_5%,LightGBM,recall_0.80,youden,-96794.6,-110366.4,-82250.0,0.0
+P2_5%,LightGBM,elkan,approve_all,-115039.3,-138882.9,-90070.3,0.0
+P2_5%,LightGBM,elkan,youden,106455.3,89602.0,123710.9,0.0
+P2_5%,LightGBM,profit_max,approve_all,-1660.7,-6834.1,3621.0,0.5
+P2_5%,LightGBM,profit_max,youden,219833.8,192011.2,249300.0,0.0
+P2_5%,LightGBM,expected_profit,approve_all,1433.0,-9448.1,11898.3,0.8
+P2_5%,LightGBM,expected_profit,youden,222927.6,196568.4,251593.2,0.0
+P2_8%,LightGBM,approve_all,youden,51143.4,25362.9,78144.7,0.0
+P2_8%,LightGBM,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_8%,LightGBM,fixed_0.5,youden,51143.4,25362.9,78144.7,0.0
+P2_8%,LightGBM,youden,approve_all,-51143.4,-78144.7,-25362.9,0.0
+P2_8%,LightGBM,f1_max,approve_all,-43190.5,-68745.8,-16022.6,0.0
+P2_8%,LightGBM,f1_max,youden,7952.9,-1988.8,18390.7,0.1
+P2_8%,LightGBM,recall_0.70,approve_all,-64561.2,-93545.0,-35945.9,0.0
+P2_8%,LightGBM,recall_0.70,youden,-13417.7,-21735.7,-4937.5,0.0
+P2_8%,LightGBM,recall_0.80,approve_all,-73539.9,-103966.0,-43560.3,0.0
+P2_8%,LightGBM,recall_0.80,youden,-22396.5,-34961.6,-9036.1,0.0
+P2_8%,LightGBM,elkan,approve_all,-53705.3,-80658.3,-25935.8,0.0
+P2_8%,LightGBM,elkan,youden,-2561.8,-7479.2,2421.6,0.3
+P2_8%,LightGBM,profit_max,approve_all,4658.6,-7888.4,17285.5,0.4
+P2_8%,LightGBM,profit_max,youden,55802.0,32133.2,81190.8,0.0
+P2_8%,LightGBM,expected_profit,approve_all,115324.8,95728.5,134449.4,0.0
+P2_8%,LightGBM,expected_profit,youden,166468.3,140170.1,193361.2,0.0
+P1,XGBoost,approve_all,youden,639342.2,604833.5,672982.6,0.0
+P1,XGBoost,fixed_0.5,approve_all,-409.9,-1107.1,0.0,0.1
+P1,XGBoost,fixed_0.5,youden,638932.3,604830.2,672738.4,0.0
+P1,XGBoost,youden,approve_all,-639342.2,-672982.6,-604833.5,0.0
+P1,XGBoost,f1_max,approve_all,-498524.0,-529337.8,-466285.2,0.0
+P1,XGBoost,f1_max,youden,140818.2,127459.4,153070.6,0.0
+P1,XGBoost,recall_0.70,approve_all,-662982.5,-696671.6,-627688.3,0.0
+P1,XGBoost,recall_0.70,youden,-23640.3,-28599.0,-18127.2,0.0
+P1,XGBoost,recall_0.80,approve_all,-806422.4,-842430.1,-770708.1,0.0
+P1,XGBoost,recall_0.80,youden,-167080.2,-179413.0,-154154.8,0.0
+P1,XGBoost,elkan,approve_all,-62480.3,-77712.4,-47094.1,0.0
+P1,XGBoost,elkan,youden,576861.9,545259.5,607749.0,0.0
+P1,XGBoost,profit_max,approve_all,-409.9,-1107.1,0.0,0.1
+P1,XGBoost,profit_max,youden,638932.3,604830.2,672738.4,0.0
+P1,XGBoost,expected_profit,approve_all,-1602.3,-5616.4,2165.2,0.4
+P1,XGBoost,expected_profit,youden,637739.9,603986.6,671772.4,0.0
+P2_0%,XGBoost,approve_all,youden,622975.8,587931.7,656877.8,0.0
+P2_0%,XGBoost,fixed_0.5,approve_all,-409.9,-1107.1,0.0,0.1
+P2_0%,XGBoost,fixed_0.5,youden,622565.9,587866.0,656445.6,0.0
+P2_0%,XGBoost,youden,approve_all,-622975.8,-656877.8,-587931.7,0.0
+P2_0%,XGBoost,f1_max,approve_all,-484830.2,-515926.1,-452669.9,0.0
+P2_0%,XGBoost,f1_max,youden,138145.6,124700.9,150580.6,0.0
+P2_0%,XGBoost,recall_0.70,approve_all,-646235.1,-679547.0,-610708.8,0.0
+P2_0%,XGBoost,recall_0.70,youden,-23259.3,-28261.9,-17727.7,0.0
+P2_0%,XGBoost,recall_0.80,approve_all,-787366.3,-823806.6,-751052.8,0.0
+P2_0%,XGBoost,recall_0.80,youden,-164390.6,-176767.5,-151250.9,0.0
+P2_0%,XGBoost,elkan,approve_all,-59633.2,-74958.8,-44311.9,0.0
+P2_0%,XGBoost,elkan,youden,563342.5,531248.4,594951.8,0.0
+P2_0%,XGBoost,profit_max,approve_all,-409.9,-1107.1,0.0,0.1
+P2_0%,XGBoost,profit_max,youden,622565.9,587866.0,656445.6,0.0
+P2_0%,XGBoost,expected_profit,approve_all,-2073.8,-6399.9,2102.9,0.3
+P2_0%,XGBoost,expected_profit,youden,620902.0,587133.4,655570.0,0.0
+P2_2%,XGBoost,approve_all,youden,470635.3,437599.3,503223.3,0.0
+P2_2%,XGBoost,fixed_0.5,approve_all,-370.8,-1001.1,0.0,0.1
+P2_2%,XGBoost,fixed_0.5,youden,470264.5,436873.6,502762.6,0.0
+P2_2%,XGBoost,youden,approve_all,-470635.3,-503223.3,-437599.3,0.0
+P2_2%,XGBoost,f1_max,approve_all,-366013.4,-394915.4,-335627.9,0.0
+P2_2%,XGBoost,f1_max,youden,104621.9,92247.1,116175.9,0.0
+P2_2%,XGBoost,recall_0.70,approve_all,-488040.3,-520421.0,-455155.1,0.0
+P2_2%,XGBoost,recall_0.70,youden,-17405.0,-22104.0,-12341.7,0.0
+P2_2%,XGBoost,recall_0.80,approve_all,-594550.6,-628798.2,-560362.9,0.0
+P2_2%,XGBoost,recall_0.80,youden,-123915.3,-135678.0,-111852.4,0.0
+P2_2%,XGBoost,elkan,approve_all,-62927.9,-79636.8,-45379.1,0.0
+P2_2%,XGBoost,elkan,youden,407707.4,379545.5,436135.3,0.0
+P2_2%,XGBoost,profit_max,approve_all,-370.8,-1001.1,0.0,0.1
+P2_2%,XGBoost,profit_max,youden,470264.5,436873.6,502762.6,0.0
+P2_2%,XGBoost,expected_profit,approve_all,-4476.6,-10319.0,1619.4,0.1
+P2_2%,XGBoost,expected_profit,youden,466158.7,434517.8,497584.0,0.0
+P2_3%,XGBoost,approve_all,youden,397669.4,365071.6,429602.5,0.0
+P2_3%,XGBoost,fixed_0.5,approve_all,-352.2,-950.8,0.0,0.1
+P2_3%,XGBoost,fixed_0.5,youden,397317.2,364942.2,429141.3,0.0
+P2_3%,XGBoost,youden,approve_all,-397669.4,-429602.5,-365071.6,0.0
+P2_3%,XGBoost,f1_max,approve_all,-309129.5,-337463.7,-279211.8,0.0
+P2_3%,XGBoost,f1_max,youden,88539.8,76674.0,99640.9,0.0
+P2_3%,XGBoost,recall_0.70,approve_all,-412265.4,-444057.2,-380642.1,0.0
+P2_3%,XGBoost,recall_0.70,youden,-14596.0,-19150.8,-9713.0,0.0
+P2_3%,XGBoost,recall_0.80,approve_all,-502160.1,-535702.9,-469068.0,0.0
+P2_3%,XGBoost,recall_0.80,youden,-104490.7,-115956.2,-92779.7,0.0
+P2_3%,XGBoost,elkan,approve_all,-113314.3,-134947.1,-90865.5,0.0
+P2_3%,XGBoost,elkan,youden,284355.1,261930.0,307569.9,0.0
+P2_3%,XGBoost,profit_max,approve_all,-352.2,-950.8,0.0,0.1
+P2_3%,XGBoost,profit_max,youden,397317.2,364942.2,429141.3,0.0
+P2_3%,XGBoost,expected_profit,approve_all,-4169.3,-11547.7,2933.5,0.2
+P2_3%,XGBoost,expected_profit,youden,393500.1,363649.0,423638.9,0.0
+P2_5%,XGBoost,approve_all,youden,257718.5,226759.6,288048.0,0.0
+P2_5%,XGBoost,fixed_0.5,approve_all,-316.8,-855.4,0.0,0.1
+P2_5%,XGBoost,fixed_0.5,youden,257401.8,226177.5,287628.0,0.0
+P2_5%,XGBoost,youden,approve_all,-257718.5,-288048.0,-226759.6,0.0
+P2_5%,XGBoost,f1_max,approve_all,-200070.9,-227329.8,-171443.1,0.0
+P2_5%,XGBoost,f1_max,youden,57647.6,46320.6,68109.8,0.0
+P2_5%,XGBoost,recall_0.70,approve_all,-266917.9,-297493.9,-236535.4,0.0
+P2_5%,XGBoost,recall_0.70,youden,-9199.4,-13478.3,-4527.4,0.0
+P2_5%,XGBoost,recall_0.80,approve_all,-324882.3,-356641.8,-293776.9,0.0
+P2_5%,XGBoost,recall_0.80,youden,-67163.8,-78175.6,-55870.8,0.0
+P2_5%,XGBoost,elkan,approve_all,-112278.7,-135923.8,-87458.2,0.0
+P2_5%,XGBoost,elkan,youden,145439.9,127289.4,164281.6,0.0
+P2_5%,XGBoost,profit_max,approve_all,-780.5,-3455.0,1925.6,0.5
+P2_5%,XGBoost,profit_max,youden,256938.0,225645.0,287101.8,0.0
+P2_5%,XGBoost,expected_profit,approve_all,5695.3,-4635.9,16147.0,0.3
+P2_5%,XGBoost,expected_profit,youden,263413.9,234707.3,291392.0,0.0
+P2_8%,XGBoost,approve_all,youden,61590.4,32684.0,89961.6,0.0
+P2_8%,XGBoost,fixed_0.5,approve_all,-267.8,-723.9,0.0,0.1
+P2_8%,XGBoost,fixed_0.5,youden,61322.6,32274.9,89592.6,0.0
+P2_8%,XGBoost,youden,approve_all,-61590.4,-89961.6,-32684.0,0.0
+P2_8%,XGBoost,f1_max,approve_all,-47338.4,-72910.4,-19633.7,0.0
+P2_8%,XGBoost,f1_max,youden,14252.0,3092.5,23976.0,0.0
+P2_8%,XGBoost,recall_0.70,approve_all,-63206.8,-91377.4,-33726.5,0.0
+P2_8%,XGBoost,recall_0.70,youden,-1616.4,-5511.4,2792.0,0.4
+P2_8%,XGBoost,recall_0.80,approve_all,-76288.2,-107552.4,-47071.3,0.0
+P2_8%,XGBoost,recall_0.80,youden,-14697.8,-25258.4,-4209.9,0.0
+P2_8%,XGBoost,elkan,approve_all,-50005.7,-76768.7,-22401.9,0.0
+P2_8%,XGBoost,elkan,youden,11584.7,2628.9,20116.7,0.0
+P2_8%,XGBoost,profit_max,approve_all,4615.3,-8985.1,19380.7,0.5
+P2_8%,XGBoost,profit_max,youden,66205.7,41525.9,90208.2,0.0
+P2_8%,XGBoost,expected_profit,approve_all,113088.9,92958.9,132252.1,0.0
+P2_8%,XGBoost,expected_profit,youden,174679.3,146602.7,200802.2,0.0
+P1,CatBoost,approve_all,youden,656006.4,621663.7,690278.1,0.0
+P1,CatBoost,fixed_0.5,approve_all,-134.0,-2729.0,2415.6,0.9
+P1,CatBoost,fixed_0.5,youden,655872.4,621710.7,689397.1,0.0
+P1,CatBoost,youden,approve_all,-656006.4,-690278.1,-621663.7,0.0
+P1,CatBoost,f1_max,approve_all,-460255.6,-491401.2,-426824.6,0.0
+P1,CatBoost,f1_max,youden,195750.8,179135.5,210663.0,0.0
+P1,CatBoost,recall_0.70,approve_all,-656006.4,-690278.1,-621663.7,0.0
+P1,CatBoost,recall_0.70,youden,0.0,0.0,0.0,1.0
+P1,CatBoost,recall_0.80,approve_all,-795797.6,-830904.6,-759003.2,0.0
+P1,CatBoost,recall_0.80,youden,-139791.2,-150819.6,-127949.6,0.0
+P1,CatBoost,elkan,approve_all,-62025.7,-75159.1,-46843.3,0.0
+P1,CatBoost,elkan,youden,593980.7,564301.5,625519.8,0.0
+P1,CatBoost,profit_max,approve_all,0.0,0.0,0.0,1.0
+P1,CatBoost,profit_max,youden,656006.4,621663.7,690278.1,0.0
+P1,CatBoost,expected_profit,approve_all,-2286.2,-5268.5,604.6,0.1
+P1,CatBoost,expected_profit,youden,653720.2,620044.1,686991.3,0.0
+P2_0%,CatBoost,approve_all,youden,639460.7,604728.8,674024.2,0.0
+P2_0%,CatBoost,fixed_0.5,approve_all,2.6,-2599.8,2521.6,1.0
+P2_0%,CatBoost,fixed_0.5,youden,639463.3,604972.9,673708.2,0.0
+P2_0%,CatBoost,youden,approve_all,-639460.7,-674024.2,-604728.8,0.0
+P2_0%,CatBoost,f1_max,approve_all,-447360.3,-478809.0,-413248.4,0.0
+P2_0%,CatBoost,f1_max,youden,192100.4,175559.4,207150.2,0.0
+P2_0%,CatBoost,recall_0.70,approve_all,-639460.7,-674024.2,-604728.8,0.0
+P2_0%,CatBoost,recall_0.70,youden,0.0,0.0,0.0,1.0
+P2_0%,CatBoost,recall_0.80,approve_all,-776872.2,-813103.2,-740341.1,0.0
+P2_0%,CatBoost,recall_0.80,youden,-137411.5,-148614.8,-125412.4,0.0
+P2_0%,CatBoost,elkan,approve_all,-63468.5,-77525.8,-48461.9,0.0
+P2_0%,CatBoost,elkan,youden,575992.1,546201.9,608356.3,0.0
+P2_0%,CatBoost,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_0%,CatBoost,profit_max,youden,639460.7,604728.8,674024.2,0.0
+P2_0%,CatBoost,expected_profit,approve_all,-3695.8,-6753.5,-474.2,0.0
+P2_0%,CatBoost,expected_profit,youden,635764.9,601877.6,669672.1,0.0
+P2_2%,CatBoost,approve_all,youden,483997.3,451353.1,517173.4,0.0
+P2_2%,CatBoost,fixed_0.5,approve_all,451.1,-2022.0,2871.0,0.7
+P2_2%,CatBoost,fixed_0.5,youden,484448.4,451495.7,517445.7,0.0
+P2_2%,CatBoost,youden,approve_all,-483997.3,-517173.4,-451353.1,0.0
+P2_2%,CatBoost,f1_max,approve_all,-338991.9,-369170.0,-307162.7,0.0
+P2_2%,CatBoost,f1_max,youden,145005.5,129432.6,158901.8,0.0
+P2_2%,CatBoost,recall_0.70,approve_all,-483997.3,-517173.4,-451353.1,0.0
+P2_2%,CatBoost,recall_0.70,youden,0.0,0.0,0.0,1.0
+P2_2%,CatBoost,recall_0.80,approve_all,-587934.3,-622220.3,-552892.0,0.0
+P2_2%,CatBoost,recall_0.80,youden,-103937.0,-114123.3,-92831.8,0.0
+P2_2%,CatBoost,elkan,approve_all,-71003.7,-88563.7,-52502.9,0.0
+P2_2%,CatBoost,elkan,youden,412993.7,385722.4,441359.3,0.0
+P2_2%,CatBoost,profit_max,approve_all,451.1,-2022.0,2871.0,0.7
+P2_2%,CatBoost,profit_max,youden,484448.4,451495.7,517445.7,0.0
+P2_2%,CatBoost,expected_profit,approve_all,-1529.1,-6375.3,3153.8,0.6
+P2_2%,CatBoost,expected_profit,youden,482468.2,450528.3,514820.3,0.0
+P2_3%,CatBoost,approve_all,youden,409530.5,377836.4,442322.3,0.0
+P2_3%,CatBoost,fixed_0.5,approve_all,665.9,-1753.0,3035.4,0.6
+P2_3%,CatBoost,fixed_0.5,youden,410196.4,379112.1,442924.0,0.0
+P2_3%,CatBoost,youden,approve_all,-409530.5,-442322.3,-377836.4,0.0
+P2_3%,CatBoost,f1_max,approve_all,-287116.1,-316916.0,-256179.0,0.0
+P2_3%,CatBoost,f1_max,youden,122414.5,107212.2,135844.1,0.0
+P2_3%,CatBoost,recall_0.70,approve_all,-409530.5,-442322.3,-377836.4,0.0
+P2_3%,CatBoost,recall_0.70,youden,0.0,0.0,0.0,1.0
+P2_3%,CatBoost,recall_0.80,approve_all,-497398.7,-530821.6,-463045.3,0.0
+P2_3%,CatBoost,recall_0.80,youden,-87868.2,-97683.8,-76993.9,0.0
+P2_3%,CatBoost,elkan,approve_all,-97133.3,-116827.2,-76597.9,0.0
+P2_3%,CatBoost,elkan,youden,312397.3,287253.9,336721.6,0.0
+P2_3%,CatBoost,profit_max,approve_all,665.9,-1753.0,3035.4,0.6
+P2_3%,CatBoost,profit_max,youden,410196.4,379112.1,442924.0,0.0
+P2_3%,CatBoost,expected_profit,approve_all,-305.5,-6506.5,5749.1,0.9
+P2_3%,CatBoost,expected_profit,youden,409225.0,378417.3,440715.1,0.0
+P2_5%,CatBoost,approve_all,youden,266691.3,235775.3,298482.2,0.0
+P2_5%,CatBoost,fixed_0.5,approve_all,1077.9,-1245.6,3355.2,0.4
+P2_5%,CatBoost,fixed_0.5,youden,267769.2,237084.4,299017.6,0.0
+P2_5%,CatBoost,youden,approve_all,-266691.3,-298482.2,-235775.3,0.0
+P2_5%,CatBoost,f1_max,approve_all,-187669.6,-216172.5,-157929.1,0.0
+P2_5%,CatBoost,f1_max,youden,79021.8,64609.8,91838.9,0.0
+P2_5%,CatBoost,recall_0.70,approve_all,-266691.3,-298482.2,-235775.3,0.0
+P2_5%,CatBoost,recall_0.70,youden,0.0,0.0,0.0,1.0
+P2_5%,CatBoost,recall_0.80,approve_all,-323674.1,-355682.4,-290663.1,0.0
+P2_5%,CatBoost,recall_0.80,youden,-56982.8,-66408.3,-47050.1,0.0
+P2_5%,CatBoost,elkan,approve_all,-129383.9,-153340.5,-104396.9,0.0
+P2_5%,CatBoost,elkan,youden,137307.4,120267.9,155795.7,0.0
+P2_5%,CatBoost,profit_max,approve_all,1077.9,-1245.6,3355.2,0.4
+P2_5%,CatBoost,profit_max,youden,267769.2,237084.4,299017.6,0.0
+P2_5%,CatBoost,expected_profit,approve_all,6059.0,-3683.5,15413.4,0.2
+P2_5%,CatBoost,expected_profit,youden,272750.3,244721.9,301820.2,0.0
+P2_8%,CatBoost,approve_all,youden,66493.8,37706.5,96376.8,0.0
+P2_8%,CatBoost,fixed_0.5,approve_all,1655.2,-546.6,3850.7,0.1
+P2_8%,CatBoost,fixed_0.5,youden,68149.0,38525.7,97374.7,0.0
+P2_8%,CatBoost,youden,approve_all,-66493.8,-96376.8,-37706.5,0.0
+P2_8%,CatBoost,f1_max,approve_all,-48422.2,-75311.3,-21653.8,0.0
+P2_8%,CatBoost,f1_max,youden,18071.6,4711.0,29980.2,0.0
+P2_8%,CatBoost,recall_0.70,approve_all,-66493.8,-96376.8,-37706.5,0.0
+P2_8%,CatBoost,recall_0.70,youden,0.0,0.0,0.0,1.0
+P2_8%,CatBoost,recall_0.80,approve_all,-80048.8,-109842.2,-48745.7,0.0
+P2_8%,CatBoost,recall_0.80,youden,-13555.0,-22590.2,-4455.0,0.0
+P2_8%,CatBoost,elkan,approve_all,-57322.7,-84399.0,-28598.6,0.0
+P2_8%,CatBoost,elkan,youden,9171.1,79.0,18298.6,0.0
+P2_8%,CatBoost,profit_max,approve_all,7108.7,2158.0,12292.1,0.0
+P2_8%,CatBoost,profit_max,youden,73602.5,45520.5,103100.9,0.0
+P2_8%,CatBoost,expected_profit,approve_all,125827.7,105373.0,144427.8,0.0
+P2_8%,CatBoost,expected_profit,youden,192321.4,166409.8,218571.8,0.0
+P1,Gradient Boosting,approve_all,youden,611511.4,579441.3,644333.4,0.0
+P1,Gradient Boosting,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P1,Gradient Boosting,fixed_0.5,youden,611511.4,579441.3,644333.4,0.0
+P1,Gradient Boosting,youden,approve_all,-611511.4,-644333.4,-579441.3,0.0
+P1,Gradient Boosting,f1_max,approve_all,-491746.5,-523047.9,-460810.3,0.0
+P1,Gradient Boosting,f1_max,youden,119764.9,107823.5,130499.5,0.0
+P1,Gradient Boosting,recall_0.70,approve_all,-701356.0,-736498.8,-666501.0,0.0
+P1,Gradient Boosting,recall_0.70,youden,-89844.6,-100022.2,-79161.5,0.0
+P1,Gradient Boosting,recall_0.80,approve_all,-820765.5,-856507.5,-783651.3,0.0
+P1,Gradient Boosting,recall_0.80,youden,-209254.1,-224445.4,-192229.1,0.0
+P1,Gradient Boosting,elkan,approve_all,-45468.1,-58636.3,-32747.1,0.0
+P1,Gradient Boosting,elkan,youden,566043.3,536012.3,597143.1,0.0
+P1,Gradient Boosting,profit_max,approve_all,0.0,0.0,0.0,1.0
+P1,Gradient Boosting,profit_max,youden,611511.4,579441.3,644333.4,0.0
+P1,Gradient Boosting,expected_profit,approve_all,-1160.8,-4523.0,2293.8,0.5
+P1,Gradient Boosting,expected_profit,youden,610350.6,578784.9,643276.6,0.0
+P2_0%,Gradient Boosting,approve_all,youden,595671.7,562959.1,628672.7,0.0
+P2_0%,Gradient Boosting,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_0%,Gradient Boosting,fixed_0.5,youden,595671.7,562959.1,628672.7,0.0
+P2_0%,Gradient Boosting,youden,approve_all,-595671.7,-628672.7,-562959.1,0.0
+P2_0%,Gradient Boosting,f1_max,approve_all,-478003.5,-509784.5,-446448.3,0.0
+P2_0%,Gradient Boosting,f1_max,youden,117668.2,105649.0,128377.7,0.0
+P2_0%,Gradient Boosting,recall_0.70,approve_all,-683829.4,-719168.9,-648463.6,0.0
+P2_0%,Gradient Boosting,recall_0.70,youden,-88157.7,-98620.4,-77383.6,0.0
+P2_0%,Gradient Boosting,recall_0.80,approve_all,-801545.0,-838003.4,-763603.9,0.0
+P2_0%,Gradient Boosting,recall_0.80,youden,-205873.3,-221167.8,-188610.3,0.0
+P2_0%,Gradient Boosting,elkan,approve_all,-45149.0,-59007.8,-31094.1,0.0
+P2_0%,Gradient Boosting,elkan,youden,550522.8,520253.5,581909.9,0.0
+P2_0%,Gradient Boosting,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_0%,Gradient Boosting,profit_max,youden,595671.7,562959.1,628672.7,0.0
+P2_0%,Gradient Boosting,expected_profit,approve_all,-350.6,-4002.7,3774.5,0.9
+P2_0%,Gradient Boosting,expected_profit,youden,595321.1,562980.7,628620.1,0.0
+P2_2%,Gradient Boosting,approve_all,youden,450683.7,419857.0,481780.1,0.0
+P2_2%,Gradient Boosting,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_2%,Gradient Boosting,fixed_0.5,youden,450683.7,419857.0,481780.1,0.0
+P2_2%,Gradient Boosting,youden,approve_all,-450683.7,-481780.1,-419857.0,0.0
+P2_2%,Gradient Boosting,f1_max,approve_all,-359958.4,-390317.8,-330509.0,0.0
+P2_2%,Gradient Boosting,f1_max,youden,90725.3,79505.7,100748.4,0.0
+P2_2%,Gradient Boosting,recall_0.70,approve_all,-516421.0,-549179.0,-482553.9,0.0
+P2_2%,Gradient Boosting,recall_0.70,youden,-65737.3,-75788.1,-55385.7,0.0
+P2_2%,Gradient Boosting,recall_0.80,approve_all,-605800.9,-640863.9,-570569.2,0.0
+P2_2%,Gradient Boosting,recall_0.80,youden,-155117.3,-169536.2,-139167.3,0.0
+P2_2%,Gradient Boosting,elkan,approve_all,-74869.0,-92780.1,-56491.9,0.0
+P2_2%,Gradient Boosting,elkan,youden,375814.6,351024.3,402422.2,0.0
+P2_2%,Gradient Boosting,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_2%,Gradient Boosting,profit_max,youden,450683.7,419857.0,481780.1,0.0
+P2_2%,Gradient Boosting,expected_profit,approve_all,-2686.2,-7723.4,2451.8,0.3
+P2_2%,Gradient Boosting,expected_profit,youden,447997.5,417930.2,478979.0,0.0
+P2_3%,Gradient Boosting,approve_all,youden,381243.3,350634.7,411667.1,0.0
+P2_3%,Gradient Boosting,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_3%,Gradient Boosting,fixed_0.5,youden,381243.3,350634.7,411667.1,0.0
+P2_3%,Gradient Boosting,youden,approve_all,-381243.3,-411667.1,-350634.7,0.0
+P2_3%,Gradient Boosting,f1_max,approve_all,-303441.8,-333001.4,-274778.9,0.0
+P2_3%,Gradient Boosting,f1_max,youden,77801.5,67070.0,87668.8,0.0
+P2_3%,Gradient Boosting,recall_0.70,approve_all,-436219.4,-467981.3,-403601.7,0.0
+P2_3%,Gradient Boosting,recall_0.70,youden,-54976.0,-64809.3,-44937.8,0.0
+P2_3%,Gradient Boosting,recall_0.80,approve_all,-511999.6,-546020.3,-478020.3,0.0
+P2_3%,Gradient Boosting,recall_0.80,youden,-130756.3,-144672.2,-115147.3,0.0
+P2_3%,Gradient Boosting,elkan,approve_all,-73778.1,-92303.7,-54061.9,0.0
+P2_3%,Gradient Boosting,elkan,youden,307465.2,283726.8,332228.3,0.0
+P2_3%,Gradient Boosting,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_3%,Gradient Boosting,profit_max,youden,381243.3,350634.7,411667.1,0.0
+P2_3%,Gradient Boosting,expected_profit,approve_all,-1895.8,-8638.6,5168.9,0.6
+P2_3%,Gradient Boosting,expected_profit,youden,379347.6,350305.3,408612.1,0.0
+P2_5%,Gradient Boosting,approve_all,youden,248062.0,218352.1,277411.4,0.0
+P2_5%,Gradient Boosting,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_5%,Gradient Boosting,fixed_0.5,youden,248062.0,218352.1,277411.4,0.0
+P2_5%,Gradient Boosting,youden,approve_all,-248062.0,-277411.4,-218352.1,0.0
+P2_5%,Gradient Boosting,f1_max,approve_all,-195083.2,-223025.5,-167921.2,0.0
+P2_5%,Gradient Boosting,f1_max,youden,52978.9,42685.3,62350.4,0.0
+P2_5%,Gradient Boosting,recall_0.70,approve_all,-282356.2,-313153.0,-251180.1,0.0
+P2_5%,Gradient Boosting,recall_0.70,youden,-34294.1,-43649.9,-24689.4,0.0
+P2_5%,Gradient Boosting,recall_0.80,approve_all,-332000.9,-364951.0,-299499.5,0.0
+P2_5%,Gradient Boosting,recall_0.80,youden,-83938.9,-97310.0,-69481.5,0.0
+P2_5%,Gradient Boosting,elkan,approve_all,-113441.2,-136269.4,-88445.5,0.0
+P2_5%,Gradient Boosting,elkan,youden,134620.8,116872.6,153402.6,0.0
+P2_5%,Gradient Boosting,profit_max,approve_all,0.0,0.0,0.0,1.0
+P2_5%,Gradient Boosting,profit_max,youden,248062.0,218352.1,277411.4,0.0
+P2_5%,Gradient Boosting,expected_profit,approve_all,5503.5,-4379.3,16132.7,0.3
+P2_5%,Gradient Boosting,expected_profit,youden,253565.5,227094.4,282426.2,0.0
+P2_8%,Gradient Boosting,approve_all,youden,61437.1,34076.3,89482.0,0.0
+P2_8%,Gradient Boosting,fixed_0.5,approve_all,0.0,0.0,0.0,1.0
+P2_8%,Gradient Boosting,fixed_0.5,youden,61437.1,34076.3,89482.0,0.0
+P2_8%,Gradient Boosting,youden,approve_all,-61437.1,-89482.0,-34076.3,0.0
+P2_8%,Gradient Boosting,f1_max,approve_all,-43321.8,-69440.5,-17020.2,0.0
+P2_8%,Gradient Boosting,f1_max,youden,18115.3,8413.3,26877.8,0.0
+P2_8%,Gradient Boosting,recall_0.70,approve_all,-66654.9,-96848.8,-37735.1,0.0
+P2_8%,Gradient Boosting,recall_0.70,youden,-5217.8,-14329.3,3834.5,0.2
+P2_8%,Gradient Boosting,recall_0.80,approve_all,-79560.3,-110370.4,-49456.1,0.0
+P2_8%,Gradient Boosting,recall_0.80,youden,-18123.2,-30440.2,-4557.1,0.0
+P2_8%,Gradient Boosting,elkan,approve_all,-53453.1,-80737.5,-26769.5,0.0
+P2_8%,Gradient Boosting,elkan,youden,7984.0,1852.2,13927.2,0.0
+P2_8%,Gradient Boosting,profit_max,approve_all,6593.0,-6183.9,20267.9,0.3
+P2_8%,Gradient Boosting,profit_max,youden,68030.0,45368.1,92238.2,0.0
+P2_8%,Gradient Boosting,expected_profit,approve_all,115897.3,97343.3,134969.9,0.0
+P2_8%,Gradient Boosting,expected_profit,youden,177334.4,151242.4,202854.2,0.0

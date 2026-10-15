@@ -21,7 +21,7 @@ METRICS = ['Recall', 'Precision', 'F1', 'MCC', 'ROC_AUC', 'PR_AUC', 'Brier', 'th
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--stage", choices=["score", "analyze", "leaf"], required=True)
-    ap.add_argument("--dataset", choices=["D1", "D2"], required=True)
+    ap.add_argument("--dataset", choices=["D1", "D2", "D3"], required=True)
     ap.add_argument("--repeats", type=int, default=None, help="default D2=10, D1=5")
     ap.add_argument("--leaf-sweep", action="store_true")
     ap.add_argument("--leaf-repeats", type=int, default=3)
@@ -29,7 +29,7 @@ def main():
     ap.add_argument("--n-workers", type=int, default=1)
     ap.add_argument("--n-jobs", type=int, default=2)
     a = ap.parse_args()
-    n_rep = a.repeats or (10 if a.dataset == "D2" else 5)
+    n_rep = a.repeats or (5 if a.dataset == "D1" else 10)
     reps = list(range(n_rep))
     if a.stage == "score":
         t0 = time.time()
@@ -53,11 +53,11 @@ def main():
         out = summarize(m, ['model', 'weighting', 'leaf'],
                         ['Recall_fixed_0.5', 'Recall_youden', 'threshold_youden', 'F1_youden',
                          'ROC_AUC', 'Brier', 'frac_score0'])
-        out.to_csv(RESULTS_DIR / "phase2_leaf_sweep.csv", index=False)
+        out.to_csv(RESULTS_DIR / ("phase2_leaf_sweep.csv" if a.dataset == "D2" else f"phase2_leaf_sweep_{a.dataset}.csv"), index=False)
         print(out.round(3).to_string(index=False))
         return
     # ---- analyze
-    R, _ = analyse(a.dataset, reps, with_profit=(a.dataset == "D2"))
+    R, _ = analyse(a.dataset, reps, with_profit=(a.dataset in ("D2", "D3")))
     R = R[R.rule.isin(['fixed_0.5', 'youden']) & (R.calib == 'raw')].copy()
     R['thr_rule'] = R.rule.map({'fixed_0.5': '0.5', 'youden': 'tuned'})
     S = summarize(R, ['dataset', 'model', 'weighting', 'thr_rule'], METRICS)

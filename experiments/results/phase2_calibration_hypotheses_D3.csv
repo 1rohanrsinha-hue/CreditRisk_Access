@@ -1,0 +1,4 @@
+hypothesis,frac_within_tol,tol,mean_abs_dev,verdict,dataset
+H1 calibrated => t*~pi,1.0,0.05,0.0037946939989386462,SUPPORTED,D3
+H2 balanced raw => t*~0.5,0.8,0.05,0.07402530655264858,SUPPORTED,D3
+H3 weighting-invariance after calibration,1.0,0.05,0.0037946939989386462,SUPPORTED,D3

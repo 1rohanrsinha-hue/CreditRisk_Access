@@ -104,6 +104,40 @@ _D3 = strict label; issue years 2010–2013 (any term) + 2014/2015 36-month; pop
 
 Other fixed choices: capacity ranking uses each model's raw (monotone-equivalent) score of the unweighted model to avoid isotonic ties, and a second ranking by expected profit with isotonic-calibrated p; random-selection benchmark = k × approve-all profit; OOT seeds = model seeds 42/43/44, split deterministic; features missing in >50% of the training window are dropped (OOT hygiene).
 
+## Phase 3B results (2026-10-16; D3 = mature vintages; outcomes reported against the frozen pre-registration above)
+**Datasets.** D3 population 667,024 strict-labelled loans (default rate .1483; 2010–2013 any term + 2014/2015 36m; 91.7% 36-month in the 200k sample, prevalence .1477). D1 100k legacy-label/one quarter (π .182); D2 200k strict, 2007–2018 incl. 38.9% from ≥2016 (π .199); D3 π .148.
+
+| claim | D1 | D2 | D3 | verdict |
+|---|---|---|---|---|
+| recall@0.5 unweighted → balanced (mean of 10 models) | .039 → .534 | .058 → .541 | .005 → .522 | SURVIVES |
+| tuned-recall \|none − balanced\| | .005 | .001 | .005 | SURVIVES |
+| tuned-recall spread across models (balanced) | .081 | .065 | .077 | SURVIVES (threshold noise) |
+| ROC-AUC spread across models | .036 | .027 | .032 | SURVIVES |
+| H1 calibrated t*≈π: share within ±.05 / mean \|t*−π\| | 100% / .006 | 100% / .005 | 100% / .004 | SURVIVES |
+| H2 balanced raw t*≈.5: share within ±.05 (RF/ET fail) | 80% | 80% | 80% | SURVIVES |
+| H3 weighting gap after calibration | .004 | .002 | .002 | SURVIVES |
+| raw balanced ECE → calibrated ECE | .224 → .012 | .211 → .010 | .254 → .008 | SURVIVES |
+| leaf purity: balanced ET recall@.5 leaf 1→20; t* | n/a | .059→.651; .203→.482 | .006→.631; .147→.495 | SURVIVES |
+| leaf purity: balanced RF recall@.5 leaf 1→20; t* | n/a | .057→.545; .207→.432 | .003→.451; .147→.416 | SURVIVES |
+
+**H8: REPLICATES** — all six pre-registered criteria pass on D3 (`phase3b_replication.csv`). Platt AUC change 0.0000, isotonic −.0006…+.0012.
+
+**H5 (in-time D3, 5 models × 10 repeats): SUPPORTED at P1, P2-0%, P2-3%** — 0 (model, rule) pairs with repeat-mean above approve-all and paired CI lower bound > 0. LightGBM, $000 per 1000 applicants, 3%: approve-all 763 (sd 10) | fixed-0.5 763 | profit-max 763 (accepts 99.9%) | expected-profit 766 | Elkan 675 | F1-max 474 | Youden 410 | recall ≥.70 342 | recall ≥.80 249. Paired CI vs approve-all (rep 0, 3%): Youden −$343k [−374k, −312k], recall-.80 −$493k, Elkan −$80k, expected-profit −$5k [n.s.].
+- Profit-max acceptance by discount rate (LightGBM): P1 100%, 0% 100%, 2% 99.9%, 3% 99.9%, 5% 99.8%, 8% 95.5%.
+- **Cells where a rule beats approve-all with paired CI excluding 0 (in-time D3):** none at P1/0%/2%/3%/5%. At **8%** (the pre-registered exception): expected-profit beats approve-all for LR/LightGBM/XGBoost/CatBoost/GB by +$110k…+$126k per 1000 (LightGBM +$115k [96k, 134k]; accepts 47%) and profit-max for CatBoost by +$7.1k [2.2k, 12.3k]. At 8% approve-all itself earns only $59k per 1000.
+- **Separate OOT result (not part of H5):** 2015 36-month fold, P2-3%, Elkan with thresholds from T−1 earned +$7.7k per 1000 over approve-all, paired CI [3.3k, 11.9k] (identical for seeds 42/43/44 — the LightGBM fit has no seed-dependent subsampling here; accepts 92.5%). This is an out-of-time, single-fold, single-vintage result; H5 is evaluated on the in-time D3 analysis only.
+
+**H6 (OOT expected-profit rule, 3 folds × 3 seeds): SUPPORTED.** Lower bound of the paired CI vs approve-all is ≤ 0 in every fold/scenario/seed (P1: −14.9k/−1.7k/−1.2k; P2-3%: −32.2k/−3.1k/−0.6k, seed 42); folds with lower bound > 0: none. Mean differences: P1 −12.6k/−0.8k/−0.05k; P2-3% −28.6k/−1.5k/+1.5k (n.s.). The shrinkage margin chosen on T−1 was m=0 in all folds. Youden(T−1) loses $216k–$436k per 1000 in 2014/2015; Elkan(T−1) loses $186k in 2013.
+
+**H7 (capacity, 10 models, 10 repeats + 3 OOT folds): NOT SUPPORTED** (pre-registered primary ranking = default-risk score).
+- Clause (a): range of model profits < CI half-width at only 3/7 acceptance levels (needs ≥ 4); clause (b): **0/7** — selecting the k% lowest-risk applicants earns *less than random selection* for all 10 models at k=30–70% (gain over random −$21k…−$53k per 1000 at P2-3%; CI upper bound < 0 for 10/10 models at k ≤ .7, 9/10 at .8, 2/10 at .9) even though bad rate falls from .148 to .063–.130, because low-risk loans carry lower interest.
+- Secondary ranking (expected profit, isotonic p + LightGBM regressors): both clauses hold — range $19–30k < CI half-width $32–35k at 7/7 levels; all 10 models beat random at every k (+$66k…+$266k per 1000, CI lower bound > 0). At k=90% profit $753k vs approve-all $763k.
+- Model-rank stability is low: mean Spearman across k .58 (P2-3%) / .61 (P1); across 10 repeats at k=.5 .46 / .40; across OOT folds .17 / .16.
+
+**OOT hygiene and seeds.** Features missing in >50% of the training window are dropped (`mortgage_accounts` for T=2013, 2014; none for 2015). All 5 models × 3 folds changed by ≤ .0014 AUC vs 3A (threshold .002) so no full rerun was needed. 3 model seeds: seed sd of OOT AUC ≈ .0003 (RF .0007–.0011; LR/LightGBM/XGBoost deterministic ≈ 0). Fold means (5 models × 3 seeds): AUC in-time .682/.697/.691 → OOT .666/.676/.673; ECE of isotonic-on-T−1 on T .022/.036/.022 vs in-sample .0026/.0010/.0016; J lost to stale T−1 threshold .0021/.0040/.0035. P2-3% profit per 1000 (mean of models ± seed sd): approve-all 1,453 / 803 / 394; Youden 601±16 / 552±5 / 318±1; Elkan 1,255±5 / 803±0.2 / 402±0.2; profit-max 1,444±2 / 803 / 395.
+
+**Operational notes.** The laptop did not actually sleep (uptime 16 days); the background jobs ran to completion. Score and analysis runners skip existing units (atomic `os.replace` checkpoints). `experiments/status.sh` prints progress.
+
 ## Phase 4: Explainability
 - [ ] SHAP on all models with 2000+ samples — `TODO`
 - [ ] Rank correlation of attributions across models — `TODO`
@@ -178,9 +212,27 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | Sec III-B2 | Imputation paragraph | **WRONG** | pandas fill bug: nothing was imputed (6151 NaNs zero-filled); journal version uses in-fold imputation |
 | Sec V | "CatBoost native categorical handling" | **WRONG** | `cat_features` was never passed in the paper's code; fixed in `creditrisk/models.py` |
 
+### Phase 3B changes to the claim table (supersedes Phase 2 profit magnitudes)
+| Claim | Status | Evidence |
+|---|---|---|
+| Phase 2 profit magnitudes (profit-max accepts ~87%, +$162k over Youden) | **SUPERSEDED** | censored-vintage artefact; on D3 profit-max accepts ≥99.8% at ≤5% and equals approve-all |
+| "Youden gives the best operating point" | **CHANGED (stronger)** | D3 3%: Youden earns 54% less than approve-all ($410k vs $763k per 1000; CI excludes 0); no cutoff beats approve-all at ≤5% |
+| "Thresholds learned on older data go stale under drift" (H4) | **NOT SUPPORTED** | \|Δπ\| up to .029 but t* moves opposite (sign agreement 13%); J lost ≤ .007 (≤1.6% of J_max) |
+| "Isotonic calibration on a recent vintage remains valid" | **WEAKENED** | ECE on next vintage .022–.036 vs .001–.003 in-sample (10–25× worse); worse than raw in 2014 |
+| "Ranking by default risk is useful for capacity-constrained lending" | **CHANGED** | all 10 models earn less than random selection at k=30–70% (lower-risk loans carry lower interest); expected-profit ranking beats random by +$66k…+$266k per 1000 |
+| "Model family matters little" | **CONFIRMED** for AUC (spread .027–.036) and expected-profit ranking; **WEAKENED** as a ranking (Spearman .17 across folds) | |
+| Phase 2 calibration/weighting/leaf-purity results | **CONFIRMED on 3 datasets** | H8 replicates |
+
 ### Phase 3A changes to the picture
 - The Phase 2 profit conclusions (profit-max accepts ~87%, +$162k over Youden, recall-.80 loses to approve-all) are **conditional on a D2 sample that is ~50% censored vintages**. On mature cells only (≤2013, or 2014/2015 36-month) approve-all is optimal, Youden loses 53%, and even the expected-profit rule is −$32k/−$51k below approve-all.
 - Under 5% p.a. discounting the whole book is unprofitable (approve-all −$297 per applicant on D2; +$475/applicant on mature cells), and at 8% profit-max rejects everything on D2.
+
+### Limitations added in Phase 3B
+- **D3 is a selected mature population** (strict label, 2010–2015 vintages, 36m-only for 2014–2015): results speak to loans of that vintage/term mix, not to 60-month loans of 2014+ or to recent vintages.
+- **Funded loans only:** "approve-all is optimal" is relative to the historically approved population; rejected applicants are unobserved.
+- **Discounting is an illustrative hurdle** (grid 0/2/3/5/8%), applied with uniform-payment timing from totals; cash-flow timing and collection costs beyond `collection_recovery_fee` are not observed.
+- **Hindsight labels** in the T−1 calibration/threshold sets; OOT folds have a single deterministic split and three model seeds.
+- **Profit regressors** (R² .06 on total profit) are noisy; their value comes from the loan-size × rate structure, not from default prediction.
 
 ### Limitations added in Phase 3A
 - **Hindsight labels:** the T−1 calibration/threshold set uses outcomes that were only observable after year T−1 (a loan issued in 2012 resolves in 2015); a live system would have fewer resolved labels.
