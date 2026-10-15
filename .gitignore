@@ -82,3 +82,5 @@ dist/
 *.gif
 *.bmp
 *.webp
+catboost_info/
+.cache/
