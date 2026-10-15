@@ -1,0 +1,5 @@
+mean_delta,ci_lo,ci_hi,p,tost_p,cell,model,best_boosting,best_auc,model_auc,tost_p_holm,equivalent,label
+-0.00848,-0.01051,-0.00644,0.00032,0.99549,with_rate,WoE Scorecard,LightGBM,0.68413,0.67566,0.99549,False,not equivalent
+-0.00091,-0.00292,0.00111,0.27874,0.00244,with_rate,EBM,LightGBM,0.68413,0.68323,0.00488,True,equivalent
+-0.01666,-0.01986,-0.01346,0.00013,0.99973,no_rate,WoE Scorecard,LightGBM,0.65819,0.64153,0.99973,False,not equivalent
+-0.00019,-0.00299,0.00262,0.86329,0.00443,no_rate,EBM,LightGBM,0.65819,0.658,0.00886,True,equivalent

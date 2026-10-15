@@ -40,7 +40,7 @@ def d3_sample(n: int = DEV_N):
 
 
 def _parse(name: str):
-    """'D3', or a leakage-ablation cell like 'D3:ir0:csgd' (interest rate out,
+    """'D3', or an endogenous-feature ablation cell like 'D3:ir0:csgd' (interest rate out,
     grade-derived credit score). cs: fico | gd (grade-derived) | none."""
     base, *opts = name.split(':')
     ir, cs = True, 'fico'
@@ -58,7 +58,14 @@ def get_dataset(name: str):
     D2: seeded random 200k labelled rows, strict label, headline features.
     Returns (X, y, profit) ; profit is realized profit (meaningful for D2)."""
     name, ir_flag, cs_flag = _parse(name)
-    if name == "D1":
+    if name == "D3FULL":                        # full 667k mature population
+        raw = d3_population().sort_index()
+        X, y, meta = build_frame(raw, ir_flag, cs_flag)
+    elif name == "STRICTFULL":                  # full 1.345M strict set (sensitivity, censored 2016+)
+        from .data import full_frame, label_strict
+        raw = label_strict(full_frame()).sort_index()
+        X, y, meta = build_frame(raw, ir_flag, cs_flag)
+    elif name == "D1":
         raw = label_legacy(load_first_n(100_000))
         X, y, meta = build_frame(raw, True, "grade_derived")
     elif name == "D3":

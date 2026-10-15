@@ -47,7 +47,7 @@ class Config:
     n_jobs: int = 4
     legacy_fill_bug: bool = False       # only the baseline reproduction sets True
     label: str = "strict"               # "strict" | "legacy"
-    # leakage switches
+    # endogenous-feature switches (interest_rate is the lender's own risk price)
     use_interest_rate: bool = True
     credit_score: str = "fico"          # "fico" | "grade_derived" | "none"
     select_k: int | None = None         # None = keep all raw features

@@ -1,0 +1,13 @@
+mean_delta,ci_lo,ci_hi,p,tost_p,ensemble,vs,family,p_sup,tost_p_holm,sup_p_holm,equivalent,superior_by_gt_margin,label
+0.00016,-0.00082,0.00113,0.72555,0.0,Soft voting,LightGBM,H17,1.0,0.0,1.0,True,False,equivalent
+0.00073,-6e-05,0.00151,0.06675,0.0,Stacking (LR meta),LightGBM,H17,1.0,0.0,1.0,True,False,equivalent
+0.00583,0.00429,0.00737,1e-05,0.87377,Soft voting,Logistic Regression,members,0.12623,1.0,0.8836,False,,not equivalent
+0.02616,0.02342,0.0289,0.0,1.0,Soft voting,Random Forest,members,0.0,1.0,0.0,False,,not equivalent
+0.00016,-0.00082,0.00113,0.72555,0.0,Soft voting,LightGBM,members,1.0,1e-05,1.0,True,,equivalent
+0.00042,-0.00068,0.00152,0.40837,0.0,Soft voting,XGBoost,members,1.0,2e-05,1.0,True,,equivalent
+0.00131,0.0001,0.00251,0.03717,3e-05,Soft voting,CatBoost,members,0.99997,0.00017,1.0,True,,equivalent
+0.0064,0.00461,0.00819,2e-05,0.94488,Stacking (LR meta),Logistic Regression,members,0.05512,1.0,0.441,False,,not equivalent
+0.02673,0.02349,0.02997,0.0,1.0,Stacking (LR meta),Random Forest,members,0.0,1.0,0.0,False,,not equivalent
+0.00073,-6e-05,0.00151,0.06675,0.0,Stacking (LR meta),LightGBM,members,1.0,0.0,1.0,True,,equivalent
+0.00099,0.0002,0.00178,0.01967,0.0,Stacking (LR meta),XGBoost,members,1.0,1e-05,1.0,True,,equivalent
+0.00187,0.00104,0.00271,0.00069,1e-05,Stacking (LR meta),CatBoost,members,0.99999,4e-05,1.0,True,,equivalent

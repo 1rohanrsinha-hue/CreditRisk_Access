@@ -91,7 +91,40 @@ def oof_proba(name, X, y, skf, seed=42, n_jobs=4, select_k=None):
     return oof, selected
 
 
+class _Resampled:
+    """Fitted encoder + classifier trained on a resampled training fold."""
+    def __init__(self, enc, clf):
+        self.enc, self.clf = enc, clf
+
+    def predict_proba(self, X):
+        return self.clf.predict_proba(self.enc.transform(X).values)
+
+
+def _fit_resampled(name, X, y, method, seed, n_jobs, leaf):
+    """Random undersampling / SMOTE applied to the TRAINING data only.
+    LR: one-hot + scaled features, plain SMOTE after one-hot. Trees: ordinal
+    codes, SMOTENC with nominal columns declared categorical."""
+    from imblearn.under_sampling import RandomUnderSampler
+    from imblearn.over_sampling import SMOTE, SMOTENC
+    pipe = make_models(y, seed, n_jobs, None, columns=list(X.columns), weighting='none', leaf=leaf)[name]
+    clf = pipe.named_steps['clf']
+    enc = FrameEncoder(mode='onehot_scaled' if name == 'Logistic Regression' else 'ordinal')
+    Z = enc.fit(X, y).transform(X)
+    if method == 'undersample':
+        rs = RandomUnderSampler(sampling_strategy=1.0, random_state=seed)
+    elif enc.mode == 'onehot_scaled':
+        rs = SMOTE(sampling_strategy=1.0, random_state=seed)
+    else:
+        idx = [i for i, c in enumerate(Z.columns) if c in enc.nominal_]
+        rs = SMOTENC(categorical_features=idx, sampling_strategy=1.0, random_state=seed)
+    Zr, yr = rs.fit_resample(Z.values, np.asarray(y))
+    clf.fit(Zr, yr)
+    return _Resampled(enc, clf)
+
+
 def fit_model(name, X, y, weighting='balanced', seed=42, n_jobs=4, leaf=None):
+    if weighting in ('undersample', 'smote'):
+        return _fit_resampled(name, X, y, weighting, seed, n_jobs, leaf)
     """Fresh pipeline fit on (X, y). Balanced weighting for GB/AdaBoost/MLP via
     sample_weight (sklearn 1.8 MLPClassifier.fit supports sample_weight)."""
     from sklearn.utils.class_weight import compute_sample_weight

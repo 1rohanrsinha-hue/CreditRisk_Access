@@ -22,7 +22,7 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 ### Additional findings (not in original list)
 - [ ] Same inplace-fillna no-op zero-fills numeric NaNs (dti 2, revol_util 37) — `TODO`
 - [ ] Label: `Current` (11.4% of rows) counted as non-default (right-censored); `Late (16-30)` counted non-default, `Late (31-120)`/`In Grace Period` counted default — `TODO`
-- [ ] `credit_score` is synthetic: derived from `grade` and `interest_rate` (app.py:211-216) — leakage/redundancy; user-entered in /predict — `TODO`
+- [ ] `credit_score` is synthetic: derived from `grade` and `interest_rate` (app.py:211-216) — endogenous/redundant feature (see terminology note); user-entered in /predict — `TODO`
 - [ ] Best model chosen by test ROC-AUC (selection on test) (app.py:834, 931) — `TODO`
 - [ ] `cross_val_score` run on already-scaled train data and doubles runtime; CV scaler leak is minor — `TODO`
 - [ ] Training runs inside the request path on first hit (`/dashboard`, etc.) if not started via `__main__` — `TODO`
@@ -39,7 +39,7 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - [x] Ordinal `employment_length` (0–10, proper NaN handling) — `DONE` — 0..10 + explicit missing indicator
 - [x] CatBoost native categoricals (`cat_features`) — `DONE` — `cat_features` set; also LightGBM category dtype
 - [x] Add `fico_range_low/high` features — `DONE` — `fico_mean` replaces grade-derived `credit_score` in headline features
-- [x] Seeds + config file (single source of truth) — `DONE` — `creditrisk/config.py` `Config` dataclass (seed 42, split sizes, leakage switches); no YAML yet
+- [x] Seeds + config file (single source of truth) — `DONE` — `creditrisk/config.py` `Config` dataclass (seed 42, split sizes, endogenous-feature switches); no YAML yet
 - [x] Reproduce baseline Table I first (record env versions; note pandas-3 fill bug effect) — `DONE` — exact after seeding app's unseeded MI step (np.random.seed(42)): LR, CatBoost (AUC .703, thr .519) and RF (rec .668, thr .180) all match Table I
 
 ## Phase 2: Core threshold study  (done 2026-10-15)
@@ -84,7 +84,7 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - [ ] Friedman/Nemenyi or paired tests — `TODO`
 - [ ] PR-AUC, MCC, KS, Gini, balanced accuracy — `TODO`
 - [x] Out-of-time validation by `issue_d` — `DONE` (3A): rolling origin T∈{2013,2014,2015}; `oot_study.py`, `phase3a_oot*.csv`
-- [ ] Leakage ablation with/without `interest_rate` and engineered `credit_score` — `TODO`
+- [x] Endogenous-feature ablation with/without `interest_rate` and engineered `credit_score` — `DONE` (3C; `experiments/endogenous_feature_ablation.py`, `phase3c_ablation*.csv`)
 - [ ] Optuna tuning with nested CV — `TODO`
 - [ ] SMOTE / undersampling / focal-loss baselines — `TODO`
 - [ ] Stacking/voting ensemble — `TODO`
@@ -191,7 +191,38 @@ _Wording rule: "not equivalent" is not "worse". If a TOST fails but the differen
 | F rate out, no score | .6289 | .2190 | .1229 | .0115 | .0034 | **+$49.3k** |
 SHAP (LightGBM, rep 0, 2,000 test rows): cell A interest_rate 36.4% of mean|SHAP|, then annual_income 11.7%, loan_amount 8.1%, dti 7.5%, fico_mean 6.3%; cell F annual_income 17.5%, credit_inquiries 14.7%, loan_amount 13.2%, dti 11.7%. The grade-derived score reconstructs the rate (E ≈ A), so only D/F are genuine removals.
 
-**D. Drift** (mean of 5 models × 3 seeds, ECE on year T): raw .041/.022/.034; isotonic-T−1 .022/.036/.022; Platt .022/.036/.022; trailing-6-month isotonic .014/.038/.017; EM prior shift .299/.146/.133; oracle .016/.011/.012. EM estimates of π_T wander (e.g. LightGBM: .40/.03/.003 vs true .156/.184/.149): verified on synthetic pure prior shift (.2509 vs true .25), so the failure is real — the drift is mostly covariate shift, which a prior-shift model misattributes. Oracle π_T requires information a deployed system would not have; trailing-6-month isotonic needs labels from the recent window (available, with hindsight).
+**D. Drift** (mean of 5 models × 3 seeds, ECE on year T): raw .041/.022/.034; isotonic-T−1 .022/.036/.022; Platt .022/.036/.022; trailing-6-month isotonic .014/.038/.017; EM prior shift .299/.146/.133; oracle .016/.011/.012. EM estimates of π_T wander (e.g. LightGBM: .40/.03/.003 vs true .156/.184/.149): verified on synthetic pure prior shift (.2509 vs true .25), so the failure is real. *(Wording corrected in Phase 3D: the earlier "mostly covariate shift" explanation was not established; see the Phase 3D EM diagnostic: EM recovers π within ≤.013 when calibration and EM batch come from the same period and fails only across years, which implicates a change in P(y | score) — calibration drift — that the prior-shift model cannot represent; covariate shift and concept drift are not separable with these data.)* Oracle π_T requires information a deployed system would not have; trailing-6-month isotonic needs labels from the recent window (available, with hindsight).
+
+## Phase 3D results (2026-10-16; outcomes reported against the frozen Phase 3D pre-registration)
+| id | verdict | key numbers |
+|---|---|---|
+| H15 resampling | **NOT SUPPORTED** — (i) holds, (ii) holds, (iii) fails | (i) undersampling moves raw Youden t* to ≈.49–.51 for all 4 models; SMOTE moves it toward .5 in 4/4 but weakly for RF/LightGBM/XGBoost (.158→.204, .155→.173, .147→.178; LR .144→.493). (ii) max mean \|t*−π\| calibrated: undersample .0072, SMOTE .0076. (iii) AUC vs unweighted (TOST ±.005, Holm over 8): equivalent — LR-undersample −.0002, LR-SMOTE −.0030, LightGBM-undersample −.0022, XGBoost-undersample −.0018; not equivalent — RF-undersample **+.0065** [.0034, .0096], RF-SMOTE −.0089, LightGBM-SMOTE −.0174, XGBoost-SMOTE −.0175 (CIs exclude 0) |
+| H16 tuning | **SUPPORTED** | (a) ΔAUC tuned−default: LightGBM +.0012 [.0007, .0017], XGBoost +.0005 [−.0004, .0015], CatBoost +.0023 [.0011, .0035], all <.005; (b) RF +.0224 [.0208, .0240] (largest); (c) AUC spread across 5 models .0068 tuned vs .0254 default |
+| H17 ensembles | **SUPPORTED** | voting +.0002 [−.0008, .0011], stacking +.0007 [−.0001, .0015] vs LightGBM (.6832): both equivalent (Holm TOST p<.001), neither superior by >.005 (Holm p=1.0) |
+| H18 interpretable | **SUPPORTED** | with rate (5 repeats; best boosting LightGBM .6841): EBM −.0009 [−.0029, .0011] equivalent (Holm p=.005); WoE scorecard −.0085 [−.0105, −.0064] not equivalent, ≥.005 below. Without rate (best LightGBM .6582): EBM −.0002 equivalent; scorecard −.0167 not equivalent |
+| H19 scale | **SUPPORTED** | 667k: max mean \|t*−π\| calibrated .0056; \|tuned recall none−bal\| mean .0095 (LR .017, LightGBM .010, XGBoost .005, CatBoost .007); AUC vs 200k: LR +.0043, LightGBM +.0064, XGBoost +.0067 (CatBoost +.0047), all <.01 |
+
+**A. Quick checks (descriptive).**
+- *OOT capacity gain over random, P2-3%, dollar capacity* (mean over 5 models × 3 seeds; 400-resample paired bootstrap): 2013 default-risk **−$108k/−$106k/−$70k** at k=30/50/70% (CIs exclude 0 in 15/15 model-seed cells, below zero); expected profit +$183k/+$193k/+$137k, expected ROI +$172k/+$187k/+$150k (15/15 above 0). 2014: default-risk +$13k (10/15 cells CI>0)/+$53k/+$75k (15/15); expected profit +$64k/+$63k/+$47k (15/15). **2015 (36m): default-risk +$30k/+$54k/+$66k (15/15 CIs exclude 0, above zero); expected profit +$21k/+$23k/+$20k (15/15); expected ROI +$22k (12/15)/+$29k/+$29k (15/15).** So in 2014–2015 default-risk ranking *beats* random and is at or above the expected-profit ranking at k=50–70%; only 2013 (and D3 in-time) show the negative-gain "paradox". The D3-in-time and 2013 results of 3B/3C therefore do not generalise to later vintages; the cause is not established (2013 includes 60-month loans; D3 mixes vintages) and is an open question.
+- *EM diagnostic (5 models × 3 seeds):* (a) calibrate on half of T−1, EM on the other half: mean |π̂ − π| .003–.013 (π̂ .1632 vs .1614 in 2013, .1574 vs .1567, .1341 vs .1371); (b) random halves of year T: .005–.012; (c) calibrate on T−1, EM on year T: π̂ .455/.035/.015 vs true .156/.185/.149 (|err| .30/.15/.13; mean calibrated p .178/.148/.127 vs π_T). None of (a)/(b) hit the 1000-iteration cap (135–175 iterations); (c) hit it in 20% of 2014 cells. **Reading:** EM is fine when calibration and the EM batch come from the same period, so the failure is not simply a weak classifier; it appears only across years, where mean(p) is already off by .02–.04 from π_T, i.e. P(y | score) changed. This is calibration drift; our data cannot separate covariate shift from concept drift, so the 3C wording "mostly covariate shift" is withdrawn (see correction in the 3C section).
+
+**B. Ensembles** (`phase3d_ensembles*.csv`, D3, 10 repeats, no retraining; split indices asserted identical across models): AUC / Brier / ECE / mean|t*−π|: stacking .6839 / .1190 / .0054 / .0023; voting .6833 / .1191 / .0066 / .0034; LightGBM .6832 / .1191 / .0058 / .0048; XGBoost .6829; CatBoost .6820; LR .6775; RF .6571. Each ensemble is also equivalent to LightGBM, XGBoost and CatBoost individually and not equivalent to LR (+.006) or RF (+.026). **Title:** "Ensemble" cannot be justified as a *combination* contribution (best ensemble gain +.0007 AUC, −.0001 Brier). It may stay only if it refers to tree-ensemble learners (the GBDT/RF family), not to voting/stacking.
+
+**C. Interpretable baselines** (`phase3d_interp*.csv`, 5 repeats; EBM full 128k-row folds, ~6.5–8 min per unit of 6 fits; no subsample needed): with rate — EBM AUC .6832, Brier .1191, ECE .0054, |t*−π| .0028; WoE scorecard .6757, .1199, .0061, .0041. Without rate — EBM .6580, WoE .6415 (best boosting .6582). Scorecard top-5 features by |coefficient| (rep 0): num_credit_lines, loan_amount, interest_rate, total_credit_lines, employment_length (`phase3d_scorecard_points.csv`).
+
+**D. Resampling** (`phase3d_resampling*.csv`; D3 × 5, D1 × 3; resampling inside training folds only; SMOTENC with ordinal nominal codes for trees, plain SMOTE after one-hot for LR; tree models in the resampled variants use ordinal codes, not LightGBM category dtype). *Does threshold moving match or beat resampling?* Yes: on D3 the unweighted model with a Youden threshold gets F1/MCC .331/.183 (LR), .336/.190 (LightGBM), .317/.162 (RF), .334/.188 (XGBoost); random undersampling at 0.5 gives .331/.183, .333/.187, .321/.167, .333/.186 (equal; RF +.004 F1), and SMOTE at 0.5 gives F1 .007–.043 for the three tree models (SMOTE barely moves their probabilities), .322/.171, .322/.169 with Youden for LightGBM/XGBoost (≈.014 F1 below unweighted+Youden). D1 shows the same pattern.
+
+**E. Scale** (`phase3d_scale*.csv`; wall-clock: D3 667k scoring 248 s for 4 models × 2 weightings × 3 repeats, strict 1.345M scoring 49 s, analysis 105 s). 667k π=.1483; AUC: LightGBM .6896, XGBoost .6896, CatBoost .6867, LR .6818. Sensitivity (1.345M strict, π=.1996; 2016+ censored, 1 repeat, threshold/calibration only): calibrated |t*−π| ≤.012 (LR Platt .0124, LightGBM isotonic .0062, balanced .0004–.0032); balanced raw t* ≈.5.
+
+**F. Optuna nested CV** (`phase3d_optuna.csv`, `optuna_params.json`; 25 trials × 5 outer folds × 5 models, inner 3-fold on a seeded 100k subsample, log-loss objective; 5 parallel processes with 2 threads each; wall-clock ≈ 1 h 15 min, summed tuning time 2.1 h):
+| model | AUC default | AUC tuned | ΔAUC [95% t-CI over 5 folds] | ΔBrier | \|t*−π\| default → tuned |
+|---|---|---|---|---|---|
+| LR | .6786 | .6786 | −.0000 [−.0001, .0000] | −.0000 | .0086 → .0080 |
+| LightGBM | .6842 | .6854 | +.0012 [.0007, .0017] | −.0001 | .0061 → .0038 |
+| XGBoost | .6843 | .6848 | +.0005 [−.0004, .0015] | −.0001 | .0054 → .0054 |
+| Random Forest | .6589 | .6813 | +.0224 [.0208, .0240] | −.0026 | .0055 → .0080 |
+| CatBoost | .6832 | .6854 | +.0023 [.0011, .0035] | −.0002 | .0050 → .0059 |
+Best parameters are stable for CatBoost (n_estimators 502 cv .02, depth 7 cv .10) and LightGBM (lr .0215, n_estimators 407) but not for regularisation terms (reg_lambda cv >1.3; min_child_samples cv .68). Tuned RF picks min_samples_leaf ≈33 (cv .6) and max_features ≈.38 — the leaf-purity effect again. Tuned RF (.6813) remains .004 below the tuned boosters.
 
 ## Phase 4: Explainability
 - [ ] SHAP on all models with 2000+ samples — `TODO`
@@ -219,7 +250,7 @@ SHAP (LightGBM, rep 0, 2,000 test rows): cell A interest_rate 36.4% of mean|SHAP
 | 2026-10-14 | Q1: treat pandas 3.0.2 in `venv/` as the baseline env; legacy fill bug replicated only via `legacy_fill_bug=True`; also run properly-imputed variant; never inplace-fillna on a selection in new code | Table I was produced under the bug |
 | 2026-10-14 | Q2: full CSV cached once to `.cache/lc_full.parquet` (gitignored; `.gitignore` edited by append only, not committed); dev data = seeded 200k sample, drawn from *labelled* rows (after label filter) so D2 has exactly 200k modelled rows; full 2.26M for out-of-time/final runs | Compute + reproducibility |
 | 2026-10-14 | Q3: headline label = Fully Paid vs Charged Off/Default; legacy 5-status label only for reproduction + sensitivity; report both | Remove right-censored/noisy labels |
-| 2026-10-14 | Q4: headline features = application-time incl. `interest_rate`, with `fico_mean` instead of grade-derived `credit_score`; leakage switches (`use_interest_rate`, `credit_score` in {fico, grade_derived, none}) implemented, ablation run in Phase 3 | Avoid grade/rate leakage in the headline |
+| 2026-10-14 | Q4: headline features = application-time incl. `interest_rate`, with `fico_mean` instead of grade-derived `credit_score`; endogenous-feature switches (`use_interest_rate`, `credit_score` in {fico, grade_derived, none}) implemented, ablation run in Phase 3 | Avoid grade/rate leakage in the headline |
 | 2026-10-14 | Q5: installed shap, pyarrow, optuna, interpret, imbalanced-learn, statsmodels, scikit-posthocs into `venv/`; `requirements-lock.txt` from pip freeze; `requirements.txt` untouched; Windows `.venv` ignored | Co-author's env |
 | 2026-10-14 | Q6: app.py/.gitignore uncommitted edits left alone. The app.py diff *is* the Youden-threshold code behind Table I (HEAD still predicts at 0.5) | Table I can only come from the working tree |
 | 2026-10-14 | Q7: layout `creditrisk/` (package), `experiments/` (scripts), `experiments/results/` (small CSVs, force-added because `*.csv` is gitignored) | As requested |
@@ -232,6 +263,8 @@ SHAP (LightGBM, rep 0, 2,000 test rows): cell A interest_rate 36.4% of mean|SHAP
 | 2026-10-15 | P2-Q5: realized_profit = total_pymnt − funded_amnt; `total_pymnt` = principal+interest+late fee+recoveries holds for 100% of FP/CO rows (32% without recoveries), so adding `recoveries` would double count. Elkan costs derived from train+val data | Verified on 2.26M rows |
 | 2026-10-15 | P2-Q6: runtime estimate ~95 min sequential-CPU (~45 min actual wall clock with 3+1+1 workers); full repeats kept (no cuts) | Under budget |
 | 2026-10-15 | P2-Q7: committed app.py (tag `paper-v1-baseline`) and .gitignore as separate commits on journal-extension; main untouched; nothing pushed; venv.txt untracked | As requested |
+| 2026-10-16 | P3D answers folded into tasks: H15–H19 pre-registered first (6fa9d00); "not equivalent" ≠ "worse" and TOST-fail with CI∋0 = INCONCLUSIVE; EM diagnostic precedes any covariate-shift wording; full 128k EBM folds; Optuna 25 trials kept (wall-clock ≈1 h 15 min < 3 h cap; sequential estimate 3.9 h CPU); leakage ablation renamed endogenous-feature ablation | As specified |
+| 2026-10-16 | Terminology: "leakage ablation" → "endogenous-feature ablation" (interest_rate is known at origination but is the lender's own risk price). Renamed `experiments/leakage_ablation.py` → `experiments/endogenous_feature_ablation.py`; updated `creditrisk/config.py`, `creditrisk/repeats.py` docstrings and tracker lines for Phase 1 config note, Phase 3 item, Q4 decision. **Left unchanged (frozen/historical):** pre-registration rows H10 and "Other fixed choices" in the Phase 3C block (commit 158e212) and the 2026-10-16 P3C decision-log entry, which still say "leakage" | Pre-registered wording is frozen |
 | 2026-10-16 | P3C answers folded into tasks: .gitignore negation rules (no force-add); H9–H14 pre-registered first (158e212) with ±.005 AUC / ±2% ROI margins; interest-rate-only ranking = higher rate first (lower first as baseline); leakage cells A–F with E flagged as partial removal; drift fixes incl. oracle excluded from H14 | As specified |
 | 2026-10-16 | Infrastructure: `repeats.get_dataset` accepts ablation cells (`D3:ir0:csgd`), `creditrisk/capacity.py` (count/dollar approval + ROI), `experiments/oot_scores.py` (cached OOT scores, 10 models seed 42 + 5 models seeds 43/44) | Shared by stats, capacity v2, drift |
 | 2026-10-15 | P3B-Q1: re-base on D3 (mature vintages); D2 = sensitivity, D1 = replication; core Phase 2 results re-run on D3 | Headline numbers must not come from a censored sample |
@@ -269,6 +302,17 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | Sec III-B2 | Imputation paragraph | **WRONG** | pandas fill bug: nothing was imputed (6151 NaNs zero-filled); journal version uses in-fold imputation |
 | Sec V | "CatBoost native categorical handling" | **WRONG** | `cat_features` was never passed in the paper's code; fixed in `creditrisk/models.py` |
 
+### Phase 3D changes to the claim table
+| Claim | Status | Evidence |
+|---|---|---|
+| "Default-risk ranking earns less than random under capacity constraints" (3B/3C) | **WEAKENED — vintage-dependent** | holds on D3 in-time and in OOT 2013 (−$106k at k=50%); reverses in 2014 (+$53k) and 2015 36m (+$54k, CI excludes 0), where it beats expected-profit ranking at k=50–70% |
+| "Resampling is a viable alternative to threshold moving" | **WEAKENED** | undersampling matches threshold moving (F1 equal; RF +.004 and +.0065 AUC); SMOTE does not move boosted-tree probabilities and costs −.009…−.018 AUC for RF/LightGBM/XGBoost; no resampling beats unweighted + Youden |
+| "Hyperparameter tuning changes model ranking" | **CONFIRMED for RF only** | RF +.022 AUC (default RF is outlier); boosters +.0005…+.0023; tuned spread .0068 vs .0254 |
+| "Ensembling (voting/stacking) improves credit-risk discrimination" | **REJECTED** | +.0002/+.0007 AUC, equivalent to best single (H17) |
+| "Interpretable models are competitive" | **SPLIT** | EBM equivalent to the best booster (−.0009); WoE scorecard −.0085 AUC with rate, −.0167 without (not equivalent) |
+| "Results depend on the 200k development sample" | **REJECTED** (H19) | 667k: calibration, weighting and AUC conclusions unchanged; AUC +.004…+.007 |
+| "EM prior-shift correction fails because of covariate shift" (3C wording) | **WITHDRAWN** | EM works within a period (|π̂−π| ≤.013); failure only across years; calibration drift, not separable from covariate/concept drift |
+
 ### Phase 3C changes to the claim table
 | Claim | Status | Evidence |
 |---|---|---|
@@ -279,7 +323,7 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | "Count-based capacity results generalise to dollars" | **WEAKENED** | expected-profit gain falls from $191.6k to $102.5k per 1000 (−46%) |
 | "t*≈π does not depend on feature set" | **CONFIRMED** (H10) | max mean \|t*−π\| .012 across 6 cells |
 | "interest_rate drives performance and the capacity paradox" | **CONFIRMED** (H11) | ΔAUC .048; removing the rate flips the default-risk capacity gain from −$39k to +$30k/+$49k |
-| "Recalibrating on recent data fixes drift" | **REJECTED** (H14) | only trailing-6-month isotonic helps (1 of 3 folds ≥30%); prior-shift EM fails under covariate shift |
+| "Recalibrating on recent data fixes drift" | **REJECTED** (H14) | only trailing-6-month isotonic helps (1 of 3 folds ≥30%); prior-shift EM fails when calibration and EM batch come from different years (3D diagnostic: works within a period) |
 
 ### Phase 3B changes to the claim table (supersedes Phase 2 profit magnitudes)
 | Claim | Status | Evidence |
@@ -295,6 +339,14 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 ### Phase 3A changes to the picture
 - The Phase 2 profit conclusions (profit-max accepts ~87%, +$162k over Youden, recall-.80 loses to approve-all) are **conditional on a D2 sample that is ~50% censored vintages**. On mature cells only (≤2013, or 2014/2015 36-month) approve-all is optimal, Youden loses 53%, and even the expected-profit rule is −$32k/−$51k below approve-all.
 - Under 5% p.a. discounting the whole book is unprofitable (approve-all −$297 per applicant on D2; +$475/applicant on mature cells), and at 8% profit-max rejects everything on D2.
+
+### Limitations added in Phase 3D
+- **EM:** the diagnostic shows the prior-shift estimator is sound within a period but cannot be used across years; we make no covariate-shift claim.
+- **Tuning on a 100k subsample** (inner 3-fold, 25 trials, n_estimators in the search space, no early stopping); the nested design leaves the outer-test fold untouched, but tuned hyperparameters may differ on the full 160k; fold-level t-CIs (n=5) assume independent folds. Calibrated t* for tuned/default models uses a 20% hold-out of the outer-training part (single isotonic fit), not a 5-fold OOF.
+- **SMOTE variant:** SMOTENC on ordinal nominal codes (trees) and plain SMOTE after one-hot (LR); sampling_strategy=1.0; resampled tree variants use ordinal codes (LightGBM without native categoricals), so AUC differences vs the unweighted baseline mix resampling with encoding for LightGBM.
+- **EBM:** fitted on full 128k-row folds (no subsample), 10 interactions, default bins; WoE: 10 quantile bins, smoothing .5, no monotonic constraints.
+- **667k is a selected mature population** (strict label, 2010–2013 any term + 2014/2015 36m); the 1.345M strict set contains censored 2016+ loans and is used only for threshold/calibration checks.
+- **Quick-check capacity CIs** resample test rows only (400 Poisson resamples) and treat the 5 models × 3 seeds as exchangeable replicates.
 
 ### Limitations added in Phase 3C
 - **Loan-size confound:** count-based capacity favours large loans (expected-profit ranking approves 68.7% of dollars at 50% of loans); dollar capacity and ROI are reported alongside.

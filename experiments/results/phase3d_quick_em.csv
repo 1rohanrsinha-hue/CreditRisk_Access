@@ -1,0 +1,136 @@
+case,T,model,seed,pi_old,pi_true,mean_p,pi_hat,abs_err,iters,hit_cap,mean_p_minus_pi_true
+"(a) T-1 random halves: calibrate on A, EM on B",2013,Logistic Regression,42,0.16366,0.16028,0.1628,0.14763,0.01265,175,False,0.00251
+"(b) year T random halves: calibrate on half, EM on other",2013,Logistic Regression,42,0.15485,0.15707,0.15456,0.14911,0.00797,162,False,-0.00251
+"(c) calibrate on T-1, EM on year T",2013,Logistic Regression,42,0.16197,0.15596,0.18,0.43549,0.27953,116,False,0.02404
+"(a) T-1 random halves: calibrate on A, EM on B",2013,Logistic Regression,43,0.16149,0.16246,0.16085,0.14976,0.0127,164,False,-0.00161
+"(b) year T random halves: calibrate on half, EM on other",2013,Logistic Regression,43,0.15535,0.15657,0.15635,0.17592,0.01936,173,False,-0.00022
+"(c) calibrate on T-1, EM on year T",2013,Logistic Regression,43,0.16197,0.15596,0.18,0.43549,0.27953,116,False,0.02404
+"(a) T-1 random halves: calibrate on A, EM on B",2013,Logistic Regression,44,0.16254,0.16141,0.16343,0.17713,0.01572,139,False,0.00202
+"(b) year T random halves: calibrate on half, EM on other",2013,Logistic Regression,44,0.15606,0.15586,0.15652,0.16495,0.00909,155,False,0.00067
+"(c) calibrate on T-1, EM on year T",2013,Logistic Regression,44,0.16197,0.15596,0.18,0.43549,0.27953,116,False,0.02404
+"(a) T-1 random halves: calibrate on A, EM on B",2013,Random Forest,42,0.16366,0.16028,0.16324,0.15325,0.00703,212,False,0.00296
+"(b) year T random halves: calibrate on half, EM on other",2013,Random Forest,42,0.15485,0.15707,0.15486,0.15511,0.00196,128,False,-0.00222
+"(c) calibrate on T-1, EM on year T",2013,Random Forest,42,0.16197,0.15596,0.17999,0.61007,0.45411,181,False,0.02403
+"(a) T-1 random halves: calibrate on A, EM on B",2013,Random Forest,43,0.16149,0.16246,0.16155,0.16296,0.00051,162,False,-0.00091
+"(b) year T random halves: calibrate on half, EM on other",2013,Random Forest,43,0.15535,0.15657,0.15619,0.17873,0.02216,228,False,-0.00037
+"(c) calibrate on T-1, EM on year T",2013,Random Forest,43,0.16197,0.15596,0.17984,0.61404,0.45808,182,False,0.02388
+"(a) T-1 random halves: calibrate on A, EM on B",2013,Random Forest,44,0.16254,0.16141,0.16309,0.17504,0.01363,183,False,0.00169
+"(b) year T random halves: calibrate on half, EM on other",2013,Random Forest,44,0.15606,0.15586,0.15644,0.16563,0.00977,200,False,0.00058
+"(c) calibrate on T-1, EM on year T",2013,Random Forest,44,0.16197,0.15596,0.18016,0.59451,0.43855,175,False,0.0242
+"(a) T-1 random halves: calibrate on A, EM on B",2013,LightGBM,42,0.16366,0.16028,0.16304,0.15156,0.00872,175,False,0.00276
+"(b) year T random halves: calibrate on half, EM on other",2013,LightGBM,42,0.15485,0.15707,0.1544,0.14471,0.01237,196,False,-0.00267
+"(c) calibrate on T-1, EM on year T",2013,LightGBM,42,0.16197,0.15596,0.17594,0.40206,0.2461,127,False,0.01998
+"(a) T-1 random halves: calibrate on A, EM on B",2013,LightGBM,43,0.16149,0.16246,0.16092,0.15049,0.01197,172,False,-0.00154
+"(b) year T random halves: calibrate on half, EM on other",2013,LightGBM,43,0.15535,0.15657,0.15636,0.17834,0.02178,190,False,-0.00021
+"(c) calibrate on T-1, EM on year T",2013,LightGBM,43,0.16197,0.15596,0.17594,0.40206,0.2461,127,False,0.01998
+"(a) T-1 random halves: calibrate on A, EM on B",2013,LightGBM,44,0.16254,0.16141,0.16412,0.1903,0.02889,152,False,0.00271
+"(b) year T random halves: calibrate on half, EM on other",2013,LightGBM,44,0.15606,0.15586,0.15652,0.16572,0.00986,171,False,0.00066
+"(c) calibrate on T-1, EM on year T",2013,LightGBM,44,0.16197,0.15596,0.17594,0.40206,0.2461,127,False,0.01998
+"(a) T-1 random halves: calibrate on A, EM on B",2013,XGBoost,42,0.16366,0.16028,0.16345,0.15967,0.00061,141,False,0.00316
+"(b) year T random halves: calibrate on half, EM on other",2013,XGBoost,42,0.15485,0.15707,0.15439,0.1449,0.01218,190,False,-0.00268
+"(c) calibrate on T-1, EM on year T",2013,XGBoost,42,0.16197,0.15596,0.17655,0.39667,0.24071,121,False,0.02059
+"(a) T-1 random halves: calibrate on A, EM on B",2013,XGBoost,43,0.16149,0.16246,0.1612,0.1562,0.00626,147,False,-0.00126
+"(b) year T random halves: calibrate on half, EM on other",2013,XGBoost,43,0.15535,0.15657,0.15622,0.17472,0.01815,185,False,-0.00035
+"(c) calibrate on T-1, EM on year T",2013,XGBoost,43,0.16197,0.15596,0.17655,0.39667,0.24071,121,False,0.02059
+"(a) T-1 random halves: calibrate on A, EM on B",2013,XGBoost,44,0.16254,0.16141,0.16387,0.18549,0.02408,149,False,0.00246
+"(b) year T random halves: calibrate on half, EM on other",2013,XGBoost,44,0.15606,0.15586,0.1564,0.16313,0.00727,164,False,0.00054
+"(c) calibrate on T-1, EM on year T",2013,XGBoost,44,0.16197,0.15596,0.17655,0.39667,0.24071,121,False,0.02059
+"(a) T-1 random halves: calibrate on A, EM on B",2013,CatBoost,42,0.16366,0.16028,0.16296,0.15109,0.0092,163,False,0.00268
+"(b) year T random halves: calibrate on half, EM on other",2013,CatBoost,42,0.15485,0.15707,0.15467,0.15121,0.00586,151,False,-0.00241
+"(c) calibrate on T-1, EM on year T",2013,CatBoost,42,0.16197,0.15596,0.17923,0.43618,0.28022,119,False,0.02327
+"(a) T-1 random halves: calibrate on A, EM on B",2013,CatBoost,43,0.16149,0.16246,0.16086,0.15014,0.01231,161,False,-0.0016
+"(b) year T random halves: calibrate on half, EM on other",2013,CatBoost,43,0.15535,0.15657,0.15624,0.17337,0.0168,170,False,-0.00033
+"(c) calibrate on T-1, EM on year T",2013,CatBoost,43,0.16197,0.15596,0.17906,0.43589,0.27993,120,False,0.0231
+"(a) T-1 random halves: calibrate on A, EM on B",2013,CatBoost,44,0.16254,0.16141,0.16414,0.18778,0.02637,138,False,0.00273
+"(b) year T random halves: calibrate on half, EM on other",2013,CatBoost,44,0.15606,0.15586,0.15657,0.16551,0.00966,152,False,0.00071
+"(c) calibrate on T-1, EM on year T",2013,CatBoost,44,0.16197,0.15596,0.17938,0.43447,0.27851,118,False,0.02342
+"(a) T-1 random halves: calibrate on A, EM on B",2014,Logistic Regression,42,0.15464,0.15728,0.15459,0.15368,0.0036,116,False,-0.00269
+"(b) year T random halves: calibrate on half, EM on other",2014,Logistic Regression,42,0.18373,0.18527,0.18411,0.19011,0.00484,133,False,-0.00116
+"(c) calibrate on T-1, EM on year T",2014,Logistic Regression,42,0.15596,0.1845,0.14655,1e-05,0.18449,896,False,-0.03795
+"(a) T-1 random halves: calibrate on A, EM on B",2014,Logistic Regression,43,0.15479,0.15713,0.15493,0.15743,0.0003,135,False,-0.00221
+"(b) year T random halves: calibrate on half, EM on other",2014,Logistic Regression,43,0.18419,0.1848,0.18414,0.18326,0.00154,105,False,-0.00066
+"(c) calibrate on T-1, EM on year T",2014,Logistic Regression,43,0.15596,0.1845,0.14655,1e-05,0.18449,896,False,-0.03795
+"(a) T-1 random halves: calibrate on A, EM on B",2014,Logistic Regression,44,0.1562,0.15572,0.15621,0.15645,0.00073,95,False,0.00049
+"(b) year T random halves: calibrate on half, EM on other",2014,Logistic Regression,44,0.18445,0.18454,0.18406,0.17793,0.00661,137,False,-0.00048
+"(c) calibrate on T-1, EM on year T",2014,Logistic Regression,44,0.15596,0.1845,0.14655,1e-05,0.18449,896,False,-0.03795
+"(a) T-1 random halves: calibrate on A, EM on B",2014,Random Forest,42,0.15464,0.15728,0.15487,0.16027,0.00299,186,False,-0.00241
+"(b) year T random halves: calibrate on half, EM on other",2014,Random Forest,42,0.18373,0.18527,0.18407,0.19087,0.0056,165,False,-0.0012
+"(c) calibrate on T-1, EM on year T",2014,Random Forest,42,0.15596,0.1845,0.15644,0.1688,0.01569,214,False,-0.02806
+"(a) T-1 random halves: calibrate on A, EM on B",2014,Random Forest,43,0.15479,0.15713,0.15476,0.15418,0.00295,131,False,-0.00237
+"(b) year T random halves: calibrate on half, EM on other",2014,Random Forest,43,0.18419,0.1848,0.18418,0.18394,0.00087,100,False,-0.00062
+"(c) calibrate on T-1, EM on year T",2014,Random Forest,43,0.15596,0.1845,0.15633,0.16568,0.01882,207,False,-0.02817
+"(a) T-1 random halves: calibrate on A, EM on B",2014,Random Forest,44,0.1562,0.15572,0.15646,0.1629,0.00717,193,False,0.00074
+"(b) year T random halves: calibrate on half, EM on other",2014,Random Forest,44,0.18445,0.18454,0.18391,0.17292,0.01162,186,False,-0.00063
+"(c) calibrate on T-1, EM on year T",2014,Random Forest,44,0.15596,0.1845,0.15597,0.15623,0.02827,123,False,-0.02853
+"(a) T-1 random halves: calibrate on A, EM on B",2014,LightGBM,42,0.15464,0.15728,0.15462,0.15428,0.003,95,False,-0.00266
+"(b) year T random halves: calibrate on half, EM on other",2014,LightGBM,42,0.18373,0.18527,0.18445,0.1953,0.01004,136,False,-0.00082
+"(c) calibrate on T-1, EM on year T",2014,LightGBM,42,0.15596,0.1845,0.14737,0.00717,0.17733,1000,True,-0.03713
+"(a) T-1 random halves: calibrate on A, EM on B",2014,LightGBM,43,0.15479,0.15713,0.15514,0.16122,0.00409,142,False,-0.00199
+"(b) year T random halves: calibrate on half, EM on other",2014,LightGBM,43,0.18419,0.1848,0.18451,0.18936,0.00456,127,False,-0.00029
+"(c) calibrate on T-1, EM on year T",2014,LightGBM,43,0.15596,0.1845,0.14737,0.00717,0.17733,1000,True,-0.03713
+"(a) T-1 random halves: calibrate on A, EM on B",2014,LightGBM,44,0.1562,0.15572,0.15634,0.1589,0.00317,134,False,0.00062
+"(b) year T random halves: calibrate on half, EM on other",2014,LightGBM,44,0.18445,0.18454,0.18387,0.17495,0.00959,143,False,-0.00067
+"(c) calibrate on T-1, EM on year T",2014,LightGBM,44,0.15596,0.1845,0.14737,0.00717,0.17733,1000,True,-0.03713
+"(a) T-1 random halves: calibrate on A, EM on B",2014,XGBoost,42,0.15464,0.15728,0.15455,0.15296,0.00432,124,False,-0.00273
+"(b) year T random halves: calibrate on half, EM on other",2014,XGBoost,42,0.18373,0.18527,0.18437,0.19414,0.00887,134,False,-0.00089
+"(c) calibrate on T-1, EM on year T",2014,XGBoost,42,0.15596,0.1845,0.14616,0.00301,0.18149,737,False,-0.03833
+"(a) T-1 random halves: calibrate on A, EM on B",2014,XGBoost,43,0.15479,0.15713,0.15505,0.15962,0.00249,139,False,-0.00208
+"(b) year T random halves: calibrate on half, EM on other",2014,XGBoost,43,0.18419,0.1848,0.18445,0.18847,0.00367,125,False,-0.00035
+"(c) calibrate on T-1, EM on year T",2014,XGBoost,43,0.15596,0.1845,0.14616,0.00301,0.18149,737,False,-0.03833
+"(a) T-1 random halves: calibrate on A, EM on B",2014,XGBoost,44,0.1562,0.15572,0.15641,0.16019,0.00447,141,False,0.00069
+"(b) year T random halves: calibrate on half, EM on other",2014,XGBoost,44,0.18445,0.18454,0.184,0.17701,0.00753,138,False,-0.00054
+"(c) calibrate on T-1, EM on year T",2014,XGBoost,44,0.15596,0.1845,0.14616,0.00301,0.18149,737,False,-0.03833
+"(a) T-1 random halves: calibrate on A, EM on B",2014,CatBoost,42,0.15464,0.15728,0.1544,0.15044,0.00684,137,False,-0.00288
+"(b) year T random halves: calibrate on half, EM on other",2014,CatBoost,42,0.18373,0.18527,0.1843,0.19257,0.0073,127,False,-0.00097
+"(c) calibrate on T-1, EM on year T",2014,CatBoost,42,0.15596,0.1845,0.14533,1e-05,0.18449,682,False,-0.03917
+"(a) T-1 random halves: calibrate on A, EM on B",2014,CatBoost,43,0.15479,0.15713,0.15496,0.15784,0.00071,129,False,-0.00217
+"(b) year T random halves: calibrate on half, EM on other",2014,CatBoost,43,0.18419,0.1848,0.1844,0.18751,0.00271,118,False,-0.0004
+"(c) calibrate on T-1, EM on year T",2014,CatBoost,43,0.15596,0.1845,0.14545,0.00067,0.18383,589,False,-0.03905
+"(a) T-1 random halves: calibrate on A, EM on B",2014,CatBoost,44,0.1562,0.15572,0.15641,0.16026,0.00453,139,False,0.00069
+"(b) year T random halves: calibrate on half, EM on other",2014,CatBoost,44,0.18445,0.18454,0.18404,0.17796,0.00658,130,False,-0.0005
+"(c) calibrate on T-1, EM on year T",2014,CatBoost,44,0.15596,0.1845,0.14614,0.00139,0.18311,961,False,-0.03835
+"(a) T-1 random halves: calibrate on A, EM on B",2015,Logistic Regression,42,0.13862,0.1359,0.13873,0.14108,0.00517,152,False,0.00283
+"(b) year T random halves: calibrate on half, EM on other",2015,Logistic Regression,42,0.14905,0.14867,0.14945,0.15625,0.00758,145,False,0.00077
+"(c) calibrate on T-1, EM on year T",2015,Logistic Regression,42,0.13726,0.14886,0.12616,0.00033,0.14854,230,False,-0.0227
+"(a) T-1 random halves: calibrate on A, EM on B",2015,Logistic Regression,43,0.13764,0.13689,0.13743,0.13309,0.0038,168,False,0.00054
+"(b) year T random halves: calibrate on half, EM on other",2015,Logistic Regression,43,0.14797,0.14975,0.14824,0.15315,0.0034,145,False,-0.00151
+"(c) calibrate on T-1, EM on year T",2015,Logistic Regression,43,0.13726,0.14886,0.12616,0.00033,0.14854,230,False,-0.0227
+"(a) T-1 random halves: calibrate on A, EM on B",2015,Logistic Regression,44,0.136,0.13852,0.13583,0.13209,0.00643,168,False,-0.0027
+"(b) year T random halves: calibrate on half, EM on other",2015,Logistic Regression,44,0.14987,0.14786,0.15002,0.15272,0.00486,129,False,0.00217
+"(c) calibrate on T-1, EM on year T",2015,Logistic Regression,44,0.13726,0.14886,0.12616,0.00033,0.14854,230,False,-0.0227
+"(a) T-1 random halves: calibrate on A, EM on B",2015,Random Forest,42,0.13862,0.1359,0.1386,0.13783,0.00193,184,False,0.0027
+"(b) year T random halves: calibrate on half, EM on other",2015,Random Forest,42,0.14905,0.14867,0.14931,0.15681,0.00813,227,False,0.00064
+"(c) calibrate on T-1, EM on year T",2015,Random Forest,42,0.13726,0.14886,0.13529,0.07237,0.07649,496,False,-0.01357
+"(a) T-1 random halves: calibrate on A, EM on B",2015,Random Forest,43,0.13764,0.13689,0.13744,0.13163,0.00525,237,False,0.00056
+"(b) year T random halves: calibrate on half, EM on other",2015,Random Forest,43,0.14797,0.14975,0.14844,0.16215,0.0124,242,False,-0.00132
+"(c) calibrate on T-1, EM on year T",2015,Random Forest,43,0.13726,0.14886,0.13542,0.07807,0.07079,451,False,-0.01344
+"(a) T-1 random halves: calibrate on A, EM on B",2015,Random Forest,44,0.136,0.13852,0.13575,0.12776,0.01076,260,False,-0.00278
+"(b) year T random halves: calibrate on half, EM on other",2015,Random Forest,44,0.14987,0.14786,0.14983,0.14876,0.0009,175,False,0.00197
+"(c) calibrate on T-1, EM on year T",2015,Random Forest,44,0.13726,0.14886,0.13541,0.07764,0.07122,456,False,-0.01346
+"(a) T-1 random halves: calibrate on A, EM on B",2015,LightGBM,42,0.13862,0.1359,0.13868,0.13982,0.00391,135,False,0.00277
+"(b) year T random halves: calibrate on half, EM on other",2015,LightGBM,42,0.14905,0.14867,0.14938,0.15535,0.00668,149,False,0.00071
+"(c) calibrate on T-1, EM on year T",2015,LightGBM,42,0.13726,0.14886,0.12485,0.0,0.14886,204,False,-0.02401
+"(a) T-1 random halves: calibrate on A, EM on B",2015,LightGBM,43,0.13764,0.13689,0.13761,0.13693,4e-05,122,False,0.00072
+"(b) year T random halves: calibrate on half, EM on other",2015,LightGBM,43,0.14797,0.14975,0.14828,0.15411,0.00436,154,False,-0.00147
+"(c) calibrate on T-1, EM on year T",2015,LightGBM,43,0.13726,0.14886,0.12485,0.0,0.14886,204,False,-0.02401
+"(a) T-1 random halves: calibrate on A, EM on B",2015,LightGBM,44,0.136,0.13852,0.13561,0.12734,0.01118,187,False,-0.00291
+"(b) year T random halves: calibrate on half, EM on other",2015,LightGBM,44,0.14987,0.14786,0.14992,0.15089,0.00303,116,False,0.00206
+"(c) calibrate on T-1, EM on year T",2015,LightGBM,44,0.13726,0.14886,0.12485,0.0,0.14886,204,False,-0.02401
+"(a) T-1 random halves: calibrate on A, EM on B",2015,XGBoost,42,0.13862,0.1359,0.13871,0.14056,0.00465,145,False,0.00281
+"(b) year T random halves: calibrate on half, EM on other",2015,XGBoost,42,0.14905,0.14867,0.14925,0.15276,0.00409,139,False,0.00058
+"(c) calibrate on T-1, EM on year T",2015,XGBoost,42,0.13726,0.14886,0.12502,0.0,0.14886,212,False,-0.02384
+"(a) T-1 random halves: calibrate on A, EM on B",2015,XGBoost,43,0.13764,0.13689,0.13763,0.1375,0.00062,87,False,0.00074
+"(b) year T random halves: calibrate on half, EM on other",2015,XGBoost,43,0.14797,0.14975,0.14821,0.15278,0.00303,149,False,-0.00154
+"(c) calibrate on T-1, EM on year T",2015,XGBoost,43,0.13726,0.14886,0.12502,0.0,0.14886,212,False,-0.02384
+"(a) T-1 random halves: calibrate on A, EM on B",2015,XGBoost,44,0.136,0.13852,0.1355,0.12489,0.01363,197,False,-0.00302
+"(b) year T random halves: calibrate on half, EM on other",2015,XGBoost,44,0.14987,0.14786,0.15007,0.15358,0.00572,137,False,0.00221
+"(c) calibrate on T-1, EM on year T",2015,XGBoost,44,0.13726,0.14886,0.12502,0.0,0.14886,212,False,-0.02384
+"(a) T-1 random halves: calibrate on A, EM on B",2015,CatBoost,42,0.13862,0.1359,0.13868,0.1398,0.0039,133,False,0.00277
+"(b) year T random halves: calibrate on half, EM on other",2015,CatBoost,42,0.14905,0.14867,0.14933,0.15413,0.00546,140,False,0.00066
+"(c) calibrate on T-1, EM on year T",2015,CatBoost,42,0.13726,0.14886,0.12381,0.0,0.14886,179,False,-0.02505
+"(a) T-1 random halves: calibrate on A, EM on B",2015,CatBoost,43,0.13764,0.13689,0.13749,0.13449,0.0024,152,False,0.0006
+"(b) year T random halves: calibrate on half, EM on other",2015,CatBoost,43,0.14797,0.14975,0.14826,0.15351,0.00375,145,False,-0.00149
+"(c) calibrate on T-1, EM on year T",2015,CatBoost,43,0.13726,0.14886,0.12333,6e-05,0.1488,169,False,-0.02553
+"(a) T-1 random halves: calibrate on A, EM on B",2015,CatBoost,44,0.136,0.13852,0.13558,0.12685,0.01168,186,False,-0.00294
+"(b) year T random halves: calibrate on half, EM on other",2015,CatBoost,44,0.14987,0.14786,0.15006,0.15327,0.00541,130,False,0.0022
+"(c) calibrate on T-1, EM on year T",2015,CatBoost,44,0.13726,0.14886,0.12392,0.0,0.14886,181,False,-0.02494

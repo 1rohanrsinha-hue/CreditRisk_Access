@@ -1,4 +1,5 @@
-"""Phase 3C / task C: leakage & feature ablation on D3 (6 cells).
+"""Phase 3C / task C: endogenous-feature ablation on D3 (6 cells; formerly "leakage ablation"):
+interest_rate is known at origination but is the lender's own risk price, so it is endogenous, not leakage.
   A rate in,  fico (headline)   B rate in,  none   C rate in,  grade-derived
   D rate out, fico              E rate out, grade-derived (PARTIAL removal: embeds rate)   F rate out, none
 Stages: score (resumable, parallel via --worker) | analyze."""

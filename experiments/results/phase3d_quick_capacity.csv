@@ -1,0 +1,406 @@
+T,seed,model,ranking,k,gain_per_1000,ci_lo,ci_hi,excludes_zero
+2013,42,Logistic Regression,default_risk,0.3,-116667.1,-126451.9,-107541.4,True
+2013,42,Logistic Regression,default_risk,0.5,-116789.5,-129928.2,-103044.1,True
+2013,42,Logistic Regression,default_risk,0.7,-77764.6,-92015.9,-63172.1,True
+2013,42,Logistic Regression,expected_profit,0.3,188433.8,175313.0,203330.9,True
+2013,42,Logistic Regression,expected_profit,0.5,188019.8,174792.4,201096.0,True
+2013,42,Logistic Regression,expected_profit,0.7,126862.3,116737.7,136868.5,True
+2013,42,Logistic Regression,expected_roi,0.3,175564.1,163424.2,190626.5,True
+2013,42,Logistic Regression,expected_roi,0.5,183842.9,171088.3,198216.0,True
+2013,42,Logistic Regression,expected_roi,0.7,140522.7,128849.6,151181.4,True
+2013,42,Random Forest,default_risk,0.3,-79943.3,-88364.3,-69830.3,True
+2013,42,Random Forest,default_risk,0.5,-79877.5,-94347.3,-66591.6,True
+2013,42,Random Forest,default_risk,0.7,-60969.0,-76005.6,-45926.5,True
+2013,42,Random Forest,expected_profit,0.3,179512.5,164923.1,194731.5,True
+2013,42,Random Forest,expected_profit,0.5,197307.9,183632.2,209873.9,True
+2013,42,Random Forest,expected_profit,0.7,148112.3,137449.6,157550.9,True
+2013,42,Random Forest,expected_roi,0.3,164607.9,151230.7,178769.9,True
+2013,42,Random Forest,expected_roi,0.5,182226.9,171200.2,196264.8,True
+2013,42,Random Forest,expected_roi,0.7,151177.4,141526.7,161055.8,True
+2013,42,LightGBM,default_risk,0.3,-114590.6,-124630.1,-105098.2,True
+2013,42,LightGBM,default_risk,0.5,-105800.2,-119293.9,-92249.7,True
+2013,42,LightGBM,default_risk,0.7,-64223.2,-79561.0,-50243.5,True
+2013,42,LightGBM,expected_profit,0.3,178379.5,164608.2,193278.4,True
+2013,42,LightGBM,expected_profit,0.5,191995.0,180362.5,204731.8,True
+2013,42,LightGBM,expected_profit,0.7,131452.0,122353.5,140654.0,True
+2013,42,LightGBM,expected_roi,0.3,171344.8,155931.8,185171.2,True
+2013,42,LightGBM,expected_roi,0.5,187226.7,175751.4,199904.2,True
+2013,42,LightGBM,expected_roi,0.7,150846.0,140914.4,160242.2,True
+2013,42,XGBoost,default_risk,0.3,-111365.1,-121146.6,-102494.9,True
+2013,42,XGBoost,default_risk,0.5,-107834.2,-121078.1,-94095.2,True
+2013,42,XGBoost,default_risk,0.7,-72295.2,-86824.3,-57619.8,True
+2013,42,XGBoost,expected_profit,0.3,177784.9,163777.4,192187.7,True
+2013,42,XGBoost,expected_profit,0.5,192583.4,180457.2,205033.9,True
+2013,42,XGBoost,expected_profit,0.7,131219.3,121416.9,141199.6,True
+2013,42,XGBoost,expected_roi,0.3,163978.9,150410.4,178017.6,True
+2013,42,XGBoost,expected_roi,0.5,182330.8,170848.4,195178.0,True
+2013,42,XGBoost,expected_roi,0.7,148953.6,138011.4,159408.6,True
+2013,42,CatBoost,default_risk,0.3,-119163.8,-128566.9,-109657.7,True
+2013,42,CatBoost,default_risk,0.5,-111119.4,-124955.4,-96618.9,True
+2013,42,CatBoost,default_risk,0.7,-70657.4,-85457.8,-56031.3,True
+2013,42,CatBoost,expected_profit,0.3,185776.2,172868.6,198741.8,True
+2013,42,CatBoost,expected_profit,0.5,197812.5,185170.4,210052.6,True
+2013,42,CatBoost,expected_profit,0.7,139969.8,130144.9,149641.5,True
+2013,42,CatBoost,expected_roi,0.3,182317.0,168796.4,195767.1,True
+2013,42,CatBoost,expected_roi,0.5,192610.7,181281.0,205857.2,True
+2013,42,CatBoost,expected_roi,0.7,155670.6,146553.6,165799.9,True
+2013,43,Logistic Regression,default_risk,0.3,-116667.1,-125929.5,-107660.4,True
+2013,43,Logistic Regression,default_risk,0.5,-116789.5,-129178.9,-104216.5,True
+2013,43,Logistic Regression,default_risk,0.7,-77764.6,-91076.2,-62415.2,True
+2013,43,Logistic Regression,expected_profit,0.3,186452.2,171832.4,199553.2,True
+2013,43,Logistic Regression,expected_profit,0.5,189027.2,175498.2,201771.2,True
+2013,43,Logistic Regression,expected_profit,0.7,130650.7,120783.8,140273.6,True
+2013,43,Logistic Regression,expected_roi,0.3,170800.6,156382.6,182772.6,True
+2013,43,Logistic Regression,expected_roi,0.5,187180.9,174077.6,199322.6,True
+2013,43,Logistic Regression,expected_roi,0.7,145024.0,134731.4,154783.8,True
+2013,43,Random Forest,default_risk,0.3,-77494.5,-86276.3,-67675.6,True
+2013,43,Random Forest,default_risk,0.5,-84943.5,-97186.0,-71516.3,True
+2013,43,Random Forest,default_risk,0.7,-64340.5,-77462.2,-49840.8,True
+2013,43,Random Forest,expected_profit,0.3,185382.9,170546.5,200440.8,True
+2013,43,Random Forest,expected_profit,0.5,191737.7,179516.1,202715.0,True
+2013,43,Random Forest,expected_profit,0.7,144550.0,135644.6,153792.2,True
+2013,43,Random Forest,expected_roi,0.3,166356.4,152687.9,180398.2,True
+2013,43,Random Forest,expected_roi,0.5,187832.2,173783.6,199758.2,True
+2013,43,Random Forest,expected_roi,0.7,147512.7,138281.9,156509.9,True
+2013,43,LightGBM,default_risk,0.3,-114590.6,-123284.0,-105407.7,True
+2013,43,LightGBM,default_risk,0.5,-105800.2,-119997.7,-92543.7,True
+2013,43,LightGBM,default_risk,0.7,-64223.2,-77237.4,-48872.0,True
+2013,43,LightGBM,expected_profit,0.3,179782.6,164595.0,192097.8,True
+2013,43,LightGBM,expected_profit,0.5,192004.2,179295.0,205047.3,True
+2013,43,LightGBM,expected_profit,0.7,133349.9,123339.6,143035.8,True
+2013,43,LightGBM,expected_roi,0.3,171784.3,158247.7,185984.4,True
+2013,43,LightGBM,expected_roi,0.5,188084.9,175169.9,199286.3,True
+2013,43,LightGBM,expected_roi,0.7,153595.5,143486.9,163578.1,True
+2013,43,XGBoost,default_risk,0.3,-111365.1,-121001.3,-102315.6,True
+2013,43,XGBoost,default_risk,0.5,-107834.2,-120807.8,-94745.7,True
+2013,43,XGBoost,default_risk,0.7,-72295.2,-85423.8,-57939.6,True
+2013,43,XGBoost,expected_profit,0.3,182515.3,168156.4,195783.0,True
+2013,43,XGBoost,expected_profit,0.5,193282.6,178985.1,206005.3,True
+2013,43,XGBoost,expected_profit,0.7,134428.4,125047.4,144517.5,True
+2013,43,XGBoost,expected_roi,0.3,169170.6,154232.9,182270.5,True
+2013,43,XGBoost,expected_roi,0.5,185294.6,172375.8,197738.7,True
+2013,43,XGBoost,expected_roi,0.7,152263.1,141407.1,162117.7,True
+2013,43,CatBoost,default_risk,0.3,-119100.4,-128515.4,-109605.9,True
+2013,43,CatBoost,default_risk,0.5,-117865.2,-130563.4,-104928.5,True
+2013,43,CatBoost,default_risk,0.7,-76247.2,-88585.4,-61780.8,True
+2013,43,CatBoost,expected_profit,0.3,187666.7,172582.6,201153.1,True
+2013,43,CatBoost,expected_profit,0.5,193565.3,181343.8,206186.8,True
+2013,43,CatBoost,expected_profit,0.7,142571.7,132213.3,152907.8,True
+2013,43,CatBoost,expected_roi,0.3,180470.9,165951.6,194051.4,True
+2013,43,CatBoost,expected_roi,0.5,195568.0,182423.3,207810.4,True
+2013,43,CatBoost,expected_roi,0.7,153019.1,142578.2,163290.7,True
+2013,44,Logistic Regression,default_risk,0.3,-116667.1,-126415.3,-106285.6,True
+2013,44,Logistic Regression,default_risk,0.5,-116789.5,-130088.0,-104032.8,True
+2013,44,Logistic Regression,default_risk,0.7,-77764.6,-93698.3,-63192.4,True
+2013,44,Logistic Regression,expected_profit,0.3,183223.9,168268.4,198403.5,True
+2013,44,Logistic Regression,expected_profit,0.5,189886.5,176472.6,204067.7,True
+2013,44,Logistic Regression,expected_profit,0.7,133778.4,124917.6,143382.0,True
+2013,44,Logistic Regression,expected_roi,0.3,171629.2,158119.7,186231.6,True
+2013,44,Logistic Regression,expected_roi,0.5,185699.4,172647.4,199552.3,True
+2013,44,Logistic Regression,expected_roi,0.7,144987.9,135248.3,156444.4,True
+2013,44,Random Forest,default_risk,0.3,-83127.1,-92846.0,-73144.2,True
+2013,44,Random Forest,default_risk,0.5,-89006.6,-102556.1,-76033.6,True
+2013,44,Random Forest,default_risk,0.7,-61643.3,-75171.3,-46786.2,True
+2013,44,Random Forest,expected_profit,0.3,184226.5,167785.7,198718.0,True
+2013,44,Random Forest,expected_profit,0.5,194375.9,179494.3,207766.9,True
+2013,44,Random Forest,expected_profit,0.7,146327.6,136334.1,155925.7,True
+2013,44,Random Forest,expected_roi,0.3,173685.5,158863.3,189916.2,True
+2013,44,Random Forest,expected_roi,0.5,184875.4,170003.1,197856.2,True
+2013,44,Random Forest,expected_roi,0.7,150244.1,139655.9,159740.8,True
+2013,44,LightGBM,default_risk,0.3,-114590.6,-124500.8,-104552.7,True
+2013,44,LightGBM,default_risk,0.5,-105800.2,-118911.5,-92181.3,True
+2013,44,LightGBM,default_risk,0.7,-64223.2,-78346.7,-49270.9,True
+2013,44,LightGBM,expected_profit,0.3,178494.9,162876.0,194079.9,True
+2013,44,LightGBM,expected_profit,0.5,194811.1,182745.4,208848.2,True
+2013,44,LightGBM,expected_profit,0.7,136015.5,127221.7,146082.7,True
+2013,44,LightGBM,expected_roi,0.3,169359.4,154451.2,184560.7,True
+2013,44,LightGBM,expected_roi,0.5,187856.1,173395.9,200777.7,True
+2013,44,LightGBM,expected_roi,0.7,151857.7,143315.7,161708.8,True
+2013,44,XGBoost,default_risk,0.3,-111365.1,-121085.9,-101447.4,True
+2013,44,XGBoost,default_risk,0.5,-107834.2,-122044.8,-93252.4,True
+2013,44,XGBoost,default_risk,0.7,-72295.2,-87646.6,-57301.3,True
+2013,44,XGBoost,expected_profit,0.3,178036.5,163231.8,192857.2,True
+2013,44,XGBoost,expected_profit,0.5,195846.3,182278.3,209929.4,True
+2013,44,XGBoost,expected_profit,0.7,134851.9,126036.8,145134.1,True
+2013,44,XGBoost,expected_roi,0.3,166831.1,151589.5,182756.7,True
+2013,44,XGBoost,expected_roi,0.5,183949.1,170878.8,197149.4,True
+2013,44,XGBoost,expected_roi,0.7,153087.3,143906.5,163508.6,True
+2013,44,CatBoost,default_risk,0.3,-115920.9,-125458.4,-105928.0,True
+2013,44,CatBoost,default_risk,0.5,-114086.7,-127295.4,-100841.8,True
+2013,44,CatBoost,default_risk,0.7,-74868.7,-89224.0,-59568.9,True
+2013,44,CatBoost,expected_profit,0.3,182601.2,168518.9,197924.3,True
+2013,44,CatBoost,expected_profit,0.5,198389.8,185043.4,212150.8,True
+2013,44,CatBoost,expected_profit,0.7,142698.5,132714.0,153824.0,True
+2013,44,CatBoost,expected_roi,0.3,184478.9,171868.7,199543.1,True
+2013,44,CatBoost,expected_roi,0.5,188390.3,176146.6,202058.9,True
+2013,44,CatBoost,expected_roi,0.7,155834.6,145359.8,166413.4,True
+2014,42,Logistic Regression,default_risk,0.3,11583.1,3527.4,18629.8,True
+2014,42,Logistic Regression,default_risk,0.5,50377.2,40476.0,60221.7,True
+2014,42,Logistic Regression,default_risk,0.7,72642.1,61689.9,82779.7,True
+2014,42,Logistic Regression,expected_profit,0.3,64159.2,52021.2,74608.8,True
+2014,42,Logistic Regression,expected_profit,0.5,59244.1,49931.3,69111.4,True
+2014,42,Logistic Regression,expected_profit,0.7,43167.6,36664.3,49474.7,True
+2014,42,Logistic Regression,expected_roi,0.3,48555.0,37864.2,58855.5,True
+2014,42,Logistic Regression,expected_roi,0.5,64798.3,55046.5,75061.9,True
+2014,42,Logistic Regression,expected_roi,0.7,59250.6,51969.2,66256.4,True
+2014,42,Random Forest,default_risk,0.3,29628.7,22632.8,36454.5,True
+2014,42,Random Forest,default_risk,0.5,59375.9,49712.9,68621.4,True
+2014,42,Random Forest,default_risk,0.7,67273.6,57689.6,77775.0,True
+2014,42,Random Forest,expected_profit,0.3,54270.4,43013.8,65810.6,True
+2014,42,Random Forest,expected_profit,0.5,56715.8,47502.6,66912.0,True
+2014,42,Random Forest,expected_profit,0.7,47429.5,40198.5,54567.6,True
+2014,42,Random Forest,expected_roi,0.3,37410.4,26014.7,49720.2,True
+2014,42,Random Forest,expected_roi,0.5,56134.3,47171.4,66687.2,True
+2014,42,Random Forest,expected_roi,0.7,54651.4,47678.7,62405.6,True
+2014,42,LightGBM,default_risk,0.3,7134.7,-255.5,14666.3,False
+2014,42,LightGBM,default_risk,0.5,54041.2,43718.2,64046.5,True
+2014,42,LightGBM,default_risk,0.7,77591.7,67513.3,86718.5,True
+2014,42,LightGBM,expected_profit,0.3,69421.0,58063.9,80810.1,True
+2014,42,LightGBM,expected_profit,0.5,66031.1,56918.5,75893.8,True
+2014,42,LightGBM,expected_profit,0.7,48460.0,42070.0,55512.1,True
+2014,42,LightGBM,expected_roi,0.3,60190.4,49489.3,71509.1,True
+2014,42,LightGBM,expected_roi,0.5,75666.0,65927.1,84796.0,True
+2014,42,LightGBM,expected_roi,0.7,63262.7,55706.2,70941.0,True
+2014,42,XGBoost,default_risk,0.3,6646.3,-479.3,13771.4,False
+2014,42,XGBoost,default_risk,0.5,53853.3,43970.0,63343.9,True
+2014,42,XGBoost,default_risk,0.7,76155.5,66314.6,85912.8,True
+2014,42,XGBoost,expected_profit,0.3,66739.5,55008.2,78745.7,True
+2014,42,XGBoost,expected_profit,0.5,66558.5,56904.8,76480.3,True
+2014,42,XGBoost,expected_profit,0.7,43103.3,36150.3,50130.4,True
+2014,42,XGBoost,expected_roi,0.3,58649.3,47418.5,71127.2,True
+2014,42,XGBoost,expected_roi,0.5,75811.7,66404.2,85339.8,True
+2014,42,XGBoost,expected_roi,0.7,62341.2,55616.9,69849.2,True
+2014,42,CatBoost,default_risk,0.3,7964.2,761.8,15173.4,True
+2014,42,CatBoost,default_risk,0.5,52592.7,42943.5,62949.5,True
+2014,42,CatBoost,default_risk,0.7,78915.6,69209.2,88275.3,True
+2014,42,CatBoost,expected_profit,0.3,68069.1,56097.7,78829.6,True
+2014,42,CatBoost,expected_profit,0.5,69651.8,60050.9,80228.1,True
+2014,42,CatBoost,expected_profit,0.7,51215.7,44557.5,57867.1,True
+2014,42,CatBoost,expected_roi,0.3,61488.2,50272.8,73538.3,True
+2014,42,CatBoost,expected_roi,0.5,80548.6,70325.5,90553.6,True
+2014,42,CatBoost,expected_roi,0.7,66930.4,59478.2,74677.4,True
+2014,43,Logistic Regression,default_risk,0.3,11583.1,4247.2,18729.0,True
+2014,43,Logistic Regression,default_risk,0.5,50377.2,40716.7,59756.8,True
+2014,43,Logistic Regression,default_risk,0.7,72642.1,61870.4,82381.0,True
+2014,43,Logistic Regression,expected_profit,0.3,63325.3,52856.7,73773.2,True
+2014,43,Logistic Regression,expected_profit,0.5,58606.3,48592.2,68740.1,True
+2014,43,Logistic Regression,expected_profit,0.7,44031.7,37277.3,50965.2,True
+2014,43,Logistic Regression,expected_roi,0.3,47962.1,36779.6,58793.5,True
+2014,43,Logistic Regression,expected_roi,0.5,64368.6,55073.5,74292.2,True
+2014,43,Logistic Regression,expected_roi,0.7,59702.3,52150.3,66484.6,True
+2014,43,Random Forest,default_risk,0.3,29875.8,22801.2,37357.9,True
+2014,43,Random Forest,default_risk,0.5,56141.3,46259.2,64933.3,True
+2014,43,Random Forest,default_risk,0.7,71556.0,61399.8,81308.4,True
+2014,43,Random Forest,expected_profit,0.3,56963.8,44751.1,68556.0,True
+2014,43,Random Forest,expected_profit,0.5,55808.7,46169.8,66708.9,True
+2014,43,Random Forest,expected_profit,0.7,46789.6,40433.5,53427.9,True
+2014,43,Random Forest,expected_roi,0.3,43307.0,33283.0,54903.2,True
+2014,43,Random Forest,expected_roi,0.5,54037.7,44490.6,63381.1,True
+2014,43,Random Forest,expected_roi,0.7,53679.5,46383.8,60608.6,True
+2014,43,LightGBM,default_risk,0.3,7134.7,578.2,13741.6,True
+2014,43,LightGBM,default_risk,0.5,54041.2,44266.5,62645.0,True
+2014,43,LightGBM,default_risk,0.7,77591.7,67173.8,87807.5,True
+2014,43,LightGBM,expected_profit,0.3,68709.1,58124.9,79293.8,True
+2014,43,LightGBM,expected_profit,0.5,67255.4,57676.7,77827.1,True
+2014,43,LightGBM,expected_profit,0.7,47369.8,40513.8,54468.5,True
+2014,43,LightGBM,expected_roi,0.3,56028.5,45936.7,66596.6,True
+2014,43,LightGBM,expected_roi,0.5,74224.5,63879.6,84333.5,True
+2014,43,LightGBM,expected_roi,0.7,64611.9,57066.5,71800.9,True
+2014,43,XGBoost,default_risk,0.3,6646.3,369.3,13683.9,True
+2014,43,XGBoost,default_risk,0.5,53853.3,44029.5,62811.1,True
+2014,43,XGBoost,default_risk,0.7,76155.5,66555.1,86219.8,True
+2014,43,XGBoost,expected_profit,0.3,69913.2,59671.0,80447.2,True
+2014,43,XGBoost,expected_profit,0.5,63206.2,54104.0,72656.2,True
+2014,43,XGBoost,expected_profit,0.7,43389.5,37204.2,50777.9,True
+2014,43,XGBoost,expected_roi,0.3,56309.5,46433.4,67158.0,True
+2014,43,XGBoost,expected_roi,0.5,75132.5,66257.1,84912.5,True
+2014,43,XGBoost,expected_roi,0.7,60430.5,52839.5,67820.6,True
+2014,43,CatBoost,default_risk,0.3,9264.9,2362.1,15587.6,True
+2014,43,CatBoost,default_risk,0.5,51263.8,42247.7,60470.8,True
+2014,43,CatBoost,default_risk,0.7,77140.2,66539.3,86988.4,True
+2014,43,CatBoost,expected_profit,0.3,68302.1,57156.4,78922.1,True
+2014,43,CatBoost,expected_profit,0.5,65864.7,56214.1,75648.2,True
+2014,43,CatBoost,expected_profit,0.7,48961.7,41909.2,56408.9,True
+2014,43,CatBoost,expected_roi,0.3,59029.0,47961.0,69449.4,True
+2014,43,CatBoost,expected_roi,0.5,76675.6,67649.4,86524.6,True
+2014,43,CatBoost,expected_roi,0.7,63060.7,54787.0,70564.6,True
+2014,44,Logistic Regression,default_risk,0.3,11583.1,3800.8,18123.3,True
+2014,44,Logistic Regression,default_risk,0.5,50377.2,39847.7,59419.6,True
+2014,44,Logistic Regression,default_risk,0.7,72642.1,62441.1,82439.4,True
+2014,44,Logistic Regression,expected_profit,0.3,64827.3,53584.1,74832.0,True
+2014,44,Logistic Regression,expected_profit,0.5,58591.6,47899.8,67370.3,True
+2014,44,Logistic Regression,expected_profit,0.7,46854.5,40283.3,53249.7,True
+2014,44,Logistic Regression,expected_roi,0.3,48271.6,38174.8,58237.8,True
+2014,44,Logistic Regression,expected_roi,0.5,62175.4,52239.2,71261.8,True
+2014,44,Logistic Regression,expected_roi,0.7,61031.2,54108.1,67271.2,True
+2014,44,Random Forest,default_risk,0.3,34707.6,27222.4,42391.9,True
+2014,44,Random Forest,default_risk,0.5,52136.8,41729.0,62343.5,True
+2014,44,Random Forest,default_risk,0.7,70204.0,59039.4,81429.9,True
+2014,44,Random Forest,expected_profit,0.3,54888.2,43593.3,64976.2,True
+2014,44,Random Forest,expected_profit,0.5,56272.1,46670.8,66093.2,True
+2014,44,Random Forest,expected_profit,0.7,45977.4,39684.0,52516.4,True
+2014,44,Random Forest,expected_roi,0.3,41061.3,30166.7,51021.7,True
+2014,44,Random Forest,expected_roi,0.5,55657.6,46283.6,64802.3,True
+2014,44,Random Forest,expected_roi,0.7,55296.9,48475.4,61918.1,True
+2014,44,LightGBM,default_risk,0.3,7134.7,-622.1,13753.0,False
+2014,44,LightGBM,default_risk,0.5,54041.2,43502.2,62662.2,True
+2014,44,LightGBM,default_risk,0.7,77591.7,67736.5,88075.4,True
+2014,44,LightGBM,expected_profit,0.3,66609.7,55231.7,77440.7,True
+2014,44,LightGBM,expected_profit,0.5,67969.3,57723.0,76583.9,True
+2014,44,LightGBM,expected_profit,0.7,49317.6,42297.2,56464.6,True
+2014,44,LightGBM,expected_roi,0.3,58128.7,48131.2,68354.4,True
+2014,44,LightGBM,expected_roi,0.5,74269.7,65329.7,83647.3,True
+2014,44,LightGBM,expected_roi,0.7,68230.2,61313.6,74633.9,True
+2014,44,XGBoost,default_risk,0.3,6646.3,-1509.1,12948.3,False
+2014,44,XGBoost,default_risk,0.5,53853.3,43597.2,63232.3,True
+2014,44,XGBoost,default_risk,0.7,76155.5,66053.7,86953.0,True
+2014,44,XGBoost,expected_profit,0.3,63374.3,52385.4,74600.7,True
+2014,44,XGBoost,expected_profit,0.5,64698.6,54147.5,73581.8,True
+2014,44,XGBoost,expected_profit,0.7,47191.8,40184.7,53478.5,True
+2014,44,XGBoost,expected_roi,0.3,55449.1,45067.6,66552.3,True
+2014,44,XGBoost,expected_roi,0.5,72619.6,62831.3,81743.5,True
+2014,44,XGBoost,expected_roi,0.7,66413.9,59433.4,72566.3,True
+2014,44,CatBoost,default_risk,0.3,6775.8,-281.1,13398.4,False
+2014,44,CatBoost,default_risk,0.5,54152.4,43364.4,62735.2,True
+2014,44,CatBoost,default_risk,0.7,77961.1,67714.2,89192.9,True
+2014,44,CatBoost,expected_profit,0.3,64649.8,53328.2,75470.8,True
+2014,44,CatBoost,expected_profit,0.5,68328.4,58539.8,77498.8,True
+2014,44,CatBoost,expected_profit,0.7,51055.2,44086.6,57747.0,True
+2014,44,CatBoost,expected_roi,0.3,61506.0,51471.3,71837.7,True
+2014,44,CatBoost,expected_roi,0.5,75517.6,65888.2,84208.5,True
+2014,44,CatBoost,expected_roi,0.7,66514.7,59139.1,72413.3,True
+2015,42,Logistic Regression,default_risk,0.3,34190.7,30470.2,38432.6,True
+2015,42,Logistic Regression,default_risk,0.5,55777.1,50618.1,61432.4,True
+2015,42,Logistic Regression,default_risk,0.7,67636.5,61173.6,74391.7,True
+2015,42,Logistic Regression,expected_profit,0.3,22258.7,15319.9,28233.4,True
+2015,42,Logistic Regression,expected_profit,0.5,24271.8,18752.4,29834.6,True
+2015,42,Logistic Regression,expected_profit,0.7,23041.7,18728.8,27293.2,True
+2015,42,Logistic Regression,expected_roi,0.3,24620.1,18580.8,30233.8,True
+2015,42,Logistic Regression,expected_roi,0.5,32082.2,26124.8,37837.4,True
+2015,42,Logistic Regression,expected_roi,0.7,31776.5,27003.9,36641.0,True
+2015,42,Random Forest,default_risk,0.3,36189.0,31947.2,40742.8,True
+2015,42,Random Forest,default_risk,0.5,54046.0,48284.7,60236.6,True
+2015,42,Random Forest,default_risk,0.7,54656.8,49027.4,60809.6,True
+2015,42,Random Forest,expected_profit,0.3,9562.8,2714.0,16208.2,True
+2015,42,Random Forest,expected_profit,0.5,10189.5,4213.0,15718.1,True
+2015,42,Random Forest,expected_profit,0.7,8698.7,3946.2,12961.0,True
+2015,42,Random Forest,expected_roi,0.3,407.8,-6041.4,6977.9,False
+2015,42,Random Forest,expected_roi,0.5,10263.8,4701.3,15950.5,True
+2015,42,Random Forest,expected_roi,0.7,12518.8,8266.4,17015.2,True
+2015,42,LightGBM,default_risk,0.3,25915.6,22234.3,30321.6,True
+2015,42,LightGBM,default_risk,0.5,55174.6,49984.4,61655.1,True
+2015,42,LightGBM,default_risk,0.7,68530.9,62771.6,75250.2,True
+2015,42,LightGBM,expected_profit,0.3,24786.5,18158.8,31025.7,True
+2015,42,LightGBM,expected_profit,0.5,26539.3,20451.7,32260.1,True
+2015,42,LightGBM,expected_profit,0.7,22166.1,18023.9,26936.6,True
+2015,42,LightGBM,expected_roi,0.3,26082.6,18871.9,32191.2,True
+2015,42,LightGBM,expected_roi,0.5,33980.5,28198.3,39228.6,True
+2015,42,LightGBM,expected_roi,0.7,34268.0,29185.1,39312.8,True
+2015,42,XGBoost,default_risk,0.3,26707.6,22637.6,31189.5,True
+2015,42,XGBoost,default_risk,0.5,54476.7,49283.2,60782.4,True
+2015,42,XGBoost,default_risk,0.7,67736.6,61443.0,74645.1,True
+2015,42,XGBoost,expected_profit,0.3,22780.9,16317.3,29064.1,True
+2015,42,XGBoost,expected_profit,0.5,26224.0,20167.0,32536.9,True
+2015,42,XGBoost,expected_profit,0.7,24422.7,19986.4,29237.5,True
+2015,42,XGBoost,expected_roi,0.3,26261.5,19286.8,32825.0,True
+2015,42,XGBoost,expected_roi,0.5,33423.9,26699.9,39152.9,True
+2015,42,XGBoost,expected_roi,0.7,33430.6,28169.4,38359.4,True
+2015,42,CatBoost,default_risk,0.3,27205.4,23444.5,31788.1,True
+2015,42,CatBoost,default_risk,0.5,53277.1,48217.9,59905.0,True
+2015,42,CatBoost,default_risk,0.7,68506.7,61427.6,75282.9,True
+2015,42,CatBoost,expected_profit,0.3,22508.9,16062.8,28349.6,True
+2015,42,CatBoost,expected_profit,0.5,24698.8,18680.9,30618.2,True
+2015,42,CatBoost,expected_profit,0.7,20260.4,15654.2,25031.2,True
+2015,42,CatBoost,expected_roi,0.3,25596.6,18674.7,31639.4,True
+2015,42,CatBoost,expected_roi,0.5,33805.9,27289.3,39377.8,True
+2015,42,CatBoost,expected_roi,0.7,32206.1,27403.7,37071.1,True
+2015,43,Logistic Regression,default_risk,0.3,34190.7,30152.7,38952.4,True
+2015,43,Logistic Regression,default_risk,0.5,55777.1,50470.6,61724.7,True
+2015,43,Logistic Regression,default_risk,0.7,67636.5,61184.0,73716.7,True
+2015,43,Logistic Regression,expected_profit,0.3,23652.8,16589.5,30014.2,True
+2015,43,Logistic Regression,expected_profit,0.5,25310.7,19433.4,32063.7,True
+2015,43,Logistic Regression,expected_profit,0.7,24290.8,19654.8,29017.7,True
+2015,43,Logistic Regression,expected_roi,0.3,24425.4,17525.1,30093.7,True
+2015,43,Logistic Regression,expected_roi,0.5,31826.1,25506.0,37212.6,True
+2015,43,Logistic Regression,expected_roi,0.7,33146.8,27816.9,37783.4,True
+2015,43,Random Forest,default_risk,0.3,36666.1,32177.1,41665.0,True
+2015,43,Random Forest,default_risk,0.5,52366.2,46639.0,58438.3,True
+2015,43,Random Forest,default_risk,0.7,56382.1,50416.2,62362.2,True
+2015,43,Random Forest,expected_profit,0.3,8543.8,1655.6,14870.7,True
+2015,43,Random Forest,expected_profit,0.5,14268.9,8158.8,20696.9,True
+2015,43,Random Forest,expected_profit,0.7,13007.4,8552.1,17491.8,True
+2015,43,Random Forest,expected_roi,0.3,3763.7,-2684.3,10594.4,False
+2015,43,Random Forest,expected_roi,0.5,10970.5,5209.5,17172.5,True
+2015,43,Random Forest,expected_roi,0.7,16054.4,10909.4,20941.0,True
+2015,43,LightGBM,default_risk,0.3,25915.6,21646.0,30495.3,True
+2015,43,LightGBM,default_risk,0.5,55174.6,49692.1,60972.6,True
+2015,43,LightGBM,default_risk,0.7,68530.9,61703.5,73824.7,True
+2015,43,LightGBM,expected_profit,0.3,25176.9,18987.6,31281.6,True
+2015,43,LightGBM,expected_profit,0.5,26281.8,20022.3,32222.7,True
+2015,43,LightGBM,expected_profit,0.7,21603.9,16905.7,26423.6,True
+2015,43,LightGBM,expected_roi,0.3,26988.2,20506.6,32963.6,True
+2015,43,LightGBM,expected_roi,0.5,35402.3,28997.4,40937.7,True
+2015,43,LightGBM,expected_roi,0.7,32928.6,28227.3,37631.5,True
+2015,43,XGBoost,default_risk,0.3,26707.6,22015.5,30966.1,True
+2015,43,XGBoost,default_risk,0.5,54476.7,48212.9,60186.1,True
+2015,43,XGBoost,default_risk,0.7,67736.6,61092.4,73627.7,True
+2015,43,XGBoost,expected_profit,0.3,24420.6,18005.6,30983.4,True
+2015,43,XGBoost,expected_profit,0.5,25939.7,19994.6,31958.4,True
+2015,43,XGBoost,expected_profit,0.7,24760.8,20125.8,29409.8,True
+2015,43,XGBoost,expected_roi,0.3,28136.5,21966.2,34304.8,True
+2015,43,XGBoost,expected_roi,0.5,33469.9,27049.0,39028.6,True
+2015,43,XGBoost,expected_roi,0.7,32832.7,27772.3,37911.1,True
+2015,43,CatBoost,default_risk,0.3,27099.1,23024.0,31444.5,True
+2015,43,CatBoost,default_risk,0.5,53129.5,47482.5,58895.3,True
+2015,43,CatBoost,default_risk,0.7,69758.7,63283.5,75644.1,True
+2015,43,CatBoost,expected_profit,0.3,23516.0,17636.4,29236.0,True
+2015,43,CatBoost,expected_profit,0.5,23323.5,17498.8,29475.2,True
+2015,43,CatBoost,expected_profit,0.7,21593.3,16789.1,26238.7,True
+2015,43,CatBoost,expected_roi,0.3,27278.7,21201.9,33387.4,True
+2015,43,CatBoost,expected_roi,0.5,35339.6,29793.4,41056.1,True
+2015,43,CatBoost,expected_roi,0.7,34612.5,29534.0,39159.1,True
+2015,44,Logistic Regression,default_risk,0.3,34190.7,29531.5,38720.7,True
+2015,44,Logistic Regression,default_risk,0.5,55777.1,49661.8,61094.6,True
+2015,44,Logistic Regression,default_risk,0.7,67636.5,61662.0,73357.1,True
+2015,44,Logistic Regression,expected_profit,0.3,23077.5,16589.0,28770.2,True
+2015,44,Logistic Regression,expected_profit,0.5,25394.7,19562.1,30657.8,True
+2015,44,Logistic Regression,expected_profit,0.7,22989.4,18159.1,27197.9,True
+2015,44,Logistic Regression,expected_roi,0.3,25732.2,19377.8,31501.8,True
+2015,44,Logistic Regression,expected_roi,0.5,32290.8,26471.7,37732.9,True
+2015,44,Logistic Regression,expected_roi,0.7,33304.3,28285.5,38107.1,True
+2015,44,Random Forest,default_risk,0.3,35864.2,31151.0,40452.9,True
+2015,44,Random Forest,default_risk,0.5,51765.8,45253.4,57186.1,True
+2015,44,Random Forest,default_risk,0.7,59870.6,53173.5,65889.5,True
+2015,44,Random Forest,expected_profit,0.3,8446.7,1563.2,14487.7,True
+2015,44,Random Forest,expected_profit,0.5,11487.7,5865.4,16345.2,True
+2015,44,Random Forest,expected_profit,0.7,10955.1,6444.0,15001.1,True
+2015,44,Random Forest,expected_roi,0.3,3776.8,-2455.7,9812.5,False
+2015,44,Random Forest,expected_roi,0.5,7482.3,1766.3,12285.9,True
+2015,44,Random Forest,expected_roi,0.7,13745.8,9022.9,18638.6,True
+2015,44,LightGBM,default_risk,0.3,25915.6,21471.7,30550.6,True
+2015,44,LightGBM,default_risk,0.5,55174.6,49369.6,61015.3,True
+2015,44,LightGBM,default_risk,0.7,68530.9,62277.8,74391.0,True
+2015,44,LightGBM,expected_profit,0.3,24300.8,17976.8,30062.9,True
+2015,44,LightGBM,expected_profit,0.5,27459.7,21060.9,33110.2,True
+2015,44,LightGBM,expected_profit,0.7,23299.4,18566.6,27754.8,True
+2015,44,LightGBM,expected_roi,0.3,28407.1,21972.3,34312.7,True
+2015,44,LightGBM,expected_roi,0.5,34602.4,28724.7,40433.1,True
+2015,44,LightGBM,expected_roi,0.7,34368.2,28831.6,39011.2,True
+2015,44,XGBoost,default_risk,0.3,26707.6,22711.2,31014.7,True
+2015,44,XGBoost,default_risk,0.5,54476.7,48675.5,60209.8,True
+2015,44,XGBoost,default_risk,0.7,67736.6,61174.6,73729.3,True
+2015,44,XGBoost,expected_profit,0.3,22726.9,16235.6,28438.7,True
+2015,44,XGBoost,expected_profit,0.5,25561.9,19567.6,31071.8,True
+2015,44,XGBoost,expected_profit,0.7,25030.0,20587.2,29095.8,True
+2015,44,XGBoost,expected_roi,0.3,27983.5,21832.6,33559.7,True
+2015,44,XGBoost,expected_roi,0.5,34518.8,28591.1,40154.1,True
+2015,44,XGBoost,expected_roi,0.7,32154.2,27036.6,36803.2,True
+2015,44,CatBoost,default_risk,0.3,27239.6,23157.2,31600.7,True
+2015,44,CatBoost,default_risk,0.5,53495.8,48397.7,59192.0,True
+2015,44,CatBoost,default_risk,0.7,69099.9,63036.0,75095.4,True
+2015,44,CatBoost,expected_profit,0.3,22480.5,15534.7,28409.1,True
+2015,44,CatBoost,expected_profit,0.5,22745.7,15903.5,28066.5,True
+2015,44,CatBoost,expected_profit,0.7,21272.1,16769.6,25306.3,True
+2015,44,CatBoost,expected_roi,0.3,25730.7,19221.4,32035.4,True
+2015,44,CatBoost,expected_roi,0.5,33812.8,27750.8,39898.5,True
+2015,44,CatBoost,expected_roi,0.7,33141.6,28305.1,37154.4,True
