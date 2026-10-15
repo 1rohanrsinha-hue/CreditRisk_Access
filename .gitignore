@@ -84,3 +84,7 @@ dist/
 *.webp
 catboost_info/
 .cache/
+
+# track small result artefacts without force-adding
+!experiments/results/*.csv
+!experiments/figures/*.png
