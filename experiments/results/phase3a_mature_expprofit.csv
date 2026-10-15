@@ -1,0 +1,5 @@
+scenario,rule,profit_per_1000_mean,accept_rate_mean,bad_rate_approved_mean,profit_per_1000_sd,accept_rate_sd,bad_rate_approved_sd,n_rep
+P1,approve_all,1259796.651,1.0,0.1477,18156.1855,0.0,0.0016,10
+P1,expected_profit,1227656.1831,0.9634,0.1421,14557.0983,0.0015,0.0015,10
+P2_5%,approve_all,475144.0429,1.0,0.1477,16127.5377,0.0,0.0016,10
+P2_5%,expected_profit,424297.4386,0.7511,0.1267,9878.1733,0.0038,0.0021,10

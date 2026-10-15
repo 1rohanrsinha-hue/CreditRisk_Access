@@ -116,3 +116,58 @@ def realized_profit(df: pd.DataFrame) -> pd.Series:
     within $1), i.e. total_pymnt ALREADY contains recoveries; adding
     `recoveries` again would double count."""
     return df['total_pymnt'] - df['funded_amnt']
+
+
+# ---------------------------------------------------------------------------
+# Profit definitions (Phase 3A)
+#   P1 = total_pymnt - funded_amnt                       (gross, undiscounted)
+#   P2 = (total_pymnt - collection_recovery_fee) discounted at r p.a. - funded_amnt
+# P2 approximation: we only have TOTALS, not cash-flow timing. Payments are
+# assumed to arrive uniformly between issue_d and last_pymnt_d (or issue_d +
+# term months if last_pymnt_d is missing); funded_amnt leaves at issue_d.
+# Late recoveries on charged-off loans may arrive after last_pymnt_d, so the
+# discounting there is slightly optimistic.
+# ---------------------------------------------------------------------------
+_FULL = None
+
+
+def full_frame() -> pd.DataFrame:
+    global _FULL
+    if _FULL is None:
+        _FULL = load_full()
+    return _FULL
+
+
+def parse_month(s: pd.Series) -> pd.Series:
+    return pd.to_datetime(s, format='%b-%Y', errors='coerce')
+
+
+def issue_year(df: pd.DataFrame) -> pd.Series:
+    return parse_month(df['issue_d']).dt.year
+
+
+def term_months(df: pd.DataFrame) -> pd.Series:
+    return df['term'].astype(str).str.extract(r'(\d+)')[0].astype(float)
+
+
+def months_to_last_payment(df: pd.DataFrame) -> pd.Series:
+    issue, last = parse_month(df['issue_d']), parse_month(df['last_pymnt_d'])
+    m = (last.dt.year - issue.dt.year) * 12 + (last.dt.month - issue.dt.month)
+    m = m.where(last.notna(), term_months(df))
+    return m.clip(lower=0)
+
+
+def profit_p1(df: pd.DataFrame) -> pd.Series:
+    return df['total_pymnt'] - df['funded_amnt']
+
+
+def profit_p2(df: pd.DataFrame, rate: float = 0.05) -> pd.Series:
+    T = months_to_last_payment(df).astype(float) / 12.0
+    if rate == 0:
+        fac = pd.Series(1.0, index=df.index)
+    else:
+        fac = pd.Series(np.where(T < 1e-9, 1.0,
+                                 (1 - (1 + rate) ** (-T)) / (np.maximum(T, 1e-9) * np.log1p(rate))),
+                        index=df.index)
+    net = df['total_pymnt'] - df['collection_recovery_fee'].fillna(0.0)
+    return net * fac - df['funded_amnt']

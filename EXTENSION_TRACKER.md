@@ -72,10 +72,18 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - Charged Off sample is right-censored by vintage (2007–2018 mix); no out-of-time check yet (Phase 3).
 
 ## Phase 3: Broader benchmarking
+### Phase 3A results (2026-10-15)
+- **Strict-labelled rows (full file): 1,345,350** (Fully Paid 1,076,751; Charged Off 268,559; Default 40) of 2,260,668 labelled rows.
+- **Vintage audit** (`phase3a_vintage_audit.csv`, `figures/vintage_audit.png`): matured by 2018Q4 = 36m ≤2015, 60m ≤2013. Censored/biased cells: 36m 2016 (28% unresolved), 2017 (60%), 2018 (88%); 60m 2014 (17%), 2015 (33%), 2016–2018 (45–90%). 2007–2008 36m have 35–58% of loans dropped for policy-exception statuses (selection, not censoring). Signature: strict-labelled mean P1 profit falls from +$1.4k (2013, 36m) to −$1.0k (2018) and early-payoff share of Fully Paid → 100%, because performing "Current" loans are excluded (survivorship).
+- **Profit definitions:** P1 = `total_pymnt − funded_amnt`; P2(r) = (`total_pymnt` − `collection_recovery_fee`) discounted at r p.a., payments uniform over [issue_d, last_pymnt_d] (or issue_d+term), minus `funded_amnt` at issue.
+- **Robustness (D2, 10 rep., LightGBM isotonic, $000/1000 appl.):** approve-all 403 / 363 / −297 / −654 for P1 / P2 0% / 5% / 8%; Youden 425 / 415 / 62 / −129; Elkan 481 / 462 / 65 / −63; profit-max 550 / 527 / 63 / 0. profit-max acceptance: 87% / 86% / 53% / **0%**. Rule ordering is P1/P2-0%: profit-max > Elkan > fixed-0.5 > F1 > Youden > approve-all > recall-.80; at 5% all non-trivial rules tie (Elkan 65, profit-max 63, Youden 62, recall-.80 62; paired CI of profit-max vs Youden includes 0). Recall-≥.80 loses to approve-all under P1/P2-0% (−$97k [−144k, −50k]) but **beats** it by +$339k under 5% because approve-all itself loses money.
+- **Expected-profit rule (D2):** P1 $663k vs profit-max $550k vs Elkan $481k (paired +$97k [72k, 122k] and +$195k [165k, 225k]); P2-5%: $169k vs $63k vs $65k (+$118k CI [92k, 139k] vs both). Regressors calibrated (mean predicted vs realized: good $2,324 vs $2,328; bad −$7,206 vs −$7,241; decile table in `phase3a_expprofit_calibration.csv`; R² .63 / .48 on the conditional, .06 on total profit). **On mature cells the rule is below approve-all** (P1 −$32k, P2-5% −$51k), so the D2 gain reflects the censored vintages.
+- **OOT (iso, mean of 5 models):** AUC drops .016–.021 vs in-time (RF worst, .644–.654); π: train .142/.154/.124, T−1 .162/.156/.137, test .156/.185/.149; ECE of isotonic-on-T−1 on year T .022/.036/.022 vs in-sample .0025/.0012/.0016 (worse than raw in 2014: .036 vs .023). Approve-all ≥ every threshold rule in all three vintages (P1 $2.08M / 1.37M / 0.84M per 1000 applicants); Youden throws away 57%/36%/28%. **H4 NOT SUPPORTED**: |Δπ| .006/.029/.012 and |Δt*| .009/.014/.009 (corr .33), t* moved *opposite* to π in 2014–2015 (sign agreement 13%), and the Youden-J lost to a stale T−1 threshold is only .0015/.0042/.0025 (0.6–1.6% of J_max, max .007).
+
 - [ ] Repeated stratified CV + bootstrap CIs — `TODO`
 - [ ] Friedman/Nemenyi or paired tests — `TODO`
 - [ ] PR-AUC, MCC, KS, Gini, balanced accuracy — `TODO`
-- [ ] Out-of-time validation by `issue_d` — `TODO`
+- [x] Out-of-time validation by `issue_d` — `DONE` (3A): rolling origin T∈{2013,2014,2015}; `oot_study.py`, `phase3a_oot*.csv`
 - [ ] Leakage ablation with/without `interest_rate` and engineered `credit_score` — `TODO`
 - [ ] Optuna tuning with nested CV — `TODO`
 - [ ] SMOTE / undersampling / focal-loss baselines — `TODO`
@@ -121,6 +129,14 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 | 2026-10-15 | P2-Q5: realized_profit = total_pymnt − funded_amnt; `total_pymnt` = principal+interest+late fee+recoveries holds for 100% of FP/CO rows (32% without recoveries), so adding `recoveries` would double count. Elkan costs derived from train+val data | Verified on 2.26M rows |
 | 2026-10-15 | P2-Q6: runtime estimate ~95 min sequential-CPU (~45 min actual wall clock with 3+1+1 workers); full repeats kept (no cuts) | Under budget |
 | 2026-10-15 | P2-Q7: committed app.py (tag `paper-v1-baseline`) and .gitignore as separate commits on journal-extension; main untouched; nothing pushed; venv.txt untracked | As requested |
+| 2026-10-15 | P3A-Q1: rolling-origin OOT on issue year, T∈{2013,2014,2015}: fit ≤T−2, calibrate+thresholds on T−1, test T; all terms for 2013/14, 36m only for 2015; vintages ≥2016 dropped from headline; windows >400k subsampled (seeded; none triggered) | As specified |
+| 2026-10-15 | P3A-Q2: report P1 and P2 (5%, with 0%/8% sensitivity, net of `collection_recovery_fee`) | Totals only, no cash-flow timing |
+| 2026-10-15 | P3A-Q3: headline decision metric NOT chosen yet; report profit-max (OOF), data-derived Elkan and the expected-profit rule side by side under P1/P2 | Decision after 3A |
+| 2026-10-15 | P3A-Q4: score-dependent expected-profit baseline added (`creditrisk/expected_profit.py`) | As specified |
+| 2026-10-15 | P3A-Q5/Q6: stats (Nadeau-Bengio, paired bootstrap + Holm; blocks = vintage folds + datasets) and Optuna plan (25 trials, inner 3-fold, outer 5-fold, 5 models, log-loss, 100k subsample, ≤3h) deferred to 3B/3C | As specified |
+| 2026-10-15 | P3A-Q7: claim table replaced by the author's manuscript mapping | |
+| 2026-10-15 | Bug fix: `FrameEncoder` median of an all-NaN column (e.g. `mort_acc` before 2012) now 0 instead of NaN; no effect on D1/D2 results | Needed for OOT |
+| 2026-10-15 | **Finding:** strict-labelled 2016–2018 loans are survivorship-biased (performing Current loans excluded), so Phase 2/3A-C D2 profit levels and rule rankings are partly a censoring artefact; the headline profit analysis should move to mature vintage cells | `mature_subset_check.py` |
 | 2026-10-15 | Seeding: baseline_repro seeds numpy (42) before app's unseeded `mutual_info_classif`; creditrisk code has no unseeded RNG. **Result: Table I reproduces exactly** (LR .592/.269/.718/.391/.696/.452; CatBoost AUC .703 thr .519; RF rec .668 thr .180). The earlier unseeded run differed by up to .038 recall / .012 threshold (column-order noise, `rf_column_order_sensitivity.csv`) | As requested |
 | 2026-10-14 | Protocols A/B/C (see results): leaking the threshold to the test set changes mean F1 by ≤ .003 and mean recall by ≤ .03; per-model recall moves ±.02–.04 | `protocol_comparison_all.csv` |
 
@@ -131,18 +147,26 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - At fixed 0.5, recall is ~0.02–0.06 for GB/AdaBoost/MLP/ET/RF but ~0.62–0.67 for the others: that cluster split is a probability-scale (weighting/bagging) effect, not ranking quality.
 - `sel_stability` = 1.0 trivially since `select_k=None` (all features kept).
 
-## Paper claims affected (Phase 2)
-_Claims inferred from the app.py comments, Table I and the Phase-1 notes — please map to the manuscript's exact sentences._
-| # | Claim | Status | Numbers |
+## Paper claims affected
+_Mapped to the manuscript sections by the author (2026-10-15)._
+| Manuscript location | Claim | Status | Evidence |
 |---|---|---|---|
-| 1 | Youden tuning puts all models on a "fair footing" for the recall comparison | **WEAKENED** | Tuned recall spread .065–.078 across models vs AUC spread .024–.027; model recall ranks uncorrelated across protocols/seeds (ρ≈0) and RF recall sd .032 from column order alone |
-| 2 | Bagging, plain GBM and MLP "rarely push minority probabilities above 0.5" because of conservatism | **CHANGED** (mechanism) | GB/AdaBoost/MLP are unweighted: balanced weighting lifts recall@0.5 .057/.039/.053 → .664/.672/.677. RF/ET were already balanced yet .053/.059: near-pure leaves (min_samples_leaf 20 ⇒ ET .651, RF .545) |
-| 3 | Class-imbalance handling improves recall | **CHANGED** | At the tuned threshold weighting changes nothing: mean recall .669 vs .670, AUC identical; it only shifts the probability scale (raw Brier .150→.205, ECE .027→.211) |
-| 4 | The tuned thresholds in Table I (e.g. LR .452, RF .180) are model-specific operating points | **CHANGED** | For calibrated scores t* = π (|t*−π| .005 D2); balanced raw t* ≈ .5; unweighted raw t* ≈ π. Thresholds are properties of the probability scale, not models |
-| 5 | CatBoost (AUC .703) is the best model | **WEAKENED** | 7 of 10 models within .007 AUC; no CIs; significance test pending (Phase 3) |
-| 6 | ROC-AUC is unaffected by threshold tuning/calibration | **CONFIRMED** | Platt Δ=0, isotonic ≤ .002 |
-| 7 | High-recall operation is the right target for credit risk | **CHANGED** | Recall-.80 rule earns $322k vs approve-all $403k per 1000; Youden $425k (+5%); profit-optimal $550k (+36%) at ~87% acceptance |
-| 8 | App risk bands (15/30/50/70%) and 0.5 cutoff are meaningful | **CHANGED** | Raw balanced probabilities are uncalibrated (ECE .21); at 0.5 only ~1.7% of applicants are flagged |
+| Abstract / Sec V | "Threshold matters more than model family" | **CONFIRMED** for 0.5-vs-tuned; **WEAKENED** for tuned-recall ranking | recall spread at 0.5 = .63 vs AUC spread .027; after tuning spread .065–.078 is threshold noise (rank ρ≈0 across protocols, RF sd .032) |
+| Sec IV-B | "XGBoost and LightGBM offer the most desirable recall–AUC balance" | **WEAKENED** | ranks flip across protocols/seeds; 7 of 10 models within .007 AUC |
+| Sec III-F | "Conservative probabilities rarely exceed 0.5" | **PARTIAL** | true for unweighted GB/AdaBoost/MLP where t*≈base rate; RF/ET mechanism is leaf purity (min_samples_leaf 20 ⇒ ET recall@0.5 .651) |
+| Sec III-F | "Youden gives the best operating point" | **CHANGED** | not profit-optimal; and in mature vintages no cutoff beats approve-all (Phase 3A) |
+| Sec III-B2 | Imputation paragraph | **WRONG** | pandas fill bug: nothing was imputed (6151 NaNs zero-filled); journal version uses in-fold imputation |
+| Sec V | "CatBoost native categorical handling" | **WRONG** | `cat_features` was never passed in the paper's code; fixed in `creditrisk/models.py` |
+
+### Phase 3A changes to the picture
+- The Phase 2 profit conclusions (profit-max accepts ~87%, +$162k over Youden, recall-.80 loses to approve-all) are **conditional on a D2 sample that is ~50% censored vintages**. On mature cells only (≤2013, or 2014/2015 36-month) approve-all is optimal, Youden loses 53%, and even the expected-profit rule is −$32k/−$51k below approve-all.
+- Under 5% p.a. discounting the whole book is unprofitable (approve-all −$297 per applicant on D2; +$475/applicant on mature cells), and at 8% profit-max rejects everything on D2.
+
+### Limitations added in Phase 3A
+- **Hindsight labels:** the T−1 calibration/threshold set uses outcomes that were only observable after year T−1 (a loan issued in 2012 resolves in 2015); a live system would have fewer resolved labels.
+- **Censoring:** strict labelling drops unresolved loans; late vintages are survivorship-biased and 60-month 2014–2015 cells are truncated. Headline results restricted to mature cells / vintages ≤2015.
+- **Discounting approximation:** only totals are available; payments are assumed uniform between issue and last payment (recoveries on charged-off loans may arrive later). 5%/8% rates are scenario hurdles, not a funding-cost estimate.
+- **Selection:** funded loans only; "approve-all optimal" means "within the historical approved population", not for rejected applicants.
 
 ## Open questions
 - [ ] Which environment produced the paper's Table I (pandas version)? The inplace-fillna bug is pandas-3 specific.

@@ -19,7 +19,7 @@ LEGACY_COLS = [
 ]
 EXTRA_COLS = ['issue_d', 'fico_range_low', 'fico_range_high',
               'total_rec_prncp', 'total_rec_int', 'total_rec_late_fee',
-              'funded_amnt', 'total_pymnt', 'recoveries']
+              'funded_amnt', 'total_pymnt', 'recoveries', 'last_pymnt_d', 'collection_recovery_fee']
 CACHE_COLS = LEGACY_COLS + EXTRA_COLS
 
 LEGACY_DEFAULT_STATUSES = [

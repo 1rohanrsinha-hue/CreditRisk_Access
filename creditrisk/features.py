@@ -57,7 +57,7 @@ class FrameEncoder(BaseEstimator, TransformerMixin):
         X = pd.DataFrame(X).copy()
         self.nominal_ = [c for c in NOMINAL if c in X.columns]
         self.numeric_ = [c for c in X.columns if c not in self.nominal_]
-        self.medians_ = X[self.numeric_].median()
+        self.medians_ = X[self.numeric_].median().fillna(0.0)   # all-NaN column in an old vintage -> 0
         self.modes_ = {c: (X[c].mode()[0] if X[c].notna().any() else 'Unknown')
                        for c in self.nominal_}
         self.cats_ = {c: sorted(X[c].fillna(self.modes_[c]).astype(str).unique())

@@ -1,0 +1,7 @@
+scenario,rule,vs,d_profit_per_1000,ci_lo,ci_hi,p
+P1,expected_profit,elkan,194780.7,164671.8,225197.8,0.0
+P1,expected_profit,profit_max,96704.3,72310.0,122156.4,0.0
+P2_0%,expected_profit,elkan,180038.9,149350.3,209679.0,0.0
+P2_0%,expected_profit,profit_max,89666.7,64143.8,115984.3,0.0
+P2_5%,expected_profit,elkan,118637.1,93114.2,140822.8,0.0
+P2_5%,expected_profit,profit_max,117757.7,91867.5,138919.2,0.0
