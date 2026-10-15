@@ -152,6 +152,34 @@ Other fixed choices: leakage cells A (rate in, fico = headline), B (in, none), C
 
 **Operational notes.** The laptop did not actually sleep (uptime 16 days); the background jobs ran to completion. Score and analysis runners skip existing units (atomic `os.replace` checkpoints). `experiments/status.sh` prints progress.
 
+## Phase 3C results (2026-10-16; outcomes reported against the frozen Phase 3C pre-registration)
+| id | verdict | key numbers |
+|---|---|---|
+| H9 equivalent boosting majority (AUC ±.005, N–B, Holm) | **SUPPORTED** | D3: 4/5 boosting models equivalent to best (LightGBM .6832): XGBoost −.0003, GB −.0005, CatBoost −.0011 (TOST Holm p<.001); AdaBoost −.0062 [−.0076, −.0049] is outside the band, as are LR −.0057, NN −.0032 (CI crosses margin), RF/ET/DT −.026…−.030 |
+| H10 \|t*−π\|<.02 in all ablation cells | **SUPPORTED** | max over (cell, model, calibrator) of mean \|t*−π\| = .0121 (cell E); mean .0034–.0049 per cell |
+| H11 removing rate+score: ΔAUC>.005 and larger capacity gain | **SUPPORTED** | ΔAUC(A−F) = .0483 (.6773 → .6289); default-risk dollar-capacity gain (k=50%, P2-3%) −$39.1k (A) → +$49.3k (F) |
+| H12 dollar-capacity gain < count-capacity gain (expected profit) | **SUPPORTED** | $191.6k vs $102.5k per 1000; difference −$89.0k, 95% CI [−90.4k, −87.7k] (−46%) |
+| H13 default-risk < random under ROI, and rate-only ≈ best model | **REJECTED** (a holds, b fails) | (a) 10/10 models negative ROI gain (−.0041…−.0077); (b) ROI(rate, high first) − ROI(best = expected-ROI XGBoost) = −.0092, CI [−.0119, −.0062], margin ±.0012 |
+| H14 cheap recalibration fix ≥30% ECE cut in ≥2 of 3 folds | **REJECTED** | isotonic on trailing 6 months: +37.6% / −3.8% / +23.5% (1 of 3 folds); Platt +1.6% / +1.4% / 0.0%; EM prior shift −1237% / −305% / −511% (diverges); oracle π_T (not eligible): +26.6% / +69.3% / +46.4% |
+
+**A. Stats** (`phase3c_stats.csv`). Best by mean AUC: D3 LightGBM (.6832), D2 LightGBM (.7081), D1 CatBoost (.7026). Equivalent set (Holm TOST<.05): D3 {XGBoost, GB, CatBoost}; D2 {XGBoost, GB, CatBoost, NN}; D1 {XGBoost, LightGBM, GB, LR} (NN and AdaBoost not). Paired-bootstrap check agrees (e.g. D3 LR [−.0058, −.0006]). OOT folds (seed-42 scores, seed sd of ΔAUC ≤.0006): CatBoost best in all three; LightGBM −.0083/−.0041/−.0035 and XGBoost −.0061/−.0041/−.0031 (inside ±.005 only in 2014–15); RF −.026…−.039. Brier and tuned-F1 differences vs best are significant (Holm) for LR, DT, RF, AdaBoost, ET on D3.
+- *Earlier claims:* "no clear winner" **CONFIRMED** (D3/D2/D1 equivalent sets of 3–4 models). "CatBoost is best" **REJECTED** as a robust claim: nominal best only on D1 and OOT, third on D3/D2 and equivalent to LightGBM/XGBoost/GB in-time; OOT lead over LightGBM/XGBoost is ≤.004 AUC except 2013.
+
+**B. Dollar capacity and ROI** (D3, P2-3%, dollar capacity, k=50%; approve-all profit $763k per 1000, ROI .0582): default-risk ROI .0519 (gain −.0063; profit gain −$41k, dollar-weighted bad rate .083); expected profit ROI .0769 (+.0187; +$123k; bad .159); expected ROI .0815 (+.0233; +$153k; bad .170); interest rate high-first ROI .0714 (+.0133; +$87k; bad .214); interest rate low-first ROI .0448 (−.0134; −$88k; bad .085). Count-capacity expected-profit ranking approves 68.7% of dollars at k=50% of loans (loan-size confound). Model-rank Spearman across k: .63 (default-risk) / .80 (expected profit) / .95 (expected ROI); across OOT folds .13 / .16 / .42. OOT ROI at k=50% (mean of 10 models; approve-all .099/.055/.031): default-risk .085/.062/.039, expected profit .125/.063/.034, rate high-first .123/.055/.026.
+
+**C. Ablation** (`phase3c_ablation_cells.csv`, D3, 5 models × 5 repeats):
+| cell | ROC-AUC | PR-AUC | Brier | ECE | mean \|t*−π\| calib. | default-risk dollar gain (k=50%, P2-3%) |
+|---|---|---|---|---|---|---|
+| A rate in, fico (headline) | .6773 | .2559 | .1197 | .0099 | .0048 | −$39.1k |
+| B rate in, no score | .6757 | .2545 | .1199 | .0102 | .0049 | −$42.8k |
+| C rate in, grade-derived | .6771 | .2563 | .1198 | .0111 | .0046 | −$38.7k |
+| D rate out, fico | .6506 | .2326 | .1216 | .0096 | .0042 | **+$30.4k** |
+| E rate out, grade-derived (partial removal) | .6770 | .2560 | .1198 | .0100 | .0046 | −$38.3k |
+| F rate out, no score | .6289 | .2190 | .1229 | .0115 | .0034 | **+$49.3k** |
+SHAP (LightGBM, rep 0, 2,000 test rows): cell A interest_rate 36.4% of mean|SHAP|, then annual_income 11.7%, loan_amount 8.1%, dti 7.5%, fico_mean 6.3%; cell F annual_income 17.5%, credit_inquiries 14.7%, loan_amount 13.2%, dti 11.7%. The grade-derived score reconstructs the rate (E ≈ A), so only D/F are genuine removals.
+
+**D. Drift** (mean of 5 models × 3 seeds, ECE on year T): raw .041/.022/.034; isotonic-T−1 .022/.036/.022; Platt .022/.036/.022; trailing-6-month isotonic .014/.038/.017; EM prior shift .299/.146/.133; oracle .016/.011/.012. EM estimates of π_T wander (e.g. LightGBM: .40/.03/.003 vs true .156/.184/.149): verified on synthetic pure prior shift (.2509 vs true .25), so the failure is real — the drift is mostly covariate shift, which a prior-shift model misattributes. Oracle π_T requires information a deployed system would not have; trailing-6-month isotonic needs labels from the recent window (available, with hindsight).
+
 ## Phase 4: Explainability
 - [ ] SHAP on all models with 2000+ samples — `TODO`
 - [ ] Rank correlation of attributions across models — `TODO`
@@ -191,6 +219,8 @@ Other fixed choices: leakage cells A (rate in, fico = headline), B (in, none), C
 | 2026-10-15 | P2-Q5: realized_profit = total_pymnt − funded_amnt; `total_pymnt` = principal+interest+late fee+recoveries holds for 100% of FP/CO rows (32% without recoveries), so adding `recoveries` would double count. Elkan costs derived from train+val data | Verified on 2.26M rows |
 | 2026-10-15 | P2-Q6: runtime estimate ~95 min sequential-CPU (~45 min actual wall clock with 3+1+1 workers); full repeats kept (no cuts) | Under budget |
 | 2026-10-15 | P2-Q7: committed app.py (tag `paper-v1-baseline`) and .gitignore as separate commits on journal-extension; main untouched; nothing pushed; venv.txt untracked | As requested |
+| 2026-10-16 | P3C answers folded into tasks: .gitignore negation rules (no force-add); H9–H14 pre-registered first (158e212) with ±.005 AUC / ±2% ROI margins; interest-rate-only ranking = higher rate first (lower first as baseline); leakage cells A–F with E flagged as partial removal; drift fixes incl. oracle excluded from H14 | As specified |
+| 2026-10-16 | Infrastructure: `repeats.get_dataset` accepts ablation cells (`D3:ir0:csgd`), `creditrisk/capacity.py` (count/dollar approval + ROI), `experiments/oot_scores.py` (cached OOT scores, 10 models seed 42 + 5 models seeds 43/44) | Shared by stats, capacity v2, drift |
 | 2026-10-15 | P3B-Q1: re-base on D3 (mature vintages); D2 = sensitivity, D1 = replication; core Phase 2 results re-run on D3 | Headline numbers must not come from a censored sample |
 | 2026-10-15 | P3B-Q2: profit message reframed ("threshold rules do not beat risk-priced lending on mature vintages; thresholds matter under a capacity constraint"); with/without interest_rate comparison belongs to 3C | |
 | 2026-10-15 | P3B-Q3: headline discount 3% p.a. (illustrative hurdle only), grid {0,2,3,5,8}% | |
@@ -226,6 +256,18 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | Sec III-B2 | Imputation paragraph | **WRONG** | pandas fill bug: nothing was imputed (6151 NaNs zero-filled); journal version uses in-fold imputation |
 | Sec V | "CatBoost native categorical handling" | **WRONG** | `cat_features` was never passed in the paper's code; fixed in `creditrisk/models.py` |
 
+### Phase 3C changes to the claim table
+| Claim | Status | Evidence |
+|---|---|---|
+| "CatBoost is the best model" (Sec IV-B/V) | **REJECTED** as robust | nominal best on D1 and OOT only; equivalent set of 3–4 models in every in-time dataset; OOT lead ≤.004 over LightGBM/XGBoost except 2013 |
+| "No clear winner among modern GBDTs" | **CONFIRMED** | H9: 4/5 boosting models equivalent to best on D3 (TOST ±.005, N–B, Holm) |
+| "Ranking by default risk helps capacity-constrained lending" | **REJECTED** (count and dollar capacity, profit and ROI) | 10/10 models below random on ROI at k=50%; gain −$41k per 1000 (dollar) |
+| "The model adds value beyond the lender's own rate" | **WEAKENED** | rate-only (high first) captures .0133 of the .0233 ROI gain of the best ranking; but still significantly below it (ΔROI −.0092, CI excl. 0) |
+| "Count-based capacity results generalise to dollars" | **WEAKENED** | expected-profit gain falls from $191.6k to $102.5k per 1000 (−46%) |
+| "t*≈π does not depend on feature set" | **CONFIRMED** (H10) | max mean \|t*−π\| .012 across 6 cells |
+| "interest_rate drives performance and the capacity paradox" | **CONFIRMED** (H11) | ΔAUC .048; removing the rate flips the default-risk capacity gain from −$39k to +$30k/+$49k |
+| "Recalibrating on recent data fixes drift" | **REJECTED** (H14) | only trailing-6-month isotonic helps (1 of 3 folds ≥30%); prior-shift EM fails under covariate shift |
+
 ### Phase 3B changes to the claim table (supersedes Phase 2 profit magnitudes)
 | Claim | Status | Evidence |
 |---|---|---|
@@ -240,6 +282,14 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 ### Phase 3A changes to the picture
 - The Phase 2 profit conclusions (profit-max accepts ~87%, +$162k over Youden, recall-.80 loses to approve-all) are **conditional on a D2 sample that is ~50% censored vintages**. On mature cells only (≤2013, or 2014/2015 36-month) approve-all is optimal, Youden loses 53%, and even the expected-profit rule is −$32k/−$51k below approve-all.
 - Under 5% p.a. discounting the whole book is unprofitable (approve-all −$297 per applicant on D2; +$475/applicant on mature cells), and at 8% profit-max rejects everything on D2.
+
+### Limitations added in Phase 3C
+- **Loan-size confound:** count-based capacity favours large loans (expected-profit ranking approves 68.7% of dollars at 50% of loans); dollar capacity and ROI are reported alongside.
+- **interest_rate is the lender's own risk price**, not an exogenous borrower attribute; its dominance (36% of SHAP) and the capacity paradox are properties of risk-based pricing, and removing it is an ablation, not a deployable scorecard.
+- **Funded loans only:** all capacity and ROI statements are relative to the historically approved population.
+- **Hindsight in drift fixes:** T−1 labels, including the trailing-6-month window, were realised after year T−1 ended; EM needs unlabeled test scores of the full year T batch.
+- **N–B tests** treat the 10 repeats as resamples of one fixed 200k sample (no population-level variance); OOT per-fold tests resample test rows only.
+- **Equivalence margins** (±.005 AUC, ±2% of approve-all ROI) are conventions, not decision-theoretic; H13(b)'s ±.0012 ROI margin is very tight.
 
 ### Limitations added in Phase 3B
 - **D3 is a selected mature population** (strict label, 2010–2015 vintages, 36m-only for 2014–2015): results speak to loans of that vintage/term mix, not to 60-month loans of 2014+ or to recent vintages.

@@ -39,21 +39,34 @@ def d3_sample(n: int = DEV_N):
     return pop.sample(n=min(n, len(pop)), random_state=BASE_SEED).sort_index()
 
 
+def _parse(name: str):
+    """'D3', or a leakage-ablation cell like 'D3:ir0:csgd' (interest rate out,
+    grade-derived credit score). cs: fico | gd (grade-derived) | none."""
+    base, *opts = name.split(':')
+    ir, cs = True, 'fico'
+    for o in opts:
+        if o == 'ir0': ir = False
+        elif o == 'ir1': ir = True
+        elif o.startswith('cs'): cs = {'csfico': 'fico', 'csgd': 'grade_derived', 'csnone': 'none'}[o]
+        else: raise ValueError(o)
+    return base, ir, cs
+
+
 def get_dataset(name: str):
     """D3: seeded 200k sample of mature vintages (see d3_population).
     D1: first 100k rows, legacy label, legacy features (grade-derived score).
     D2: seeded random 200k labelled rows, strict label, headline features.
     Returns (X, y, profit) ; profit is realized profit (meaningful for D2)."""
-    cache = CACHE_DIR / f"dataset_{name}.parquet"
+    name, ir_flag, cs_flag = _parse(name)
     if name == "D1":
         raw = label_legacy(load_first_n(100_000))
         X, y, meta = build_frame(raw, True, "grade_derived")
     elif name == "D3":
         raw = d3_sample()
-        X, y, meta = build_frame(raw, True, "fico")
+        X, y, meta = build_frame(raw, ir_flag, cs_flag)
     elif name == "D2":
         raw = load_dev_sample(DEV_N, BASE_SEED, "strict")
-        X, y, meta = build_frame(raw, True, "fico")
+        X, y, meta = build_frame(raw, ir_flag, cs_flag)
     else:
         raise ValueError(name)
     profit = realized_profit(raw.loc[X.index])
@@ -70,7 +83,7 @@ def _slug(s):
 
 
 def score_path(ds, rep, model, weighting, leaf=None):
-    d = SCORES_DIR / ds
+    d = SCORES_DIR / ds.replace(':', '_')
     d.mkdir(parents=True, exist_ok=True)
     return d / f"r{rep:02d}__{_slug(model)}__{weighting}__leaf{leaf or 0}.npz"
 

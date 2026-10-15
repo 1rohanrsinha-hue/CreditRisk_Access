@@ -70,8 +70,9 @@ def analyse(ds, reps, tag="", **kw):
     ANALYSIS_DIR.mkdir(parents=True, exist_ok=True)
     R, C = [], []
     for rep in reps:
-        fr = ANALYSIS_DIR / f"{ds}{tag}_r{rep:02d}_rules.csv"
-        fc = ANALYSIS_DIR / f"{ds}{tag}_r{rep:02d}_cal.csv"
+        dsn = ds.replace(":", "_")
+        fr = ANALYSIS_DIR / f"{dsn}{tag}_r{rep:02d}_rules.csv"
+        fc = ANALYSIS_DIR / f"{dsn}{tag}_r{rep:02d}_cal.csv"
         if fr.exists() and fc.exists():
             R.append(pd.read_csv(fr)); C.append(pd.read_csv(fc)); continue
         r, c = analyse_repeat(ds, rep, **kw)
