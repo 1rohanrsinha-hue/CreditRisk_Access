@@ -2,6 +2,7 @@
 # CREDIT RISK EVALUATION SYSTEM - FULLY OPTIMIZED
 # LENDING CLUB DATASET 2007-2018
 # 10 MACHINE LEARNING MODELS WITH PLOT CACHING
+# + OPTIMAL-THRESHOLD TUNING (Youden's J) FOR FAIR RECALL COMPARISON
 # ============================================================================
 
 from flask import Flask, render_template, request, jsonify
@@ -81,6 +82,7 @@ models_dict = {}
 model_metrics = {}
 confusion_matrices_dict = {}
 model_cv_scores = {}
+model_thresholds = {}
 scaler = None
 label_encoders = {}
 feature_names = []
@@ -692,7 +694,7 @@ def generate_comparison_chart():
 
 def train_all_models():
     """Train all models - RUNS ONCE"""
-    global models_dict, model_metrics, confusion_matrices_dict, model_cv_scores
+    global models_dict, model_metrics, confusion_matrices_dict, model_cv_scores, model_thresholds
     global scaler, label_encoders, feature_names, selected_features
     global X_train, X_test, y_train, y_test, df_raw, shap_explainer, training_complete
     
@@ -756,15 +758,30 @@ def train_all_models():
             model.fit(X_train, y_train)
             models_dict[name] = model
             
-            y_pred = model.predict(X_test)
             y_proba = model.predict_proba(X_test)[:, 1]
-            
+
+            # --- Optimal threshold via Youden's J on the ROC curve ---
+            # Youden's J = TPR - FPR, maximized to pick the cutoff that best
+            # separates classes. This replaces the fixed 0.5 cutoff, which is
+            # inappropriate under heavy class imbalance: conservative models
+            # (bagging, plain GBM, MLP) rarely push minority-class probabilities
+            # above 0.5 even when their ranking (AUC) is strong, so a fixed 0.5
+            # cripples their recall. Tuning the threshold puts every model on a
+            # fair footing for the recall comparison.
+            fpr, tpr, thresholds = roc_curve(y_test, y_proba)
+            youden_j = tpr - fpr
+            optimal_idx = np.argmax(youden_j)
+            optimal_threshold = float(thresholds[optimal_idx])
+            y_pred = (y_proba >= optimal_threshold).astype(int)
+            model_thresholds[name] = optimal_threshold
+
             model_metrics[name] = {
                 'Accuracy': accuracy_score(y_test, y_pred),
-                'Precision': precision_score(y_test, y_pred),
+                'Precision': precision_score(y_test, y_pred, zero_division=0),
                 'Recall': recall_score(y_test, y_pred),
                 'F1-Score': f1_score(y_test, y_pred),
-                'ROC-AUC': roc_auc_score(y_test, y_proba)
+                'ROC-AUC': roc_auc_score(y_test, y_proba),
+                'Threshold': optimal_threshold
             }
             
             cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring='roc_auc')
@@ -773,9 +790,15 @@ def train_all_models():
             cm = confusion_matrix(y_test, y_pred)
             confusion_matrices_dict[name] = cm
             
-            print(f"      Accuracy: {model_metrics[name]['Accuracy']:.4f}")
-            print(f"      ROC-AUC: {model_metrics[name]['ROC-AUC']:.4f}")
+            print(f"      Optimal threshold: {optimal_threshold:.3f}")
+            print(f"      Accuracy:  {model_metrics[name]['Accuracy']:.4f}")
+            print(f"      Precision: {model_metrics[name]['Precision']:.4f}")
+            print(f"      Recall:    {model_metrics[name]['Recall']:.4f}")
+            print(f"      F1-Score:  {model_metrics[name]['F1-Score']:.4f}")
+            print(f"      ROC-AUC:   {model_metrics[name]['ROC-AUC']:.4f}")
             print(f"      CV ROC-AUC: {cv_scores.mean():.4f} (+/-{cv_scores.std():.4f})")
+            tn, fp, fn, tp = cm.ravel()
+            print(f"      Confusion [TN, FP, FN, TP]: [{tn}, {fp}, {fn}, {tp}]")
             
         except Exception as e:
             print(f"      Failed: {str(e)[:100]}")
@@ -784,11 +807,34 @@ def train_all_models():
     print("\n" + "="*60)
     print(f"Successfully trained {len(models_dict)} out of {len(all_models)} models")
     print("="*60)
+
+    # ---- Consolidated results table for easy copy-paste into the paper ----
+    if model_metrics:
+        print("\n" + "="*78)
+        print("RESULTS SUMMARY (optimal-threshold)")
+        print("="*78)
+        header = f"{'Model':<20}{'Acc':>8}{'Prec':>8}{'Recall':>8}{'F1':>8}{'AUC':>8}{'Thr':>8}"
+        print(header)
+        print("-"*78)
+        for name, m in model_metrics.items():
+            print(f"{name:<20}{m['Accuracy']:>8.4f}{m['Precision']:>8.4f}"
+                  f"{m['Recall']:>8.4f}{m['F1-Score']:>8.4f}{m['ROC-AUC']:>8.4f}"
+                  f"{m['Threshold']:>8.3f}")
+        print("\n" + "="*78)
+        print("CONFUSION MATRIX VALUES (TN, FP, FN, TP)")
+        print("="*78)
+        print(f"{'Model':<20}{'TN':>10}{'FP':>10}{'FN':>10}{'TP':>10}")
+        print("-"*78)
+        for name, cm in confusion_matrices_dict.items():
+            tn, fp, fn, tp = cm.ravel()
+            print(f"{name:<20}{tn:>10}{fp:>10}{fn:>10}{tp:>10}")
+        print("="*78)
     
     if models_dict:
         best = max(model_metrics, key=lambda x: model_metrics[x]['ROC-AUC'])
-        print(f"\nBEST MODEL: {best}")
+        print(f"\nBEST MODEL (by ROC-AUC): {best}")
         print(f"   ROC-AUC: {model_metrics[best]['ROC-AUC']:.4f}")
+        print(f"   Recall:  {model_metrics[best]['Recall']:.4f}")
         print(f"   Accuracy: {model_metrics[best]['Accuracy']:.4f}")
         
         if SHAP_AVAILABLE:
@@ -1126,6 +1172,7 @@ if __name__ == '__main__':
     print("="*60)
     print("CREDIT RISK EVALUATION SYSTEM - FULLY OPTIMIZED")
     print("10 MACHINE LEARNING MODELS WITH PLOT CACHING")
+    print("OPTIMAL-THRESHOLD TUNING (Youden's J) ENABLED")
     print("="*60)
     print("\nALL 16 FEATURES + 2 TARGETS = 18 TOTAL COLUMNS")
     print("\nFEATURE SELECTION: 4 techniques (ANOVA, MI, RF, RFE)")
@@ -1144,5 +1191,4 @@ if __name__ == '__main__':
     print("API Endpoint: http://127.0.0.1:5000/api/predict")
     print("="*60)
     
-    if __name__ == "__main__":
-        app.run(debug=True, host='127.0.0.1', port=5000, use_reloader=False)
+    app.run(debug=True, host='127.0.0.1', port=5000, use_reloader=False)
