@@ -40,14 +40,36 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - [x] CatBoost native categoricals (`cat_features`) — `DONE` — `cat_features` set; also LightGBM category dtype
 - [x] Add `fico_range_low/high` features — `DONE` — `fico_mean` replaces grade-derived `credit_score` in headline features
 - [x] Seeds + config file (single source of truth) — `DONE` — `creditrisk/config.py` `Config` dataclass (seed 42, split sizes, leakage switches); no YAML yet
-- [x] Reproduce baseline Table I first (record env versions; note pandas-3 fill bug effect) — `DONE` — LR + CatBoost AUC exact; RF recall within column-order noise (see Decisions log)
+- [x] Reproduce baseline Table I first (record env versions; note pandas-3 fill bug effect) — `DONE` — exact after seeding app's unseeded MI step (np.random.seed(42)): LR, CatBoost (AUC .703, thr .519) and RF (rec .668, thr .180) all match Table I
 
-## Phase 2: Core threshold study
-- [ ] Weighting × threshold 2×2 ablation on all 10 models — `TODO`
-- [ ] Threshold rules: Youden, F1-max, G-mean, fixed-recall, prevalence, cost-sensitive — `TODO`
-- [ ] Calibration analysis (reliability, Brier, ECE, Platt/isotonic) — `TODO`
-- [ ] Empirical check: Youden threshold ≈ base rate for calibrated models — `TODO`
-- [ ] Profit/cost evaluation using `funded_amnt`, `total_pymnt`, `recoveries` — `TODO`
+## Phase 2: Core threshold study  (done 2026-10-15)
+- [x] Weighting × threshold 2×2 ablation on all 10 models — `DONE` — D2 ×10 repeats, D1 ×5 (`phase2_weighting_*.csv`); RF/ET `min_samples_leaf` sweep ×3 repeats (`phase2_leaf_sweep.csv`)
+- [x] Threshold rules: Youden, F1-max, G-mean, fixed-recall (.70/.80), prevalence, Elkan (data-derived costs), profit-max — `DONE` — `creditrisk/thresholds.py`, all picked on OOF, evaluated on test
+- [x] Calibration analysis (reliability, Brier, ECE, log loss, Platt/isotonic) — `DONE` — `phase2_calibration_*.csv`, `experiments/figures/reliability_diagrams.png`
+- [x] Empirical check: Youden threshold ≈ base rate for calibrated models — `DONE` — H1 SUPPORTED (|t*−π| = .005 D2 / .006–.007 D1)
+- [x] Profit/cost evaluation — `DONE` — realized profit = `total_pymnt − funded_amnt` (`total_pymnt` already contains `recoveries`; verified on 100% of Fully Paid/Charged Off rows within $1)
+- [ ] Profit evaluation of weighted vs unweighted at equal-data budgets, out-of-time — `TODO` (Phase 3)
+
+### Phase 2 key results (D2, 10 repeats, mean ± sd over repeats)
+| cell (all 10 models) | mean recall | recall spread across models | AUC spread |
+|---|---|---|---|
+| none, thr 0.5 | .058 | .038 ± .005 | .024 |
+| none, tuned (Youden OOF) | .669 | .078 ± .026 | .024 |
+| balanced, thr 0.5 | .541 | **.633 ± .018** (RF/ET stay at .05) | .027 |
+| balanced, tuned | .670 | .065 ± .015 | .027 |
+
+- **RF/ET collapse is not a weighting effect:** balanced RF/ET recall@0.5 = .053/.059 (≈ unweighted). With `min_samples_leaf` 1→5→20 (balanced): ET recall@0.5 .059→.528→.651, Youden t* .203→.434→.482; RF .057→.299→.545, t* .207→.343→.432. Unweighted: t* stays ≈ .20 for every leaf size. ROC-AUC rises .683→.703 (ET) with leaf=20.
+- **Calibration (D2):** Platt leaves AUC unchanged (Δ=0.0000), isotonic changes it by −.0005…+.0008 (ties). Raw unweighted Brier .150 / ECE .027; raw balanced Brier .205 / ECE .211; Platt/isotonic all ≈ .147 / .007–.013.
+- **Threshold theory:** H1 (calibrated ⇒ t*≈π) SUPPORTED, 40/40 variants within ±.05, mean |t*−π| .005. H2 (balanced raw ⇒ t*≈.5) SUPPORTED 8/10 (fails for RF/ET, t*≈.20: pure leaves). H3 (weighting-invariance after calibration) SUPPORTED: mean |t*_none − t*_bal| = .001–.002 vs .22 raw. AdaBoost raw unweighted t*=.375 (scores not probabilities). Replicated on D1 (H1 .006, H2 .8, H3 .006). Bootstrap sd of t* ≤ .014; ±.005 J-tolerance interval width ≈ .04 (raw .05).
+- **Profit (per 1000 applicants, D2 test):** approve-all $402.9k ± 18.5k; oracle $1,853k; reject-all 0. LightGBM isotonic: Youden $425k, F1-max $441k, recall-.80 $322k (loses vs approve-all), Elkan $481k, profit-max $550k (accept 87%, bad rate 16.6%). Paired bootstrap vs Youden: profit-max +$162k [128k, 196k], Elkan +$64k [48k, 81k]; XGBoost F1-max +$0.6k [−2k, +3k] (no difference).
+- **Why constant-cost Elkan underperforms profit-max:** repaid-loan profit rises with risk (decile 0→9: $1.1k→$4.9k) and loss-given-default too ($6.3k→$9.4k), so the global costs (C_FP $2,319, C_FN $7,263 ⇒ t=.242) are wrong in the tail; expected profit is negative only in the top risk decile (score > ~.38).
+
+### Limitations of the profit analysis
+- Undiscounted cash flows (no time value, no cost of capital).
+- Funded loans only: rejected applicants are unobserved (selection bias; approving more than the historical policy is extrapolation).
+- No servicing / origination / collection costs. LendingClub `collection_recovery_fee` (mean $202 = 16.7% of gross recoveries on Charged Off) is NOT deducted; would lower charged-off profit by ~2.8%.
+- Strict label only (Fully Paid vs Charged Off/Default); Current loans have no realized outcome.
+- Charged Off sample is right-censored by vintage (2007–2018 mix); no out-of-time check yet (Phase 3).
 
 ## Phase 3: Broader benchmarking
 - [ ] Repeated stratified CV + bootstrap CIs — `TODO`
@@ -92,6 +114,14 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 | 2026-10-14 | Q7: layout `creditrisk/` (package), `experiments/` (scripts), `experiments/results/` (small CSVs, force-added because `*.csv` is gitignored) | As requested |
 | 2026-10-14 | Table I repro: LR matches to 3 d.p. (Acc .592, Prec .269, Rec .718, F1 .391, AUC .696, Thr .452); CatBoost AUC .703 exact, Thr .510 vs .519; RF Rec .641 vs .668, Thr .190 vs .180. RF/CatBoost differences are from column order: app.py's feature selection reorders columns using unseeded `mutual_info_classif`; over 20 random column orders RF recall = .669 ± .032 (range .600–.706), thr .1805 ± .010 — the paper's .668 is the mean. Not a replica error. | `experiments/column_order_sensitivity.py` |
 | 2026-10-14 | Fill-bug effect (proper vs bug): AUC changes ≤ .002 for all models; tuned-threshold recall/precision change up to ±.04–.06 for RF/CatBoost/ET/LGBM (same column-order noise scale) | `baseline_table1.csv` |
+| 2026-10-15 | P2-Q1: ranking metric = realized profit (D2) + ROC-AUC, PR-AUC, Brier; never recall. F1/MCC/recall/precision secondary at the chosen point | Recall spread is threshold noise |
+| 2026-10-15 | P2-Q2: uncertainty everywhere: 10 repeated stratified 64/16/20 splits on D2, 5 on D1 (split seed 42+rep, model seed 42+rep, data sample fixed); 1000-resample bootstraps (t* CI on rep 0, paired bootstrap for profit diffs) | ±.03 recall noise |
+| 2026-10-15 | P2-Q3: weighting 2×2 = {none, balanced} × {0.5, tuned (Youden on OOF)}; balanced = class_weight / `sample_weight` for GB, AdaBoost, **and MLP** (sklearn 1.8 supports it, no oversampling needed) / XGB `scale_pos_weight`=neg/pos of each training fold / CatBoost `auto_class_weights` | As specified |
+| 2026-10-15 | P2-Q4: calibration protocol: 5-fold OOF (fresh pipeline per fold) over train+val → Platt (LR on logit) and isotonic fit on OOF → all thresholds on calibrated OOF → refit on train+val → apply calibrators → test | As specified; D2 full, D1 replication |
+| 2026-10-15 | P2-Q5: realized_profit = total_pymnt − funded_amnt; `total_pymnt` = principal+interest+late fee+recoveries holds for 100% of FP/CO rows (32% without recoveries), so adding `recoveries` would double count. Elkan costs derived from train+val data | Verified on 2.26M rows |
+| 2026-10-15 | P2-Q6: runtime estimate ~95 min sequential-CPU (~45 min actual wall clock with 3+1+1 workers); full repeats kept (no cuts) | Under budget |
+| 2026-10-15 | P2-Q7: committed app.py (tag `paper-v1-baseline`) and .gitignore as separate commits on journal-extension; main untouched; nothing pushed; venv.txt untracked | As requested |
+| 2026-10-15 | Seeding: baseline_repro seeds numpy (42) before app's unseeded `mutual_info_classif`; creditrisk code has no unseeded RNG. **Result: Table I reproduces exactly** (LR .592/.269/.718/.391/.696/.452; CatBoost AUC .703 thr .519; RF rec .668 thr .180). The earlier unseeded run differed by up to .038 recall / .012 threshold (column-order noise, `rf_column_order_sensitivity.csv`) | As requested |
 | 2026-10-14 | Protocols A/B/C (see results): leaking the threshold to the test set changes mean F1 by ≤ .003 and mean recall by ≤ .03; per-model recall moves ±.02–.04 | `protocol_comparison_all.csv` |
 
 ## Surprising findings (Phase 1)
@@ -101,6 +131,19 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - At fixed 0.5, recall is ~0.02–0.06 for GB/AdaBoost/MLP/ET/RF but ~0.62–0.67 for the others: that cluster split is a probability-scale (weighting/bagging) effect, not ranking quality.
 - `sel_stability` = 1.0 trivially since `select_k=None` (all features kept).
 
+## Paper claims affected (Phase 2)
+_Claims inferred from the app.py comments, Table I and the Phase-1 notes — please map to the manuscript's exact sentences._
+| # | Claim | Status | Numbers |
+|---|---|---|---|
+| 1 | Youden tuning puts all models on a "fair footing" for the recall comparison | **WEAKENED** | Tuned recall spread .065–.078 across models vs AUC spread .024–.027; model recall ranks uncorrelated across protocols/seeds (ρ≈0) and RF recall sd .032 from column order alone |
+| 2 | Bagging, plain GBM and MLP "rarely push minority probabilities above 0.5" because of conservatism | **CHANGED** (mechanism) | GB/AdaBoost/MLP are unweighted: balanced weighting lifts recall@0.5 .057/.039/.053 → .664/.672/.677. RF/ET were already balanced yet .053/.059: near-pure leaves (min_samples_leaf 20 ⇒ ET .651, RF .545) |
+| 3 | Class-imbalance handling improves recall | **CHANGED** | At the tuned threshold weighting changes nothing: mean recall .669 vs .670, AUC identical; it only shifts the probability scale (raw Brier .150→.205, ECE .027→.211) |
+| 4 | The tuned thresholds in Table I (e.g. LR .452, RF .180) are model-specific operating points | **CHANGED** | For calibrated scores t* = π (|t*−π| .005 D2); balanced raw t* ≈ .5; unweighted raw t* ≈ π. Thresholds are properties of the probability scale, not models |
+| 5 | CatBoost (AUC .703) is the best model | **WEAKENED** | 7 of 10 models within .007 AUC; no CIs; significance test pending (Phase 3) |
+| 6 | ROC-AUC is unaffected by threshold tuning/calibration | **CONFIRMED** | Platt Δ=0, isotonic ≤ .002 |
+| 7 | High-recall operation is the right target for credit risk | **CHANGED** | Recall-.80 rule earns $322k vs approve-all $403k per 1000; Youden $425k (+5%); profit-optimal $550k (+36%) at ~87% acceptance |
+| 8 | App risk bands (15/30/50/70%) and 0.5 cutoff are meaningful | **CHANGED** | Raw balanced probabilities are uncalibrated (ECE .21); at 0.5 only ~1.7% of applicants are flagged |
+
 ## Open questions
 - [ ] Which environment produced the paper's Table I (pandas version)? The inplace-fillna bug is pandas-3 specific.
 - [ ] Target journal / page budget / required reporting standards?
@@ -109,3 +152,7 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - [ ] Is `interest_rate`/grade-derived `credit_score` allowed as a feature in the headline results?
 - [ ] Which python env to standardise on (rebuild `venv`; remove Windows `.venv`)?
 - [ ] Uncommitted changes to `app.py`/`.gitignore` on main: intentional? Commit them before Phase 1?
+- [ ] (Phase 3) Which temporal split for out-of-time: train ≤2015 / test 2016–2018? Current loans in late vintages are censored — drop vintages after 2016?
+- [ ] (Phase 3) Deduct `collection_recovery_fee` from realized profit (−2.8% on charged-off loss)? Default: no, per instruction.
+- [ ] (Phase 3) Optuna budget and the nested-CV outer folds (compute)?
+- [ ] (Phase 3) Is a time-value discount (e.g. 5–8% p.a. on monthly cash flows) acceptable, given only totals are available per loan?

@@ -107,3 +107,12 @@ def legacy_clean(df: pd.DataFrame, legacy_fill_bug: bool = True) -> pd.DataFrame
                 out[c] = out[c].fillna(m[0] if not m.empty else 'Unknown')
     out = out.fillna(0)          # legacy fallback; no-op when properly imputed
     return out
+
+
+def realized_profit(df: pd.DataFrame) -> pd.Series:
+    """Cash actually received minus funded amount, undiscounted.
+    Verified on the full file: total_pymnt = total_rec_prncp + total_rec_int +
+    total_rec_late_fee + recoveries (100% of Fully Paid / Charged Off rows,
+    within $1), i.e. total_pymnt ALREADY contains recoveries; adding
+    `recoveries` again would double count."""
+    return df['total_pymnt'] - df['funded_amnt']

@@ -39,6 +39,7 @@ def run(variant: str, nrows: int, seed: int = 42):
     for col in X.select_dtypes(include=['object', 'string']).columns:
         X[col] = LabelEncoder().fit_transform(X[col].astype(str))
     with stage("legacy feature selection (no-op reorder)"):
+        np.random.seed(seed)   # app.py's mutual_info_classif is unseeded -> uses numpy global RNG
         feats = legacy_app.perform_feature_selection(X, y, n_features=16)
     X = X[feats].apply(pd.to_numeric, errors='coerce')
     X = X.fillna(X.mean())

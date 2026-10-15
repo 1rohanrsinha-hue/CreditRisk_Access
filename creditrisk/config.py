@@ -18,6 +18,7 @@ LEGACY_COLS = [
     'pub_rec', 'revol_util', 'total_acc', 'collections_12_mths_ex_med', 'mort_acc',
 ]
 EXTRA_COLS = ['issue_d', 'fico_range_low', 'fico_range_high',
+              'total_rec_prncp', 'total_rec_int', 'total_rec_late_fee',
               'funded_amnt', 'total_pymnt', 'recoveries']
 CACHE_COLS = LEGACY_COLS + EXTRA_COLS
 
@@ -29,7 +30,11 @@ STRICT_DEFAULT = ['Charged Off', 'Default']
 STRICT_GOOD = ['Fully Paid']
 
 # Columns kept aligned with rows but NEVER used as model inputs.
-META_COLS = ['issue_d', 'funded_amnt', 'total_pymnt', 'recoveries', 'loan_status']
+META_COLS = ['issue_d', 'funded_amnt', 'total_pymnt', 'recoveries', 'loan_status',
+             'total_rec_prncp', 'total_rec_int', 'total_rec_late_fee']
+FIGURES_DIR = ROOT / "experiments" / "figures"
+SCORES_DIR = CACHE_DIR / "scores"
+ANALYSIS_DIR = CACHE_DIR / "analysis"
 
 
 @dataclass
