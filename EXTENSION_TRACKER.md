@@ -152,6 +152,19 @@ Other fixed choices: leakage cells A (rate in, fico = headline), B (in, none), C
 
 **Operational notes.** The laptop did not actually sleep (uptime 16 days); the background jobs ran to completion. Score and analysis runners skip existing units (atomic `os.replace` checkpoints). `experiments/status.sh` prints progress.
 
+## Phase 3D PRE-REGISTRATION (written 2026-10-16, committed BEFORE tasks B–F; H5–H14 remain frozen)
+_Wording rule: "not equivalent" is not "worse". If a TOST fails but the difference CI includes 0 the cell is labelled INCONCLUSIVE. All equivalence tests: ROC-AUC, margin ±0.005, Nadeau–Bengio corrected (variance factor 1/J + n_test/n_train, n_te/n_tr = .25), Holm over the stated family._
+
+| id | Hypothesis | Rationale | Decision rule (fixed now) |
+|---|---|---|---|
+| H15 | Random undersampling and SMOTE (inside training folds only; OOF validation folds and calibration data never resampled) move the raw Youden t* toward 0.5 like balanced weighting, calibrated t* stays within .02 of π, and AUC is equivalent (±.005) to the unweighted baseline | Resampling, like weighting, only shifts the effective prior | D3, 5 repeats, LR/RF/LightGBM/XGBoost. (i) for each method, \|t*_method − .5\| < \|t*_none − .5\| (raw Youden on OOF) in ≥3 of 4 models; (ii) every (method, model, calibrator∈{Platt, isotonic}) mean \|t*−π\| < .02; (iii) TOST equivalence vs unweighted for every (method, model), Holm over 8. SUPPORTED only if (i)–(iii) all hold; each reported separately |
+| H16 | After nested-CV tuning: (a) AUC gain of tuned over default < .005 for LightGBM, XGBoost, CatBoost; (b) RF gains more than the boosters; (c) AUC spread across the 5 tuned models ≤ spread at defaults | Phase 2/3C: GBDTs sit on a plateau; RF is limited by leaf purity | 5 outer folds; (a) mean paired ΔAUC < .005 for each of the three; (b) ΔAUC(RF) > max ΔAUC of the three boosters; (c) max−min of mean AUC across tuned models ≤ same at defaults. SUPPORTED only if all three; report each |
+| H17 | Soft-voting and stacking ensembles are each equivalent to the best single model on D3 and neither is superior by more than .005 | 4 of 5 boosters are already equivalent | Family = {voting vs best, stacking vs best}, Holm over 2 (members reported separately, Holm over 10). Equivalent if TOST Holm p < .05; "superior by > .005" if the one-sided test of Δ > +.005 rejects at Holm α=.05. SUPPORTED if both equivalent and neither superior |
+| H18 | EBM is equivalent to the best boosting model; the WoE scorecard LR is not equivalent (≥ .005 below). Both with and without interest_rate | Additive shape functions capture most signal; WoE bins lose within-bin information | Primary = with interest_rate; 5 repeats; vs best of {GB, XGBoost, LightGBM, CatBoost}. EBM: TOST equivalent. Scorecard: SUPPORTED as "≥.005 below" if mean Δ ≤ −.005 and TOST fails; INCONCLUSIVE if TOST fails and the Δ CI includes 0 |
+| H19 | On the 667k mature population: (a) calibrated \|t*−π\| < .02, (b) \|tuned recall none − balanced\| < .01, (c) mean AUC of LR, LightGBM, XGBoost differs from the D3-200k values by < .01 | Properties of the score scale, not of sample size | (a) every (model, calibrator) mean; (b) mean over models; (c) each of the three. SUPPORTED only if all three |
+
+**Quick checks (task A) are descriptive, not tested hypotheses.** Fixed design choices: SMOTENC (categorical = nominal columns, ordinal codes) for tree models and plain SMOTE after one-hot for LR; sampling_strategy=1.0 for both methods; tuning objective = inner 3-fold log loss on a seeded 100k subsample, 25 trials per (model, outer fold), n_estimators in the search space (no early stopping); EBM fit on a seeded 100k subsample if a 128k-row fit exceeds ~2 min; WoE: 10 quantile bins, additive smoothing .5.
+
 ## Phase 3C results (2026-10-16; outcomes reported against the frozen Phase 3C pre-registration)
 | id | verdict | key numbers |
 |---|---|---|
