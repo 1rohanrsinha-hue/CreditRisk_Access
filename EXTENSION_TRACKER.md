@@ -90,6 +90,20 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - [ ] Stacking/voting ensemble — `TODO`
 - [ ] WoE scorecard and EBM baselines — `TODO`
 
+## Phase 3B PRE-REGISTRATION (written 2026-10-15, committed BEFORE running tasks C and D; do not edit)
+_D3 = strict label; issue years 2010–2013 (any term) + 2014/2015 36-month; population 667,024 loans, default rate .1483; seeded 200k dev sample (prevalence .1477, 91.7% 36-month). The 3A mature-cell diagnostic was run on D2-derived cells (a different sample), so H5/H6 are informed priors, not blind predictions; no D3 outcome has been looked at._
+
+**Headline discount rate: 3% p.a., described only as an illustrative hurdle rate (not claimed to be a cost of funds).** All conclusions are stated across the grid {0, 2, 3, 5, 8}%; P1 (gross, undiscounted) is reported alongside.
+
+| id | Hypothesis | Rationale | Decision rule (fixed now) |
+|---|---|---|---|
+| H5 | On D3, approve-all earns at least as much as every threshold rule (fixed 0.5, Youden, F1-max, Elkan, profit-max, recall≥.70/.80) at 0% and 3% (and P1); at 8% reject-all or a very high threshold may win | LendingClub prices risk through interest; 3A mature-cell diagnostic | SUPPORTED if no (model, rule≠approve-all) pair at P1/0%/3% has a repeat-mean profit above approve-all together with a paired 95% bootstrap CI (repeat 0) lower bound > 0. REJECTED otherwise (report which) |
+| H6 | The expected-profit rule, evaluated out of time (classifier + two LightGBM regressors trained ≤T−2, calibrator and shrinkage margin m chosen on T−1 from {0,50,100,200,300,500,750,1000,1500,2000}$, test T), does not beat approve-all by more than its bootstrap CI | In-time D2 gain was a censoring artefact; mature-cell in-time result was below approve-all | SUPPORTED if in every fold, under P1 and P2-3%, the paired 95% CI of (rule − approve-all) has lower bound ≤ 0. REJECTED if the lower bound is > 0 in ≥2 of 3 folds under both P1 and P2-3% |
+| H7 | At matched acceptance rates k∈{30,…,90}% the ten models' profits differ by less than the bootstrap CI half-width at most k, i.e. model family does not matter much for profit, while all models beat random selection at the same k | Phase 2: AUC spread .03, 7 models within .007 | Clause (a): at ≥4 of 7 k levels, max−min of the 10 models' repeat-mean profit < half-width of the 95% bootstrap CI of the best model's profit level. Clause (b): every model has gain over random (profit(k) − k·profit(approve-all)) with paired 95% CI > 0 at every k. H7 SUPPORTED only if (a) and (b) both hold; report each separately |
+| H8 | Phase 2 calibration/weighting results replicate on D3 with same direction and similar magnitude | They are properties of probability scales | Replicates if all hold: H1 40/40-style: ≥80% of calibrated variants have \|t*−π\|≤.05; H2: ≥70% of balanced-raw models have \|t*−.5\|≤.05; H3: mean \|t*_none−t*_bal\|≤.01 after calibration; weighting: \|mean tuned recall none − balanced\|≤.02; leaf purity: balanced ET and RF recall@0.5 at leaf 20 exceed leaf 1 by ≥.30 and t* rises by ≥.15 |
+
+Other fixed choices: capacity ranking uses each model's raw (monotone-equivalent) score of the unweighted model to avoid isotonic ties, and a second ranking by expected profit with isotonic-calibrated p; random-selection benchmark = k × approve-all profit; OOT seeds = model seeds 42/43/44, split deterministic; features missing in >50% of the training window are dropped (OOT hygiene).
+
 ## Phase 4: Explainability
 - [ ] SHAP on all models with 2000+ samples — `TODO`
 - [ ] Rank correlation of attributions across models — `TODO`
@@ -129,6 +143,12 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 | 2026-10-15 | P2-Q5: realized_profit = total_pymnt − funded_amnt; `total_pymnt` = principal+interest+late fee+recoveries holds for 100% of FP/CO rows (32% without recoveries), so adding `recoveries` would double count. Elkan costs derived from train+val data | Verified on 2.26M rows |
 | 2026-10-15 | P2-Q6: runtime estimate ~95 min sequential-CPU (~45 min actual wall clock with 3+1+1 workers); full repeats kept (no cuts) | Under budget |
 | 2026-10-15 | P2-Q7: committed app.py (tag `paper-v1-baseline`) and .gitignore as separate commits on journal-extension; main untouched; nothing pushed; venv.txt untracked | As requested |
+| 2026-10-15 | P3B-Q1: re-base on D3 (mature vintages); D2 = sensitivity, D1 = replication; core Phase 2 results re-run on D3 | Headline numbers must not come from a censored sample |
+| 2026-10-15 | P3B-Q2: profit message reframed ("threshold rules do not beat risk-priced lending on mature vintages; thresholds matter under a capacity constraint"); with/without interest_rate comparison belongs to 3C | |
+| 2026-10-15 | P3B-Q3: headline discount 3% p.a. (illustrative hurdle only), grid {0,2,3,5,8}% | |
+| 2026-10-15 | P3B-Q4: 3C inference = paired bootstrap per fold + Holm; equivalence margins (AUC ±.005) rather than non-rejection; Friedman/Nemenyi only secondary | ~5 blocks = low power |
+| 2026-10-15 | P3B-Q5: Optuna tunes log loss only; profit reported, never tuned (3D) | Profit is noisy under censoring |
+| 2026-10-15 | P3B-Q6: OOT: 3 model seeds per fold; split deterministic | |
 | 2026-10-15 | P3A-Q1: rolling-origin OOT on issue year, T∈{2013,2014,2015}: fit ≤T−2, calibrate+thresholds on T−1, test T; all terms for 2013/14, 36m only for 2015; vintages ≥2016 dropped from headline; windows >400k subsampled (seeded; none triggered) | As specified |
 | 2026-10-15 | P3A-Q2: report P1 and P2 (5%, with 0%/8% sensitivity, net of `collection_recovery_fee`) | Totals only, no cash-flow timing |
 | 2026-10-15 | P3A-Q3: headline decision metric NOT chosen yet; report profit-max (OOF), data-derived Elkan and the expected-profit rule side by side under P1/P2 | Decision after 3A |

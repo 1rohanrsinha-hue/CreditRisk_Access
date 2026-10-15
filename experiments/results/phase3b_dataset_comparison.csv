@@ -1,0 +1,4 @@
+dataset,rows,sampling,label,features,issue_years,prevalence,share_36m,share_2016plus,purpose
+D1,100000,first 100k CSV rows,legacy 5-status (Current = 0),legacy 16 incl. grade-derived credit_score,Oct–Dec 2015 (one quarter),0.1824,,0.0,replication of conference paper
+D2,200000,seeded random 200k of labelled rows,strict (FP vs CO/Default),"headline (fico mean, interest_rate, ordinal emp_length)",2007–2018,0.1994,0.7606,0.3888,sensitivity (censored vintages included)
+D3,200000,"seeded random 200k of 667,024 mature loans",strict,headline,2010–2013 any term; 2014–2015 36m,0.1477,0.9174,0.0,HEADLINE

@@ -23,14 +23,34 @@ BASE_SEED = 42
 DEV_N = 200_000
 
 
+def d3_population():
+    """Mature vintages: strict label; issue years 2010-2013 (any term) plus
+    2014 and 2015 36-month loans. Excludes pre-2010 (policy-exception regime),
+    60-month 2014+ and all vintages >= 2016 (censored)."""
+    from .data import full_frame, label_strict, issue_year, term_months
+    d = label_strict(full_frame())
+    yr, tm = issue_year(d), term_months(d)
+    m = ((yr >= 2010) & (yr <= 2013)) | (yr.isin([2014, 2015]) & (tm == 36))
+    return d[m]
+
+
+def d3_sample(n: int = DEV_N):
+    pop = d3_population()
+    return pop.sample(n=min(n, len(pop)), random_state=BASE_SEED).sort_index()
+
+
 def get_dataset(name: str):
-    """D1: first 100k rows, legacy label, legacy features (grade-derived score).
+    """D3: seeded 200k sample of mature vintages (see d3_population).
+    D1: first 100k rows, legacy label, legacy features (grade-derived score).
     D2: seeded random 200k labelled rows, strict label, headline features.
     Returns (X, y, profit) ; profit is realized profit (meaningful for D2)."""
     cache = CACHE_DIR / f"dataset_{name}.parquet"
     if name == "D1":
         raw = label_legacy(load_first_n(100_000))
         X, y, meta = build_frame(raw, True, "grade_derived")
+    elif name == "D3":
+        raw = d3_sample()
+        X, y, meta = build_frame(raw, True, "fico")
     elif name == "D2":
         raw = load_dev_sample(DEV_N, BASE_SEED, "strict")
         X, y, meta = build_frame(raw, True, "fico")
