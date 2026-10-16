@@ -1,0 +1,5 @@
+cell,model,best_boosting,model_auc,best_auc,Δ AUC,CI low,CI high,TOST p (Holm),label
+with_rate,WoE Scorecard,LightGBM,0.67566,0.68413,-0.00848,-0.01051,-0.00644,0.99549,not equivalent
+with_rate,EBM,LightGBM,0.68323,0.68413,-0.00091,-0.00292,0.00111,0.00488,equivalent
+no_rate,WoE Scorecard,LightGBM,0.64153,0.65819,-0.01666,-0.01986,-0.01346,0.99973,not equivalent
+no_rate,EBM,LightGBM,0.658,0.65819,-0.00019,-0.00299,0.00262,0.00886,equivalent

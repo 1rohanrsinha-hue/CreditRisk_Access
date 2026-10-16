@@ -1,0 +1,5 @@
+model,vs_cell,spearman_shared_features,rate_share_with,top3_with,top3_without
+LightGBM,no_rate,0.8357,0.3646,interest_rate|annual_income|loan_amount,fico_mean|annual_income|loan_amount
+LightGBM,no_rate_no_score,0.8286,0.3646,interest_rate|annual_income|loan_amount,annual_income|credit_inquiries|loan_amount
+EBM,no_rate,0.8714,0.3294,interest_rate|annual_income|loan_amount,fico_mean|annual_income|loan_amount
+EBM,no_rate_no_score,0.8374,0.3294,interest_rate|annual_income|loan_amount,annual_income|credit_inquiries|loan_amount

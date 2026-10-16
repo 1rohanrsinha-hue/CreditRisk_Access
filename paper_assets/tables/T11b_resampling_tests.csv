@@ -1,0 +1,9 @@
+model,method,Δ AUC,CI low,CI high,TOST p (Holm),label
+Logistic Regression,undersample,-0.0002,-0.00075,0.00035,7e-05,equivalent
+Logistic Regression,smote,-0.00298,-0.00415,-0.0018,0.02609,equivalent
+Random Forest,undersample,0.00649,0.00341,0.00957,1.0,not equivalent
+Random Forest,smote,-0.00886,-0.0148,-0.00293,1.0,not equivalent
+LightGBM,undersample,-0.00224,-0.00329,-0.00119,0.00652,equivalent
+LightGBM,smote,-0.01738,-0.02075,-0.01402,1.0,not equivalent
+XGBoost,undersample,-0.00178,-0.00398,0.00042,0.03834,equivalent
+XGBoost,smote,-0.01747,-0.01905,-0.01589,1.0,not equivalent

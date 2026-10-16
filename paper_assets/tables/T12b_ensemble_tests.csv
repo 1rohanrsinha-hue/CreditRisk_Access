@@ -1,0 +1,13 @@
+ensemble,vs,family,Δ AUC,CI low,CI high,TOST p (Holm),label
+Soft voting,LightGBM,H17,0.00016,-0.00082,0.00113,0.0,equivalent
+Stacking (LR meta),LightGBM,H17,0.00073,-6e-05,0.00151,0.0,equivalent
+Soft voting,Logistic Regression,members,0.00583,0.00429,0.00737,1.0,not equivalent
+Soft voting,Random Forest,members,0.02616,0.02342,0.0289,1.0,not equivalent
+Soft voting,LightGBM,members,0.00016,-0.00082,0.00113,1e-05,equivalent
+Soft voting,XGBoost,members,0.00042,-0.00068,0.00152,2e-05,equivalent
+Soft voting,CatBoost,members,0.00131,0.0001,0.00251,0.00017,equivalent
+Stacking (LR meta),Logistic Regression,members,0.0064,0.00461,0.00819,1.0,not equivalent
+Stacking (LR meta),Random Forest,members,0.02673,0.02349,0.02997,1.0,not equivalent
+Stacking (LR meta),LightGBM,members,0.00073,-6e-05,0.00151,0.0,equivalent
+Stacking (LR meta),XGBoost,members,0.00099,0.0002,0.00178,1e-05,equivalent
+Stacking (LR meta),CatBoost,members,0.00187,0.00104,0.00271,4e-05,equivalent

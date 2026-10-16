@@ -1,0 +1,8 @@
+method,kind,ROC-AUC,Brier,ECE,mean |t*−π|
+Stacking (LR meta),ensemble,0.683875,0.119019,0.005382,0.002348
+Soft voting,ensemble,0.683306,0.119072,0.006562,0.003416
+LightGBM,single,0.683151,0.119115,0.005751,0.004809
+XGBoost,single,0.682886,0.119108,0.00529,0.003325
+CatBoost,single,0.682001,0.119161,0.005638,0.003353
+Logistic Regression,single,0.677473,0.119566,0.006056,0.003526
+Random Forest,single,0.657146,0.120961,0.005259,0.005486

@@ -1,0 +1,5 @@
+version,k,share with >=2 shared codes,share_overlap_ge2_strict,mean_jaccard,share_lt_k_codes
+rate_allowed,3,0.9885,0.9775,0.8282,0.0458
+rate_allowed,4,0.9858,0.9858,0.8435,0.1132
+rate_excluded,3,0.9865,0.9738,0.8169,0.0532
+rate_excluded,4,0.9833,0.9833,0.836,0.1358

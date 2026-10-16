@@ -1,0 +1,11 @@
+model,metric,paper,reproduced_legacy,abs_diff_legacy,reproduced_proper_impute
+Logistic Regression,Accuracy,0.592,0.59225,0.00025,0.5958
+Logistic Regression,Precision,0.269,0.268781,0.000219,0.26985
+Logistic Regression,Recall,0.718,0.717731,0.000269,0.712524
+Logistic Regression,F1,0.391,0.3911,0.0001,0.391448
+Logistic Regression,AUC,0.696,0.696422,0.000422,0.696537
+Logistic Regression,Threshold,0.452,0.452067,6.7e-05,0.45446
+CatBoost,AUC,0.703,0.702525,0.000475,0.70137
+CatBoost,Threshold,0.519,0.519135,0.000135,0.480647
+Random Forest,Recall,0.668,0.66758,0.00042,0.667032
+Random Forest,Threshold,0.18,0.18,0.0,0.18

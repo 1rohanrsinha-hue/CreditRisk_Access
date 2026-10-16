@@ -1,0 +1,7 @@
+scenario,pairs,rule_beats_approve_all_CI_lo_gt_0,rule_below_CI_hi_lt_0
+P1,40,0,25
+P2_0%,40,0,27
+P2_2%,40,0,25
+P2_3%,40,0,25
+P2_5%,40,0,25
+P2_8%,40,6,25

@@ -1,0 +1,11 @@
+model,scores,metric,value,CI low,CI high
+LightGBM (tuned),calibrated PD,ROC-AUC,0.68983,0.68586,0.69365
+LightGBM (tuned),calibrated PD,Brier,0.11885,0.11766,0.12004
+LightGBM (tuned),calibrated PD,ECE,0.00279,0.0025,0.0053
+LightGBM (tuned),raw score,ROC-AUC,0.68984,0.68583,0.69363
+LightGBM (tuned),raw score,Brier,0.11885,0.11766,0.12005
+LightGBM (tuned),raw score,ECE,0.00408,0.00324,0.00631
+LightGBM (tuned),calibrated PD,PR-AUC,0.26797,0.26256,0.27343
+LightGBM (tuned),calibrated PD,LogLoss,0.39054,0.38732,0.39367
+EBM (companion),raw probability,ROC-AUC,0.68915,0.68526,0.69297
+EBM (companion),raw probability,ECE,0.00348,0.00297,0.00597

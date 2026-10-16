@@ -1,0 +1,14 @@
+\begin{tabular}{llrrrrl}
+\toprule
+model & method & $\Delta$ AUC & CI low & CI high & TOST p (Holm) & label \\
+\midrule
+Logistic Regression & undersample & -0.0002 & -0.0008 & +0.0003 & 0.0001 & equivalent \\
+Logistic Regression & smote & -0.0030 & -0.0042 & -0.0018 & 0.0261 & equivalent \\
+Random Forest & undersample & +0.0065 & +0.0034 & +0.0096 & 1.0000 & not equivalent \\
+Random Forest & smote & -0.0089 & -0.0148 & -0.0029 & 1.0000 & not equivalent \\
+LightGBM & undersample & -0.0022 & -0.0033 & -0.0012 & 0.0065 & equivalent \\
+LightGBM & smote & -0.0174 & -0.0208 & -0.0140 & 1.0000 & not equivalent \\
+XGBoost & undersample & -0.0018 & -0.0040 & +0.0004 & 0.0383 & equivalent \\
+XGBoost & smote & -0.0175 & -0.0191 & -0.0159 & 1.0000 & not equivalent \\
+\bottomrule
+\end{tabular}
