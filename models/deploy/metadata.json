@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-10-16T22:19:09+00:00",
-  "git_commit": "f27d7d33bb2d582d7f3a6937ab42871274ae6301",
+  "created_utc": "2026-10-16T22:45:17+00:00",
+  "git_commit": "2051444d03a286180d32a55f284f48891beb5094",
   "git_branch": "app-v2",
   "git_dirty": false,
   "versions": {
@@ -74,7 +74,7 @@
   "heldout_n": 133405,
   "parity_excluded_invalid_inputs": 60,
   "parity_n": 1000,
-  "train_seconds": 495,
+  "train_seconds": 504,
   "bundle_bytes": 1377733,
   "bundle_sha256": "824c098222280991c6db2a6a2d59c4d44ceac7103bde8f86794970d6e24ba92c"
 }
