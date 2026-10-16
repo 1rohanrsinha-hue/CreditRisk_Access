@@ -331,6 +331,13 @@ Reliability: mean PD matches the observed rate within the bootstrap CI in all th
 **Tests** (`python -m pytest`, 39 passed): `tests/test_creditrisk.py` (encoder/pipeline leak-freeness, calibrator monotonicity, tiers cover all PDs incl. edges, direction-aware labels, borrower view hides interest_rate, input validation, loud load failures on missing dir / version / schema / corrupted hash), `tests/test_app.py` (valid/invalid/missing/unknown-category/out-of-range/non-JSON requests, form, schema, health, pages render with the notice, old bands and 0.5 cutoff absent, figure whitelist, refuses to start without a model, no training code in app.py), `tests/test_parity.py` (H24; skipped if `models/deploy` is absent).
 **Not tested:** Docker build/run (not installed here); load/concurrency; any fairness or regulatory property.
 
+## Phase 6 PRE-REGISTRATION (written 2026-10-17, committed BEFORE task C; H5–H24 remain frozen)
+| id | Hypothesis | Decision rule (fixed now) |
+|---|---|---|
+| H25 | The deployed configuration (tuned LightGBM, isotonic calibration fitted on out-of-fold scores) run on the 2013, 2014 and 2015 (36m) OOT folds shows ECE on the new year at least 5× its in-time ECE in at least 2 of 3 folds, and ROC-AUC 0.010–0.030 below its in-time AUC | Protocol folds of the earlier OOT study (fit on years ≤ T−2, test on year T; 36-month only for T=2015; features missing in >50% of the training window dropped), 3 seeds. For each fold: the training window is split 80/20 stratified at random; the configuration is fitted on the 80% (median Optuna parameters, 5-fold OOF isotonic) and evaluated on (a) the 20% in-time hold-out and (b) all loans of year T. "ECE ratio" = seed-mean ECE(year T) / seed-mean ECE(in-time), 15 equal-frequency bins. "AUC gap" = seed-mean AUC(in-time) − AUC(year T). SUPPORTED if the ratio ≥ 5 in ≥ 2 of 3 folds AND the AUC gap lies in [.010, .030] in all 3 folds; each clause reported separately. A 36-month-only variant of all three folds is reported as secondary and does not enter the verdict |
+
+**Fixed design choices.** Calibration is on OOF scores of the training window (as deployed), NOT on year T−1 labels. Bootstrap CIs (1,000 resamples) on both ECEs, and on their ratio. The in-time hold-out is small for early folds (ECE bias is positive at small n; this is stated in the results, not corrected).
+
 ## Phase 6: Paper support
 - [ ] Auto-export results to CSV and LaTeX tables — `TODO`
 - [ ] 300 dpi figures — `TODO`
