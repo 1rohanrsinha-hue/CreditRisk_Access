@@ -91,3 +91,4 @@ catboost_info/
 
 # deployment metadata is tracked; the binary only if small (see tracker)
 !models/deploy/*.csv
+!models/deploy/bundle.joblib

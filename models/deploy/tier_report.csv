@@ -1,0 +1,4 @@
+tier,definition,n,share,observed_default_rate,obs_ci_lo,obs_ci_hi,mean_pd,gap_obs_minus_pd,gap_ci_lo,gap_ci_hi,calibrated_within_ci
+Tier 1: lower predicted risk,PD < 0.75 x prevalence,52360,0.39249,0.06841,0.06625,0.07063,0.06921,-0.0008,-0.00305,0.00129,True
+Tier 2: typical predicted risk,0.75 x prevalence <= PD <= 1.5 x prevalence,55579,0.41662,0.16049,0.15727,0.16391,0.16201,-0.00152,-0.00442,0.00148,True
+Tier 3: higher predicted risk,PD > 1.5 x prevalence,25466,0.19089,0.28579,0.27963,0.29161,0.2825,0.00329,-0.00189,0.00832,True
