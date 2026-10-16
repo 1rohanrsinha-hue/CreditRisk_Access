@@ -78,7 +78,7 @@ Status legend: `TODO` / `IN PROGRESS` / `DONE`. Last updated: 2026-10-14.
 - **Profit definitions:** P1 = `total_pymnt − funded_amnt`; P2(r) = (`total_pymnt` − `collection_recovery_fee`) discounted at r p.a., payments uniform over [issue_d, last_pymnt_d] (or issue_d+term), minus `funded_amnt` at issue.
 - **Robustness (D2, 10 rep., LightGBM isotonic, $000/1000 appl.):** approve-all 403 / 363 / −297 / −654 for P1 / P2 0% / 5% / 8%; Youden 425 / 415 / 62 / −129; Elkan 481 / 462 / 65 / −63; profit-max 550 / 527 / 63 / 0. profit-max acceptance: 87% / 86% / 53% / **0%**. Rule ordering is P1/P2-0%: profit-max > Elkan > fixed-0.5 > F1 > Youden > approve-all > recall-.80; at 5% all non-trivial rules tie (Elkan 65, profit-max 63, Youden 62, recall-.80 62; paired CI of profit-max vs Youden includes 0). Recall-≥.80 loses to approve-all under P1/P2-0% (−$97k [−144k, −50k]) but **beats** it by +$339k under 5% because approve-all itself loses money.
 - **Expected-profit rule (D2):** P1 $663k vs profit-max $550k vs Elkan $481k (paired +$97k [72k, 122k] and +$195k [165k, 225k]); P2-5%: $169k vs $63k vs $65k (+$118k CI [92k, 139k] vs both). Regressors calibrated (mean predicted vs realized: good $2,324 vs $2,328; bad −$7,206 vs −$7,241; decile table in `phase3a_expprofit_calibration.csv`; R² .63 / .48 on the conditional, .06 on total profit). **On mature cells the rule is below approve-all** (P1 −$32k, P2-5% −$51k), so the D2 gain reflects the censored vintages.
-- **OOT (iso, mean of 5 models):** AUC drops .016–.021 vs in-time (RF worst, .644–.654); π: train .142/.154/.124, T−1 .162/.156/.137, test .156/.185/.149; ECE of isotonic-on-T−1 on year T .022/.036/.022 vs in-sample .0025/.0012/.0016 (worse than raw in 2014: .036 vs .023). Approve-all ≥ every threshold rule in all three vintages (P1 $2.08M / 1.37M / 0.84M per 1000 applicants); Youden throws away 57%/36%/28%. **H4 NOT SUPPORTED**: |Δπ| .006/.029/.012 and |Δt*| .009/.014/.009 (corr .33), t* moved *opposite* to π in 2014–2015 (sign agreement 13%), and the Youden-J lost to a stale T−1 threshold is only .0015/.0042/.0025 (0.6–1.6% of J_max, max .007).
+- **OOT (iso, mean of 5 models):** AUC drops .016–.021 vs in-time *[Phase 6 check against the 3-seed CSV: fold means .0154/.0209/.0176, i.e. .015–.021]* (RF worst, .644–.654); π: train .142/.154/.124, T−1 .162/.156/.137, test .156/.185/.149; ECE of isotonic-on-T−1 on year T .022/.036/.022 vs in-sample .0025/.0012/.0016 (worse than raw in 2014: .036 vs .023). Approve-all ≥ every threshold rule in all three vintages (P1 $2.08M / 1.37M / 0.84M per 1000 applicants); Youden throws away 57%/36%/28%. **H4 NOT SUPPORTED**: |Δπ| .006/.029/.012 and |Δt*| .009/.014/.009 (corr .33), t* moved *opposite* to π in 2014–2015 (sign agreement 13%), and the Youden-J lost to a stale T−1 threshold is only .0015/.0042/.0025 (0.6–1.6% of J_max, max .007).
 
 - [ ] Repeated stratified CV + bootstrap CIs — `TODO`
 - [ ] Friedman/Nemenyi or paired tests — `TODO`
@@ -171,7 +171,7 @@ _Wording rule: "not equivalent" is not "worse". If a TOST fails but the differen
 | H9 equivalent boosting majority (AUC ±.005, N–B, Holm) | **SUPPORTED** | D3: 4/5 boosting models equivalent to best (LightGBM .6832): XGBoost −.0003, GB −.0005, CatBoost −.0011 (TOST Holm p<.001); AdaBoost −.0062 [−.0076, −.0049] is outside the band, as are LR −.0057, NN −.0032 (CI crosses margin), RF/ET/DT −.026…−.030 |
 | H10 \|t*−π\|<.02 in all ablation cells | **SUPPORTED** | max over (cell, model, calibrator) of mean \|t*−π\| = .0121 (cell E); mean .0034–.0049 per cell |
 | H11 removing rate+score: ΔAUC>.005 and larger capacity gain | **SUPPORTED** | ΔAUC(A−F) = .0483 (.6773 → .6289); default-risk dollar-capacity gain (k=50%, P2-3%) −$39.1k (A) → +$49.3k (F) |
-| H12 dollar-capacity gain < count-capacity gain (expected profit) | **SUPPORTED** | $191.6k vs $102.5k per 1000; difference −$89.0k, 95% CI [−90.4k, −87.7k] (−46%) |
+| H12 dollar-capacity gain < count-capacity gain (expected profit) | **SUPPORTED** | $191.6k vs $102.5k per 1000 (mean over k = 30–90%); difference −$89.0k, 95% CI [−90.4k, −87.7k] (−46%) |
 | H13 default-risk < random under ROI, and rate-only ≈ best model | **REJECTED** (a holds, b fails) | (a) 10/10 models negative ROI gain (−.0041…−.0077); (b) ROI(rate, high first) − ROI(best = expected-ROI XGBoost) = −.0092, CI [−.0119, −.0062], margin ±.0012 |
 | H14 cheap recalibration fix ≥30% ECE cut in ≥2 of 3 folds | **REJECTED** | isotonic on trailing 6 months: +37.6% / −3.8% / +23.5% (1 of 3 folds); Platt +1.6% / +1.4% / 0.0%; EM prior shift −1237% / −305% / −511% (diverges); oracle π_T (not eligible): +26.6% / +69.3% / +46.4% |
 
@@ -331,10 +331,45 @@ Reliability: mean PD matches the observed rate within the bootstrap CI in all th
 **Tests** (`python -m pytest`, 39 passed): `tests/test_creditrisk.py` (encoder/pipeline leak-freeness, calibrator monotonicity, tiers cover all PDs incl. edges, direction-aware labels, borrower view hides interest_rate, input validation, loud load failures on missing dir / version / schema / corrupted hash), `tests/test_app.py` (valid/invalid/missing/unknown-category/out-of-range/non-JSON requests, form, schema, health, pages render with the notice, old bands and 0.5 cutoff absent, figure whitelist, refuses to start without a model, no training code in app.py), `tests/test_parity.py` (H24; skipped if `models/deploy` is absent).
 **Not tested:** Docker build/run (not installed here); load/concurrency; any fairness or regulatory property.
 
-## Phase 6: Paper support
-- [ ] Auto-export results to CSV and LaTeX tables — `TODO`
-- [ ] 300 dpi figures — `TODO`
-- [ ] List of paper claims that changed vs. conference version — `TODO`
+## Phase 6 PRE-REGISTRATION (written 2026-10-17, committed BEFORE task C; H5–H24 remain frozen)
+| id | Hypothesis | Decision rule (fixed now) |
+|---|---|---|
+| H25 | The deployed configuration (tuned LightGBM, isotonic calibration fitted on out-of-fold scores) run on the 2013, 2014 and 2015 (36m) OOT folds shows ECE on the new year at least 5× its in-time ECE in at least 2 of 3 folds, and ROC-AUC 0.010–0.030 below its in-time AUC | Protocol folds of the earlier OOT study (fit on years ≤ T−2, test on year T; 36-month only for T=2015; features missing in >50% of the training window dropped), 3 seeds. For each fold: the training window is split 80/20 stratified at random; the configuration is fitted on the 80% (median Optuna parameters, 5-fold OOF isotonic) and evaluated on (a) the 20% in-time hold-out and (b) all loans of year T. "ECE ratio" = seed-mean ECE(year T) / seed-mean ECE(in-time), 15 equal-frequency bins. "AUC gap" = seed-mean AUC(in-time) − AUC(year T). SUPPORTED if the ratio ≥ 5 in ≥ 2 of 3 folds AND the AUC gap lies in [.010, .030] in all 3 folds; each clause reported separately. A 36-month-only variant of all three folds is reported as secondary and does not enter the verdict |
+
+**Fixed design choices.** Calibration is on OOF scores of the training window (as deployed), NOT on year T−1 labels. Bootstrap CIs (1,000 resamples) on both ECEs, and on their ratio. The in-time hold-out is small for early folds (ECE bias is positive at small n; this is stated in the results, not corrected).
+
+## Phase 6: Paper support  (done 2026-10-17; no manuscript prose written)
+- [x] Export tables (CSV + LaTeX booktabs) and figures (PNG 300 dpi + PDF) — `DONE` — `experiments/export_paper_assets.py` → `paper_assets/` (33 table files for T1–T15 incl. sub-tables, 9 figures, `MANIFEST.md`)
+- [x] Automated verification of exported numbers and of tracker statements — `DONE` — `paper_assets/verify.py` (see results)
+- [x] List of paper claims that changed vs. conference version — `DONE` — `paper_assets/claims_audit.md`, table T15
+- [x] Reference candidates (all UNVERIFIED) — `DONE` — `paper_assets/references_to_verify.md`
+- [x] Reproducibility package — `DONE` — `scripts/reproduce_all.sh` (dry-run validated; the full run was not re-executed)
+- [x] Deployment configuration out of time (H25) — `DONE` — **H25 NOT SUPPORTED**
+
+### Phase 6 results
+**H25 (frozen at e647452): NOT SUPPORTED.** Deployed configuration (tuned LightGBM with median Optuna parameters, isotonic on 5-fold OOF scores of the training window) on the protocol OOT folds, 3 seeds; in-time = random 20% hold-out of the training window; bootstrap 1,000 resamples (rows shared across seeds, each seed with its own labels).
+| fold | n in-time / OOT | AUC in-time [95% CI] | AUC OOT | AUC gap [95% CI] | ECE in-time [CI] | ECE OOT [CI] | ECE ratio [CI] |
+|---|---|---|---|---|---|---|---|
+| 2013 | 7,958 / 134,804 | .6961 [.6878, .7052] | .6733 | +.0228 [+.0139, +.0323] | .0141 [.0134, .0197] | .0344 [.0325, .0364] | **2.4** [1.7, 2.6] |
+| 2014 | 18,631 / 223,103 | .6891 [.6837, .6949] | .6827 | +.0063 [+.0007, +.0127] | .0074 [.0083, .0123]\* | .0179 [.0160, .0192] | **2.4** [1.4, 2.2]\* |
+| 2015 (36m) | 34,598 / 283,026 | .6710 [.6661, .6756] | .6826 | −.0116 [−.0173, −.0062] | .0067 [.0067, .0099] | .0387 [.0374, .0399] | **5.8** [3.9, 5.8] |
+\*The bootstrap in-time ECE is biased upward at small n, so the point estimate lies at or below the CI's lower edge in 2014 and 2015; ratios are the seed-mean point estimates.
+Clause 1 (ECE ratio ≥ 5 in ≥ 2 of 3 folds): **fails**, 1 of 3 (2015 only). Clause 2 (AUC gap within [.010, .030] in all folds): **fails** (.023 in range; .006 below; −.012 negative, the 2015 OOT year is *easier* than the in-window hold-out). 36-month-only variants (secondary, not in the verdict): AUC gap +.029/+.003, ECE ratio 1.4/0.6.
+Reading: the configuration's calibration is clearly worse on the new year (ECE .018–.039; 6–14× the .0028 of the 133k in-time split), but against its *own small in-window hold-outs* the ratio is only 1.4–5.8×, because small hold-outs inflate ECE; and AUC does not consistently fall out of time for this configuration. The model-card sentence was rewritten with these measured numbers (app-v2).
+
+**Export and verification.** 42 assets exported (33 tables for T1–T15 with sub-tables, 9 figures); `paper_assets/verify.py`: **68 checks passed, 0 table mismatches**, 1 tracker discrepancy (the H4 "J lost ≤ .007" statement; corrected above). Checks that first failed and were fixed in the export/verify code, not in the data: H10/H19 scorecard numbers initially included raw (uncalibrated) rows; a bootstrap-alignment bug in the first H25 run (in-time CIs; the point estimates and verdict were unaffected). Clarifications found by verification: H12's $191.6k/$102.5k are means over k = 30–90% (k=50%: $242.1k/$122.9k); the 3A AUC-drop range .016–.021 is .015–.021 on the 3-seed CSV.
+**Repository hygiene** (no secrets; see the decisions log for the list): largest tracked file 1.6 MB, `.git` 6.8 MB; no tracked dataset, pickles or caches; a Windows co-author's account name appears in the ignored `.venv/pyvenv.cfg`; untracked `venv.txt` contains a local absolute path; the legacy `app.py` runs with `debug=True` (127.0.0.1 only), v2 does not.
+
+### Open items before manuscript drafting
+1. Fill in the Lending Club data source (URL/licence/date accessed) in `scripts/reproduce_all.sh` and the paper's data statement.
+2. Verify every reference in `paper_assets/references_to_verify.md` yourself (all UNVERIFIED).
+3. Locate the manuscript numbers behind each row of `claims_audit.md` (the manuscript is not in the repository; only 6 claims carry the author's section mapping).
+4. Decide the treatment of H25 (not supported): state the absolute out-of-time ECE (.018–.039) rather than a ratio, and say that AUC is not consistently lower out of time for this configuration.
+5. H20/H23: state the vintage pattern without a cause (no further test has been run).
+6. Table T7a is 12 numeric columns wide; split or rotate for the journal template. T1–T15 LaTeX files are bare `tabular` environments (no caption/label; captions are in the manifest).
+7. H1–H4 were not frozen before running (stated in the task prompts, first committed with results); the paper should say so.
+8. Rerun `scripts/reproduce_all.sh` on a clean checkout before submission (the commands marked [inferred] were never re-run in this audit).
+9. Placeholder title: "Calibration, Base Rates and Decision Thresholds in Credit-Risk Classification: A Multi-Dataset Study" (authors decide).
 
 ## Decisions log
 | Date | Decision | Reason |
@@ -396,6 +431,15 @@ Reliability: mean PD matches the observed rate within the bootstrap CI in all th
 | 2026-10-17 | Deployment trained on 80% (20% held out for the model card), EBM interactions=10 as in 3D | Reportable held-out metrics |
 | 2026-10-17 | Required inputs: no defaults or zero-filling; `employment_length` accepts explicit "not reported" (the model has a missing-indicator feature); `emp_length_missing` is derived, not an input; legacy `revolving_utilization`/`credit_score` fields are gone (the study's feature set uses fico_mean and no revolving utilisation) | Serve exactly the features that were trained and benchmarked |
 | 2026-10-17 | Bundle (1.38 MB, under the 5 MB limit) is committed on app-v2 via negation rules `!models/deploy/bundle.joblib` and `!models/deploy/*.csv` in `.gitignore` (no force-add); the legacy `models/*.pkl` stay ignored | Small enough to version; regenerated deterministically by `scripts/train_deploy.py` |
+| 2026-10-17 | Phase 6 pre-registration (H25) at e647452, before task C; tracker merged into journal-extension from app-v2 (tracker file only; app code stays on app-v2) | Per instruction |
+| 2026-10-17 | Q2: deployment model has its own table (T12e/T12f/T12g); deployment test metrics and tier report copied into `experiments/results/phase5_deploy_*.csv` on journal-extension | The export script must run on the study branch |
+| 2026-10-17 | Q3: tables as CSV + LaTeX booktabs, figures as PNG (300 dpi) + PDF; the figures are regenerated from the result CSVs (the reliability figure from cached scores) and may differ in style from the earlier PNGs in experiments/figures | Vector output requires regeneration |
+| 2026-10-17 | Q4: H25 run on the protocol folds (mixed terms for 2013/2014, 36m for 2015) with calibration on OOF scores of the training window (as deployed), not on year T−1 labels; the 36m-only variant is secondary | Matches the deployed procedure; verdict pre-registered |
+| 2026-10-17 | Q5: the H20/H23 pattern is stated without a cause | The pre-registered rule |
+| 2026-10-17 | Q6: placeholder title recorded; authors decide | Per instruction |
+| 2026-10-17 | T15 / claims audit are parsed mechanically from the tracker's claim tables; the category mapping (WRONG = WRONG/REJECTED/WITHDRAWN/NOT SUPPORTED, etc.) is documented in `claims_audit.md` | Avoids a second hand-maintained list |
+| 2026-10-17 | T14: H1–H4 carry no frozen pre-registration commit (stated in the Phase 2/3A task prompts; first committed with results at b7a4fee and 7ac7a5d) | Honest disclosure |
+| 2026-10-17 | Verification corrections: H4 J-lost wording, H12 labelled as a mean over k, 3A AUC-drop range (see Phase 6 results) | Found by `paper_assets/verify.py` |
 
 ## Surprising findings (Phase 1)
 - Youden-threshold recall for a single model is unstable to *column order* (RF std .032) — larger than most inter-model recall differences claimed in the paper.
@@ -414,6 +458,14 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | Sec III-F | "Youden gives the best operating point" | **CHANGED** | not profit-optimal; and in mature vintages no cutoff beats approve-all (Phase 3A) |
 | Sec III-B2 | Imputation paragraph | **WRONG** | pandas fill bug: nothing was imputed (6151 NaNs zero-filled); journal version uses in-fold imputation |
 | Sec V | "CatBoost native categorical handling" | **WRONG** | `cat_features` was never passed in the paper's code; fixed in `creditrisk/models.py` |
+
+### Phase 6 changes to the claim table
+| Claim | Status | Evidence |
+|---|---|---|
+| "Calibration drifts out of time, so recalibrate annually" (model card / app) | **SUPPORTED, but the size is revised** | H25 NOT SUPPORTED as a ratio claim: deployed configuration's ECE on the new year is .034/.018/.039 (6–14× the 133k in-time ECE .0028) but only 2.4/2.4/5.8× its own small in-window hold-out ECE |
+| "Out-of-time AUC is about .016 lower" (model card, from Phase 3) | **WEAKENED for the deployed configuration** | AUC gap vs in-window hold-out +.023/+.006/−.012; no consistent drop |
+| "J lost to a stale threshold is at most .007" (Phase 3B table) | **CORRECTED** | fold means ≤ .004; worst single cell .0146 (6.5% of J_max) |
+| "Expected-profit gain falls from $191.6k to $102.5k with dollar capacity" | **CLARIFIED** | means over k = 30–90%; at k = 50% $242.1k → $122.9k (−49%) |
 
 ### Phase 5 changes to the claim table
 | Claim | Status | Evidence |
@@ -458,7 +510,7 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | "No clear winner among modern GBDTs" | **CONFIRMED** | H9: 4/5 boosting models equivalent to best on D3 (TOST ±.005, N–B, Holm) |
 | "Ranking by default risk helps capacity-constrained lending" | **REJECTED** (count and dollar capacity, profit and ROI) | 10/10 models below random on ROI at k=50%; gain −$41k per 1000 (dollar) |
 | "The model adds value beyond the lender's own rate" | **WEAKENED** | rate-only (high first) captures .0133 of the .0233 ROI gain of the best ranking; but still significantly below it (ΔROI −.0092, CI excl. 0) |
-| "Count-based capacity results generalise to dollars" | **WEAKENED** | expected-profit gain falls from $191.6k to $102.5k per 1000 (−46%) |
+| "Count-based capacity results generalise to dollars" | **WEAKENED** | expected-profit gain falls from $191.6k to $102.5k per 1000 (−46%); *[Phase 6 clarification: these are means over capacity levels k = 30–90%; at k = 50% the figures are $242.1k and $122.9k]* |
 | "t*≈π does not depend on feature set" | **CONFIRMED** (H10) | max mean \|t*−π\| .012 across 6 cells |
 | "interest_rate drives performance and the capacity paradox" | **CONFIRMED** (H11) | ΔAUC .048; removing the rate flips the default-risk capacity gain from −$39k to +$30k/+$49k |
 | "Recalibrating on recent data fixes drift" | **REJECTED** (H14) | only trailing-6-month isotonic helps (1 of 3 folds ≥30%); prior-shift EM fails when calibration and EM batch come from different years (3D diagnostic: works within a period) |
@@ -468,7 +520,7 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 |---|---|---|
 | Phase 2 profit magnitudes (profit-max accepts ~87%, +$162k over Youden) | **SUPERSEDED** | censored-vintage artefact; on D3 profit-max accepts ≥99.8% at ≤5% and equals approve-all |
 | "Youden gives the best operating point" | **CHANGED (stronger)** | D3 3%: Youden earns 54% less than approve-all ($410k vs $763k per 1000; CI excludes 0); no cutoff beats approve-all at ≤5% |
-| "Thresholds learned on older data go stale under drift" (H4) | **NOT SUPPORTED** | \|Δπ\| up to .029 but t* moves opposite (sign agreement 13%); J lost ≤ .007 (≤1.6% of J_max) |
+| "Thresholds learned on older data go stale under drift" (H4) | **NOT SUPPORTED** | \|Δπ\| up to .029 but t* moves opposite (sign agreement 13%); Youden J lost to a stale threshold: fold means .0021/.0040/.0035 (≤1.6% of J_max), worst single (fold, model, seed) cell .0146 (6.5% of J_max; CatBoost/RF). *[Phase 6 correction: the earlier "≤ .007" was the seed-42 maximum]* |
 | "Isotonic calibration on a recent vintage remains valid" | **WEAKENED** | ECE on next vintage .022–.036 vs .001–.003 in-sample (10–25× worse); worse than raw in 2014 |
 | "Ranking by default risk is useful for capacity-constrained lending" | **CHANGED** | all 10 models earn less than random selection at k=30–70% (lower-risk loans carry lower interest); expected-profit ranking beats random by +$66k…+$266k per 1000 |
 | "Model family matters little" | **CONFIRMED** for AUC (spread .027–.036) and expected-profit ranking; **WEAKENED** as a ranking (Spearman .17 across folds) | |

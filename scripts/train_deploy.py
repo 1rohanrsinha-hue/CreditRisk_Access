@@ -82,6 +82,14 @@ def main():
     g = lambda m, s_='calibrated PD', mod='LightGBM (tuned)': M[(M.metric == m) & (M.scores == s_) & (M.model == mod)].iloc[0]
     f = lambda r: f"{r.value:.4f} [{r.ci_lo:.4f}, {r.ci_hi:.4f}]"
     tbl = "\n".join(f"| {r.tier} | {r.definition} | {r.share:.3f} | {r.observed_default_rate:.3f} [{r.obs_ci_lo:.3f}, {r.obs_ci_hi:.3f}] | {r.mean_pd:.3f} | {r.gap_obs_minus_pd:+.4f} [{r.gap_ci_lo:+.4f}, {r.gap_ci_hi:+.4f}] |" for r in T.itertuples())
+    drift_sentence = ("The out-of-time behaviour of this exact configuration has not been measured in this checkout (run experiments/deploy_oot.py on the study branch).")
+    d25 = ROOT / "experiments" / "results" / "phase6_deploy_oot.csv"
+    if d25.exists():
+        q = pd.read_csv(d25); q = q[q.scope == 'protocol'].set_index('T')
+        drift_sentence = (f"Study Phase 6 (H25) ran this configuration (tuned LightGBM, isotonic on out-of-fold scores) on rolling-origin folds, fitting on years <= T-2 and testing on year T = " + "/".join(str(t) for t in q.index) +
+                          f" (36-month loans only in 2015): ECE on the new year was " + "/".join(f"{v:.3f}" for v in q.ECE_oot) + f", i.e. about {q.ECE_oot.min()/g('ECE').value:.0f}-{q.ECE_oot.max()/g('ECE').value:.0f}x this model's in-time ECE of {g('ECE').value:.4f} (a 133k-loan hold-out); "
+                          f"against small in-window hold-outs of the same training windows the ratio was only " + "/".join(f"{v:.1f}" for v in q.ECE_ratio) + " (small hold-outs inflate ECE). ROC-AUC on the new year was " + "/".join(f"{v:.3f}" for v in q.AUC_oot) +
+                          " versus " + "/".join(f"{v:.3f}" for v in q.AUC_in_time) + " in-window: AUC did not fall consistently out of time for this configuration, but calibration was clearly worse. The H25 hypothesis (ECE >= 5x in >= 2 of 3 folds and a .010-.030 AUC gap) was NOT supported.")
     card = f"""# Model card: calibrated LightGBM credit-default PD (research prototype)
 
 **Not for credit decisions.** This is a research prototype that accompanies a journal study. It has not been validated for any
@@ -119,7 +127,7 @@ accept/reject cutoffs: on mature vintages no threshold rule earned more than app
 
 ## Limitations
 - **Research prototype, not for credit decisions;** no fairness, stability or regulatory validation.
-- **In-time test split.** Out-of-time (Phase 3) AUC fell by about .016 and calibration drifted: raw ECE .041/.022/.034 and isotonic-on-previous-year ECE .022/.036/.022 for test years 2013/2014/2015 (study Phase 3C), versus an in-time calibrated ECE of {g('ECE').value:.4f} for this model, i.e. about {0.022/g('ECE').value:.0f}-{0.036/g('ECE').value:.0f}x higher out of time (5-model means from the study; this exact model was not run out of time). **Recalibrate (refit the calibrator on recent labelled loans) at least annually**, and monitor mean PD against the realised default rate.
+- **In-time test split; the drift sentence below is measured, not assumed.** {drift_sentence} **Recalibrate (refit the calibrator on recent labelled loans) at least annually**, and monitor mean PD against the realised default rate per tier.
 - **Funded loans only; vintages 2010-2015 only.** Late vintages (2016+) are censored and excluded; the model has not seen 60-month loans issued after 2013.
 - **interest_rate is endogenous** (set by the lender from its own risk assessment); removing it costs about .048 AUC and changes capacity-ranking conclusions. Reason codes shown to borrowers hide it by default (config flag).
 - Reason-code wording describes the value relative to the training median; it is not causal.
