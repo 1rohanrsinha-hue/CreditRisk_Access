@@ -235,10 +235,52 @@ _Wording rule: "not equivalent" is not "worse". If a TOST fails but the differen
 
 **Fixed design choices.** Term/vintage split uses the existing OOT score cache (`.cache/oot_scores`), rankings default-risk, expected-profit and interest-rate-only; k ∈ {30,50,70}%; paired bootstrap 1,000 draws. SHAP: TreeExplainer (trees; RF tuned with `optuna_params.json` medians), LinearExplainer (LR), native additive term contributions (EBM, interactions=0 as in 3D), exact points (WoE, coef × WoE). Reason-code labels live in `creditrisk/reason_codes.py`. No regulatory-compliance claim is made.
 
-## Phase 4: Explainability
-- [ ] SHAP on all models with 2000+ samples — `TODO`
-- [ ] Rank correlation of attributions across models — `TODO`
-- [ ] Top-k reason codes — `TODO`
+## Phase 4: Explainability  (done 2026-10-17)
+- [x] Term and vintage diagnostic (task A) — `DONE` — `experiments/term_vintage_check.py`, `phase4_term_vintage.csv`, `phase4_h20.csv`, figure `phase4_term_vintage.png`; **H20 SUPPORTED**
+- [x] SHAP on all models with 2000 rows × 3 repeats — `DONE` — `experiments/shap_study.py`, `phase4_shap*.csv`, figures `phase4_shap_top10.png`, `phase4_shap_rankcorr.png`
+- [x] Rank correlation of attributions across models — `DONE` — **H21 SUPPORTED**
+- [x] Top-k reason codes (EBM vs tuned LightGBM) — `DONE` — `creditrisk/reason_codes.py`, `experiments/reason_codes_study.py`, `phase4_reasoncodes*.csv`, `phase4_reasoncode_examples.{csv,md}`; **H22 SUPPORTED**
+
+### Phase 4 results (2026-10-17; outcomes against the frozen Phase 4 pre-registration, commit b3240f4)
+| id | verdict | key numbers |
+|---|---|---|
+| H20 36m-only 2013 default-risk capacity gain < 2014 and 2015 | **SUPPORTED** | 36m, P2-3%, k=50% (USD per 1000 loans, 5 models × 3 seeds): 2013 −$33.3k, 2014 +$2.9k, 2015 +$54.3k. gain(2014)−gain(2013) = +$36.1k [26.0k, 46.7k]; gain(2015)−gain(2013) = +$87.6k [77.8k, 97.1k]. Term mix alone does not explain the sign change |
+| H21 attribution agreement | **SUPPORTED** (all 3 clauses) | booster pairs (LightGBM, XGBoost, CatBoost, GB): min Spearman .961 (≥.8); each booster vs LR/WoE: min .845 (≥.6; WoE is the lowest, .83–.89; LR .93–.95); interest_rate ranks first in all 8 models in every repeat |
+| H22 top-3 reason-code overlap ≥2/3 for ≥70% of loans | **SUPPORTED** (both versions) | pooled share: rate allowed .989 (per-rep .973–.984), rate excluded .987; mean Jaccard .83/.82; top-1 code identical for ~.86 (rate allowed) / ~.82 (excluded) |
+
+**A. Term × vintage** (`phase4_term_vintage.csv`; default-risk gain, P2-3%, k=50%, mean of 5 models × 3 seeds, Poisson-bootstrap CI on the averaged per-loan column; all-term rows reproduce the 3D quick-check numbers exactly):
+| test vintage | term | n test | gain, default-risk | gain, expected profit | gain, rate-only | mean rate % | default rate | corr(p, rate) |
+|---|---|---|---|---|---|---|---|---|
+| 2013 | all | 134,804 | −$105.9k [−117.3, −93.3] | +$193.4k | −$179.3k | 14.5 | .156 | .82 |
+| 2013 | 36 | 100,422 | −$33.3k [−41.4, −25.3] | +$66.6k | −$74.7k | 13.4 | .123 | .81 |
+| 2013 | 60 | 34,382 | +$34.5k [−2.1, +67.9] (n.s.) | +$207.3k | −$77.3k | 17.9 | .251 | .77 |
+| 2014 | all | 223,103 | +$53.4k [43.9, 61.8] | +$63.0k | +$2.9k (n.s.) | 13.7 | .184 | .84 |
+| 2014 | 36 | 162,570 | +$2.9k [−3.6, +9.8] (n.s.) | +$44.3k | −$27.0k | 12.5 | .137 | .82 |
+| 2014 | 60 | 60,533 | +$227.9k [200.7, 254.8] | +$138.8k | +$112.3k | 16.9 | .311 | .81 |
+| 2015 | 36 | 283,026 | +$54.3k [49.5, 59.6] | +$22.6k | +$32.1k | 11.3 | .149 | .79 |
+At k=30% and 70% the signs agree except 2014-36m (k=30%: −$16.9k; k=70%: +$17.1k) and 2013-60m (k=30%: +$1.3k n.s.; k=70%: +$45.1k, CI excludes 0).
+What the cells suggest (**hypotheses, not tested here**): (i) the sign change is a vintage effect within 36-month loans, so the 2013 → 2015 pattern is not a 60-month-share artefact; (ii) for 36m loans the default rate rises .123 → .137 → .149 while the mean rate falls 13.4 → 12.5 → 11.3%, i.e. the price-for-risk margin compresses, so selecting on low risk stops giving up as much interest income as it saves in losses; (iii) 60-month loans carry the largest default-risk gain in 2014 (+$228k), consistent with high-default, long-duration loans being where the ranking pays; (iv) corr(p, rate) is .77–.84 in every cell, so the score is largely the rate everywhere and this correlation does not by itself explain the change. Not tested: 2013/2014 models were fit on mixed terms and the 2015 model on 36m only, so vintage is confounded with training composition; a 36m-only refit of the 2013 and 2014 folds would remove that confound.
+
+**B. SHAP/attribution agreement** (D3, unweighted, raw scores, 3 repeats × 2,000 seeded test rows; TreeSHAP for LightGBM/XGBoost/GB/tuned RF, CatBoost native ShapValues, shap LinearExplainer for LR, native additive term scores for EBM (interaction terms split equally between their two features), exact centred points coef × WoE for the scorecard; dummies summed to the original feature; RF is on the probability scale, all others log-odds, so ranks/shares only). Mean share of mean |attribution| (%):
+| feature | LightGBM | XGBoost | CatBoost | GB | RF tuned | LR | WoE | EBM |
+|---|---|---|---|---|---|---|---|---|
+| interest_rate | 36.5 | 36.5 | 37.3 | 37.1 | 35.3 | 29.0 | 38.3 | 32.9 |
+| annual_income | 11.5 | 11.1 | 10.9 | 11.5 | 11.0 | 7.6 | 7.3 | 11.7 |
+| loan_amount | 8.1 | 8.3 | 6.5 | 8.3 | 7.3 | 8.0 | 5.3 | 9.1 |
+| debt_to_income | 7.4 | 7.3 | 9.1 | 7.6 | 9.6 | 7.2 | 8.9 | 6.9 |
+| fico_mean | 6.4 | 6.2 | 8.2 | 6.4 | 9.5 | 10.0 | 6.6 | 7.0 |
+Ranks 2–4 differ by model (annual_income #2 in 6 of 8; fico_mean #2 for LR; debt_to_income #2 for the WoE scorecard). Pairwise Spearman (Kendall) range .83–.99 (.63–.96); lowest pairs involve the WoE scorecard (vs LR .83, vs GB .85, vs EBM .86). Stability across the 3 repeats: mean Spearman of ranks .97–1.00; top-3 set identical in all repeats for LightGBM, XGBoost, CatBoost, WoE, EBM (not GB, RF, LR). With vs without rate (shared features): LightGBM Spearman .84 (cell D) / .83 (cell F), EBM .87 / .84. Without rate: cell D (score kept) fico_mean becomes first (LightGBM 21.8%, EBM 19.6%); cell F (rate and score out) annual_income 17.2%, credit_inquiries 14.9–14.2%, loan_amount 13.1–14.2%, dti 10–12%.
+*Conference-paper SHAP claims (wording from the author's prompt; the paper's own SHAP output was not re-derived):* "interest rate is the top feature" **CONFIRMED** (first in all 8 models, 29–38%, every repeat); "credit score and DTI complete the top 3" **WEAKENED**: fico_mean is top-3 only for LR (#2) and fico/DTI are #4–#6 in most models (annual_income and loan_amount fill ranks 2–3 in the boosters; DTI is top-3 for CatBoost, tuned RF and the scorecard); "attributions are similar across models" **CONFIRMED** for ranks (Spearman ≥.83 for every pair, ≥.96 among boosters), with the caveat that this is largely one dominant feature (interest_rate, ~35%) and the remaining 15 features share a flat 1–12% tail; the paper's 50-sample global SHAP for one model could not support a cross-model claim.
+
+**C. Reason codes** (`phase4_reasoncodes.csv`, `_jaccard.csv`, `_examples.csv/.md`; 3 reps × 2,000 loans pooled; "risk-increasing" = positive contribution to log-odds of default; primary EBM = 3D configuration with 10 interactions; the no-interaction EBM is a sensitivity: .989/.986 for k=3).
+| version | k | share with ≥2 shared codes (of the codes both models issue) | strict (≥2 shared) | mean Jaccard | loans with <k positive contributions |
+|---|---|---|---|---|---|
+| rate allowed | 3 | .989 | .978 | .83 | 4.6% |
+| rate allowed | 4 | .986 | .986 | .84 | 11.3% |
+| rate excluded | 3 | .987 | .974 | .82 | 5.3% |
+| rate excluded | 4 | .983 | .983 | .84 | 13.6% |
+Jaccard (k=3, rate allowed): 5th–25th percentile .5, median 1.0. interest_rate is a top-3 code for ~51% of loans in both models and the top code for ~41–42%. Chance level for a 2-of-3 match drawing 3 of 16 features at random ≈ 7%. Disagreement concentrates in low-risk loans whose positive contributions are tiny (example 5: all < .03 log-odds). Two worked examples (from `phase4_reasoncode_examples.md`, amounts rounded): (1) loan 8,500, income 20,000, DTI 19.2, rate 15.6%, FICO 662, employment length missing → both models: interest rate (+.435 EBM / +.397 SHAP), low income (+.314/+.305), employment length not reported (+.311/+.276), overlap 3/3; (2) loan 19,000, income 65,000, rate 15.9%, FICO 667, purpose house → both: interest rate (+.472/+.490), loan amount (+.208/+.208); third code differs (EBM loan purpose +.119, LightGBM FICO +.113), overlap 2/3.
+**Interpretation limits:** labels in `creditrisk/reason_codes.py` assume that a positive contribution means "high" (or "low" for income/score/employment) on that feature; for non-monotone features (loan_amount, num_credit_lines, loan_purpose, home_ownership) the label states the feature, not a direction, and example 5 shows a code ("loan amount is high" for a 12,000 loan, +.013) that a direction-blind template would misdescribe. interest_rate is the lender's own price: excluded-version codes are listed separately because "your interest rate" is not an actionable borrower attribute.
 
 ## Phase 5: Deployment
 - [ ] Persist models/scaler/encoders with joblib (versioned) — `TODO`
@@ -294,6 +336,14 @@ _Wording rule: "not equivalent" is not "worse". If a TOST fails but the differen
 | 2026-10-15 | **Finding:** strict-labelled 2016–2018 loans are survivorship-biased (performing Current loans excluded), so Phase 2/3A-C D2 profit levels and rule rankings are partly a censoring artefact; the headline profit analysis should move to mature vintage cells | `mature_subset_check.py` |
 | 2026-10-15 | Seeding: baseline_repro seeds numpy (42) before app's unseeded `mutual_info_classif`; creditrisk code has no unseeded RNG. **Result: Table I reproduces exactly** (LR .592/.269/.718/.391/.696/.452; CatBoost AUC .703 thr .519; RF rec .668 thr .180). The earlier unseeded run differed by up to .038 recall / .012 threshold (column-order noise, `rf_column_order_sensitivity.csv`) | As requested |
 | 2026-10-14 | Protocols A/B/C (see results): leaking the threshold to the test set changes mean F1 by ≤ .003 and mean recall by ≤ .03; per-model recall moves ±.02–.04 | `protocol_comparison_all.csv` |
+| 2026-10-17 | Phase 4 pre-registered (H20–H22) at b3240f4 before tasks A–C | Same discipline as 3B–3D |
+| 2026-10-17 | Q1/Q6: term-and-vintage split first; H20 supported (term mix does not explain the sign change), so SHAP-by-vintage was NOT run | Per instruction, run only if A did not explain the sign change — it did not, so the by-vintage SHAP is left as an open question (see below) |
+| 2026-10-17 | Q2: SHAP on equivalent boosters (LightGBM, XGBoost, CatBoost, GB) + tuned RF, LR, WoE scorecard, EBM; 2,000 rows × 3 repeats; ranks only | Scales differ (RF probability scale) |
+| 2026-10-17 | Q3: reason codes from the EBM, reported with and without interest_rate | Lender's own price is not borrower-actionable |
+| 2026-10-17 | Q4: Phase 5 deployed model = calibrated tuned LightGBM, EBM as interpretable companion; the paper names no winner | LightGBM/CatBoost/EBM statistically tied (H9, H18) |
+| 2026-10-17 | Q5: primary results stay at default hyperparameters (as pre-registered); tuned results go in a robustness table | Tuning gain ≤.0023 AUC for boosters (H16) |
+| 2026-10-17 | CORRECTION to the Phase 4 pre-registration's "Fixed design choices": it says EBM "interactions=0 as in 3D"; the 3D EBM actually used interactions=10. H20–H22 hypotheses and decision rules are unchanged. Phase 4 used the 3D configuration (interactions=10; each interaction term split equally between its two features) as primary and reports interactions=0 as a sensitivity (H22 .989 vs .989 at k=3) | Keep the explanation model identical to the model that was benchmarked; frozen text left unedited |
+| 2026-10-17 | SHAP "without rate" reported for both cell D (rate out, FICO kept) and cell F (rate and score out); the prompt asked for A vs F | Cell F removes the score as well; D isolates the rate |
 
 ## Surprising findings (Phase 1)
 - Youden-threshold recall for a single model is unstable to *column order* (RF std .032) — larger than most inter-model recall differences claimed in the paper.
@@ -312,6 +362,14 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | Sec III-F | "Youden gives the best operating point" | **CHANGED** | not profit-optimal; and in mature vintages no cutoff beats approve-all (Phase 3A) |
 | Sec III-B2 | Imputation paragraph | **WRONG** | pandas fill bug: nothing was imputed (6151 NaNs zero-filled); journal version uses in-fold imputation |
 | Sec V | "CatBoost native categorical handling" | **WRONG** | `cat_features` was never passed in the paper's code; fixed in `creditrisk/models.py` |
+
+### Phase 4 changes to the claim table
+| Claim | Status | Evidence |
+|---|---|---|
+| "Default-risk ranking earns less than random under capacity constraints" | **WEAKENED further — vintage-dependent, not a term-mix effect** | 36m only (H20): 2013 −$33k, 2014 +$3k (n.s.), 2015 +$54k at k=50%; all-term 2013 −$106k, 2014 +$53k; 60m loans in 2014 +$228k. Cause untested (hypothesis: price-for-risk margin compression 2013→2015; model training composition also differs by fold) |
+| "SHAP: interest rate, credit score and DTI are the top 3 features" | **WEAKENED** (interest rate first CONFIRMED) | interest_rate first in 8/8 models (29–38%); fico_mean top-3 only in LR; annual_income and loan_amount fill ranks 2–3 for boosters; DTI top-3 for CatBoost, RF, WoE |
+| "Feature attributions are similar across models" | **CONFIRMED** for ranks (H21) | Spearman ≥.83 all pairs, ≥.96 among boosters; dominated by one feature |
+| "EBM/interpretable model can give consistent explanations" (new) | **SUPPORTED** (H22) | top-3 reason codes overlap ≥2/3 with tuned LightGBM for 98.9% of loans (rate allowed), 98.7% (excluded); not a regulatory-compliance claim |
 
 ### Phase 3D changes to the claim table
 | Claim | Status | Evidence |
@@ -351,6 +409,14 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 - The Phase 2 profit conclusions (profit-max accepts ~87%, +$162k over Youden, recall-.80 loses to approve-all) are **conditional on a D2 sample that is ~50% censored vintages**. On mature cells only (≤2013, or 2014/2015 36-month) approve-all is optimal, Youden loses 53%, and even the expected-profit rule is −$32k/−$51k below approve-all.
 - Under 5% p.a. discounting the whole book is unprofitable (approve-all −$297 per applicant on D2; +$475/applicant on mature cells), and at 8% profit-max rejects everything on D2.
 
+### Limitations added in Phase 4
+- **Reason codes are not adverse-action notices.** Whether they satisfy adverse-action-notice requirements (ECOA/Reg B, FCRA) is a legal question outside this study; no compliance claim is made.
+- **Direction-blind labels:** a positive contribution does not always mean "high value"; non-monotone features need direction-aware wording before any customer-facing use.
+- **Attribution is conditional on the model and background distribution:** TreeSHAP (path-dependent), LinearExplainer (5,000-row background) and EBM term scores answer slightly different questions; the RF is on the probability scale, so only ranks and shares are compared. EBM interaction terms are split equally between two features (an arbitrary convention).
+- **Attribution is not causation;** interest_rate dominance reflects the lender's own risk-based pricing.
+- **H20 confound:** OOT folds 2013/2014 train on mixed terms, 2015 on 36m only; the cross-vintage contrast is therefore also a training-set contrast. The explanation for the sign change is hypothesis only.
+- **2,000-row subsamples** per repeat (3 repeats): rank stability is reported, but ranks 6–16 are close together (shares 1–6%) so their order is not a finding.
+
 ### Limitations added in Phase 3D
 - **EM:** the diagnostic shows the prior-shift estimator is sound within a period but cannot be used across years; we make no covariate-shift claim.
 - **Tuning on a 100k subsample** (inner 3-fold, 25 trials, n_estimators in the search space, no early stopping); the nested design leaves the outer-test fold untouched, but tuned hyperparameters may differ on the full 160k; fold-level t-CIs (n=5) assume independent folds. Calibrated t* for tuned/default models uses a 20% hold-out of the outer-training part (single isotonic fit), not a 5-fold OOF.
@@ -380,6 +446,25 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 - **Discounting approximation:** only totals are available; payments are assumed uniform between issue and last payment (recoveries on charged-off loans may arrive later). 5%/8% rates are scenario hurdles, not a funding-cost estimate.
 - **Selection:** funded loans only; "approve-all optimal" means "within the historical approved population", not for rejected applicants.
 
+## Title note (2026-10-17)
+"Ensemble" is not justified as a *combination* method: voting and stacking are equivalent to the best single booster (+.0002 / +.0007 AUC, H17). It could stay only as shorthand for tree-ensemble learners, which would mislead readers. The evidence points to calibration and decision thresholds. Candidate titles:
+1. *Calibration, Not Classifier Choice: Decision Thresholds for Credit-Risk Models on Lending Club Loans*
+2. *Where to Cut: Calibrated Probabilities and Decision Thresholds in Credit Default Prediction*
+3. *Threshold Choice and Probability Calibration in Machine-Learning Credit Scoring: A Multi-Model, Out-of-Time Evaluation*
+4. *Beyond Youden: Calibration, Class Weighting and Profit-Aware Decisions for Peer-to-Peer Credit Risk*
+
+## Paper-ready summary (10 headline findings; datasets: D1 100k legacy-label one quarter, D2 200k strict 2007–2018, D3 200k of the 667k mature-vintage population, OOT = rolling-origin 2013/2014/2015)
+1. **Threshold matters more than the model family at 0.5, not after tuning.** D2, 10 repeats: balanced recall@0.5 spread across 10 models .633 vs AUC spread .027; after Youden tuning recall spread .065 (threshold noise). *CONFIRMED (0.5-vs-tuned), WEAKENED (tuned ranking).*
+2. **After calibration the Youden optimum is the prevalence, and weighting is irrelevant.** mean |t*−π| .006/.005/.004 (D1/D2/D3), max .0056 on 667k; tuned-recall gap none vs balanced .005/.001/.005; raw balanced ECE .22–.25 → .008–.012. *H1, H3, H8, H19 SUPPORTED.*
+3. **RF/ET "threshold failure" is leaf purity, not weighting.** D3 balanced ET recall@0.5 .006 → .631 (leaf 1 → 20); tuned RF picks min_samples_leaf ≈33. *REPLICATES.*
+4. **Boosted trees are interchangeable; combining or tuning them does not help.** D3 AUC: LightGBM .6832, XGBoost/GB/CatBoost within .0011 (equivalent, H9); voting/stacking +.0002/+.0007 (H17); tuned boosters +.0005…+.0023 (RF +.0224, H16); EBM −.0009 (equivalent), WoE scorecard −.0085 (H18). *SUPPORTED.*
+5. **Youden is not profit-optimal; in mature vintages approving everyone beats every threshold rule.** D3 P2-3% per 1000 applicants: approve-all $763k, Elkan $675k, F1-max $474k, Youden $410k (H5); expected-profit rule not better OOT (H6). Exception: 8% hurdle rate. *SUPPORTED.*
+6. **Default-risk ranking under capacity is vintage-dependent, not a pure default-risk story.** Dollar capacity, k=50%, P2-3%: D3 in-time and OOT 2013 below random (−$106k), 2014 +$53k, 2015 36m +$54k; 36m only 2013 −$33k → 2014 +$3k → 2015 +$54k (H20); expected-profit ranking beats random in every fold (+$22k…+$193k). *WEAKENED; cause untested.*
+7. **Interest rate is the lender's own price and carries the result.** D3: removing rate and score costs .0483 AUC and flips the capacity gain −$39.1k → +$49.3k (H11); interest_rate is 29–38% of mean |attribution| and ranked first in all 8 models (H21). *SUPPORTED.*
+8. **Calibration drifts across years and cheap fixes mostly fail.** OOT ECE raw .041/.022/.034; trailing-6-month isotonic helps 1 of 3 folds (H14 rejected); EM prior shift works within a period (|π̂−π| ≤.013) and fails across years. *REJECTED (fix), diagnostic only (cause).*
+9. **Threshold moving matches or beats resampling.** D3, 5 repeats: undersampling ≈ threshold moving (F1 equal); SMOTE moves boosted-tree probabilities little and costs −.009…−.018 AUC for RF/LightGBM/XGBoost (H15 not supported). *WEAKENED.*
+10. **Explanations agree across models, and reason codes from an interpretable model track the best booster.** Spearman of attribution ranks ≥.83 for all pairs (≥.96 among boosters, H21); EBM and tuned-LightGBM top-3 reason codes overlap ≥2/3 for 98.9% of loans (98.7% without interest rate, H22). *SUPPORTED; not a compliance claim.*
+
 ## Open questions
 - [ ] Which environment produced the paper's Table I (pandas version)? The inplace-fillna bug is pandas-3 specific.
 - [ ] Target journal / page budget / required reporting standards?
@@ -392,3 +477,5 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 - [ ] (Phase 3) Deduct `collection_recovery_fee` from realized profit (−2.8% on charged-off loss)? Default: no, per instruction.
 - [ ] (Phase 3) Optuna budget and the nested-CV outer folds (compute)?
 - [ ] (Phase 3) Is a time-value discount (e.g. 5–8% p.a. on monthly cash flows) acceptable, given only totals are available per loan?
+- [ ] (Phase 4) Refit the 2013 and 2014 OOT folds on 36-month loans only to remove the training-composition confound in H20; then (if still unexplained) SHAP by vintage and term.
+- [ ] (Phase 5) Direction-aware reason-code wording and legal review before any customer-facing use.

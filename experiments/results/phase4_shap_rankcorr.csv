@@ -1,0 +1,29 @@
+a,b,spearman,kendall,min_spearman_over_reps
+CatBoost,EBM,0.9529,0.8333,0.95
+CatBoost,Gradient Boosting,0.9686,0.8833,0.9588
+CatBoost,Logistic Regression,0.9255,0.7889,0.9118
+CatBoost,Random Forest (tuned),0.9824,0.9222,0.9765
+CatBoost,WoE Scorecard,0.885,0.7336,0.8624
+Gradient Boosting,EBM,0.9794,0.9167,0.9735
+Gradient Boosting,Logistic Regression,0.95,0.85,0.9441
+Gradient Boosting,Random Forest (tuned),0.9725,0.8944,0.9676
+Gradient Boosting,WoE Scorecard,0.8452,0.6723,0.8271
+LightGBM,CatBoost,0.9657,0.8778,0.9618
+LightGBM,EBM,0.9902,0.9556,0.9882
+LightGBM,Gradient Boosting,0.9922,0.9611,0.9912
+LightGBM,Logistic Regression,0.95,0.8444,0.9353
+LightGBM,Random Forest (tuned),0.9794,0.9111,0.9765
+LightGBM,WoE Scorecard,0.8649,0.7001,0.8536
+LightGBM,XGBoost,0.9931,0.9611,0.9912
+Logistic Regression,EBM,0.9608,0.8778,0.95
+Logistic Regression,WoE Scorecard,0.8266,0.6332,0.8109
+Random Forest (tuned),EBM,0.9676,0.8778,0.9588
+Random Forest (tuned),Logistic Regression,0.9373,0.8111,0.9294
+Random Forest (tuned),WoE Scorecard,0.8869,0.7448,0.8801
+WoE Scorecard,EBM,0.8565,0.689,0.8418
+XGBoost,CatBoost,0.9608,0.8611,0.9559
+XGBoost,EBM,0.9863,0.9389,0.9824
+XGBoost,Gradient Boosting,0.9912,0.9556,0.9853
+XGBoost,Logistic Regression,0.9441,0.8278,0.9265
+XGBoost,Random Forest (tuned),0.9686,0.8833,0.9676
+XGBoost,WoE Scorecard,0.8467,0.6834,0.8433

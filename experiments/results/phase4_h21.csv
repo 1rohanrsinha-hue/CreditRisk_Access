@@ -1,0 +1,4 @@
+clause,value,holds
+1 boosters >= .8,0.9608,True
+2 booster vs LR/WoE >= .6,0.8452,True
+3 interest_rate first in all,,True

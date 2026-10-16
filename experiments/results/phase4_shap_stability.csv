@@ -1,0 +1,9 @@
+model,mean_spearman_across_reps,top3_identical_all_reps,top3
+LightGBM,0.9941,True,interest_rate|annual_income|loan_amount
+XGBoost,0.9941,True,interest_rate|annual_income|loan_amount
+CatBoost,1.0,True,interest_rate|annual_income|debt_to_income
+Gradient Boosting,0.9922,False,interest_rate|annual_income|loan_amount
+Random Forest (tuned),0.9941,False,interest_rate|annual_income|debt_to_income
+Logistic Regression,0.9853,False,interest_rate|fico_mean|loan_amount
+WoE Scorecard,0.9696,True,interest_rate|debt_to_income|annual_income
+EBM,0.9882,True,interest_rate|annual_income|loan_amount
