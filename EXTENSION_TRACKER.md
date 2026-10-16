@@ -292,6 +292,15 @@ _Wording rule: "not equivalent" is not "worse"; CI includes 0 but TOST fails = I
 
 **Fixed design choices.** Task A: same OOT protocol and score code as `oot_scores.py` (fit ≤ T−2, calibrate/threshold on T−1, test T), all three sets restricted to term = 36 for every T; 3 seeds; rankings default-risk (isotonic-calibrated), expected-profit and rate-only; k ∈ {30,50,70}%. Deployment model (task B): tuned LightGBM with numeric parameters = median over the 5 outer folds in `optuna_params.json` (integers rounded; categorical = mode), unweighted, 5-fold OOF isotonic calibration, Platt behind a config switch; EBM companion = 3D configuration (interactions=10). Tiers (task C): PD < 0.75π, 0.75π–1.5π, > 1.5π, review tiers not accept/reject cutoffs. Prototype status is stated in the app and model card.
 
+### Phase 5A results: 36-month refit (2026-10-17; `experiments/term36_refit.py`, `phase5_term36.csv`, `phase5_h23.csv`)
+Training, calibration and test all restricted to 36-month loans; 5 models × 3 seeds; P2-3%, dollar capacity; gain in USD per 1000 loans, Poisson-bootstrap 95% CI on the model-and-seed average. Training sizes: 29,096 (T=2013; `mortgage_accounts` dropped as >50% missing), 72,566 (2014), 172,988 (2015).
+| T | default-risk k=30 / 50 / 70% | expected-profit k=50% | rate-only k=50% | default rate | mean rate % |
+|---|---|---|---|---|---|
+| 2013 | −$36.0k / **−$21.2k** [−28.6, −12.8] / −$5.9k [−14.3, +2.3] | +$62.4k | −$74.7k | .123 | 13.4 |
+| 2014 | −$7.5k / **+$11.6k** [+4.8, +18.0] / +$22.7k | +$43.3k | −$27.0k | .137 | 12.5 |
+| 2015 | +$30.0k / **+$54.3k** [49.2, 59.4] / +$66.0k | +$22.6k | +$32.1k | .149 | 11.3 |
+**H23: SUPPORTED.** gain(2014) − gain(2013) = +$32.8k [21.8k, 43.2k]; gain(2015) − gain(2013) = +$75.5k [65.6k, 84.8k]. The sign pattern survives the 36-month refit (mixed-term fit: 2013 −$33.3k, 2014 +$2.9k). The 2014 gain is larger with the 36m-only fit (+$11.6k, CI now excludes 0). The 2013 fold now trains on only 29k loans (2010–2011 36m), so its level is noisy. 2015 is identical to the earlier run by construction. **No cause is claimed:** the pre-registered rule requires a further test that isolates one, and none has been run (the price-for-risk margin compression remains a hypothesis).
+
 ## Phase 5: Deployment
 - [ ] Persist models/scaler/encoders with joblib (versioned) — `TODO`
 - [ ] Calibrated PD output — `TODO`
