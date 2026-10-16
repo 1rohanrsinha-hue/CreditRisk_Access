@@ -1,0 +1,12 @@
+services:
+  credit-risk:
+    build: .
+    image: credit-risk-prototype:v2
+    ports:
+      - "8000:8000"
+    environment:
+      BORROWER_SHOW_RATE: "false"     # borrower-facing reason codes hide interest_rate (the lender's own price)
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped

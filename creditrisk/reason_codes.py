@@ -47,3 +47,47 @@ def overlap_stats(A, B):
     jac = np.array([len(set(a) & set(b)) / max(1, len(set(a) | set(b))) for a, b in zip(A, B)])
     avail = np.array([min(len(a), len(b)) for a, b in zip(A, B)])
     return ov, jac, avail
+
+
+# ---------------------------------------------------------------------------------------------
+# Direction-aware wording (Phase 5). The sentence depends on whether the applicant's value is
+# above or below the training MEDIAN of that feature, or on the category itself; a missing value
+# gets its own sentence. This describes the value relative to typical borrowers; it is not a
+# causal statement and NOT a regulatory adverse-action notice.
+DIRECTION_LABELS = {
+    'interest_rate':      ("The interest rate on this loan is higher than typical", "The interest rate on this loan is lower than typical"),
+    'fico_mean':          ("Credit score is higher than typical (but still adds risk in combination with other factors)", "Credit score is lower than typical"),
+    'debt_to_income':     ("Debt payments are high relative to income", "Debt payments are low relative to income (but add risk in combination with other factors)"),
+    'annual_income':      ("Annual income is higher than typical (but adds risk in combination with other factors)", "Annual income is lower than typical"),
+    'loan_amount':        ("The requested loan amount is higher than typical", "The requested loan amount is lower than typical"),
+    'credit_inquiries':   ("Number of recent credit inquiries is higher than typical", "Number of recent credit inquiries is lower than typical"),
+    'delinquencies':      ("More delinquencies in the credit history than typical", "Fewer delinquencies than typical (but adds risk in combination with other factors)"),
+    'public_records':     ("More derogatory public records than typical", "Fewer public records than typical (but adds risk in combination with other factors)"),
+    'collections':        ("More accounts sent to collections than typical", "Fewer accounts sent to collections than typical (but adds risk in combination with other factors)"),
+    'num_credit_lines':   ("Number of open credit accounts is higher than typical", "Number of open credit accounts is lower than typical"),
+    'total_credit_lines': ("Total number of credit accounts is higher than typical", "Total number of credit accounts is lower than typical"),
+    'mortgage_accounts':  ("Number of mortgage accounts is higher than typical", "Number of mortgage accounts is lower than typical"),
+    'employment_length':  ("Length of employment is longer than typical (but adds risk in combination with other factors)", "Length of employment is shorter than typical"),
+}
+CATEGORY_LABELS = {
+    'loan_purpose': "Loan purpose ({v}) is associated with higher risk",
+    'home_ownership': "Housing status ({v}) is associated with higher risk",
+}
+MISSING_LABELS = {
+    'emp_length_missing': "Employment length was not reported",
+    'employment_length': "Employment length was not reported",
+}
+
+
+def direction_label(feature, value, median=None):
+    """Plain-language label for a risk-increasing contribution of `feature` at `value`."""
+    if feature in CATEGORY_LABELS:
+        return CATEGORY_LABELS[feature].format(v=str(value).replace('_', ' '))
+    if feature == 'emp_length_missing':
+        return MISSING_LABELS['emp_length_missing']
+    if value is None or (isinstance(value, float) and np.isnan(value)):
+        return MISSING_LABELS.get(feature, f"{feature} was not reported")
+    if feature in DIRECTION_LABELS:
+        hi, lo = DIRECTION_LABELS[feature]
+        return hi if (median is None or value >= median) else lo
+    return LABELS.get(feature, feature)
