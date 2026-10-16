@@ -301,13 +301,35 @@ Training, calibration and test all restricted to 36-month loans; 5 models × 3 s
 | 2015 | +$30.0k / **+$54.3k** [49.2, 59.4] / +$66.0k | +$22.6k | +$32.1k | .149 | 11.3 |
 **H23: SUPPORTED.** gain(2014) − gain(2013) = +$32.8k [21.8k, 43.2k]; gain(2015) − gain(2013) = +$75.5k [65.6k, 84.8k]. The sign pattern survives the 36-month refit (mixed-term fit: 2013 −$33.3k, 2014 +$2.9k). The 2014 gain is larger with the 36m-only fit (+$11.6k, CI now excludes 0). The 2013 fold now trains on only 29k loans (2010–2011 36m), so its level is noisy. 2015 is identical to the earlier run by construction. **No cause is claimed:** the pre-registered rule requires a further test that isolates one, and none has been run (the price-for-risk margin compression remains a hypothesis).
 
-## Phase 5: Deployment
-- [ ] Persist models/scaler/encoders with joblib (versioned) — `TODO`
-- [ ] Calibrated PD output — `TODO`
-- [ ] Risk bands and cutoff derived from Phase 2 results — `TODO`
-- [ ] Fix `/api/predict` (encoder handling, defaults, per-model threshold) — `TODO`
-- [ ] Docker — `TODO`
-- [ ] Basic tests — `TODO`
+## Phase 5: Deployment  (done 2026-10-17; code on branch `app-v2`, study results on `journal-extension`)
+- [x] 36-month refit (H23) — `DONE` (journal-extension) — **H23 SUPPORTED**
+- [x] Persist the pipeline with joblib (versioned, hash/schema/version-validated load) — `DONE` — `creditrisk/serving.py`, `scripts/train_deploy.py`, `models/deploy/`
+- [x] Calibrated PD output (isotonic default, Platt switch) — `DONE`
+- [x] Review tiers anchored on π; old hardcoded 15/30/50/70% bands and the 0.5 cutoff removed — `DONE` — `creditrisk/tiers.py`
+- [x] Rewrite `app.py` and templates (no training at request time, strict validation, direction-aware reason codes, prototype notice) — `DONE`
+- [x] Tests (`tests/`) — `DONE` — 39 passed
+- [x] Dockerfile / docker-compose / .dockerignore / README — `WRITTEN, NOT BUILT` (Docker is not installed on this machine; no claim that the image builds or runs)
+
+### Phase 5 results (outcomes against the frozen Phase 5 pre-registration, commit f60b319)
+| id | verdict | key numbers |
+|---|---|---|
+| H23 36-month refit keeps 2013 < 2014, 2015 | **SUPPORTED** | see Phase 5A results above: −$21.2k / +$11.6k / +$54.3k at k=50%; differences +$32.8k [21.8, 43.2] and +$75.5k [65.6, 84.8]. No cause claimed |
+| H24 serving parity | **SUPPORTED** | 1,000 held-out loans: reloaded vs in-memory max |Δ| = 1.1e-16 (calibrated PD) and 1.1e-16 (EBM probability); `/api/predict` vs library call max |Δ| = 0.0 (PD and EBM probability); tiers and reason-code features identical for all 1,000 |
+
+**Persistence** (`models/deploy/`, trained by `python scripts/train_deploy.py`, 495 s, from clean commit `f27d7d3` on app-v2): `bundle.joblib` 1.38 MB (LightGBM pipeline + calibrator + EBM + feature list/dtypes + π + medians + 0.1/99.9% ranges), `metadata.json` (versions: Python 3.13.5, numpy 2.4.4, pandas 3.0.2, scikit-learn 1.8.0, lightgbm 4.6.0, interpret 0.7.8, joblib 1.5.3; schema hash 89c547fad2da2087; training issue dates; git hash; SHA-256 of the bundle), `model_card.md`, `test_metrics.csv`, `tier_report.csv`, `reliability_15bins.csv`, `parity_sample.csv` (1,000 held-out loans, feature values only), `parity_expected_in_memory.csv`. Everything is under 5 MB and is committed; regenerate with the command above (deterministic: two runs gave identical outputs). Data: mature population D3 (667,024 loans; training split 533,619, held-out stratified 20% = 133,405; π = .1483); LightGBM params = median of the 5 outer-fold Optuna winners (numeric, integers rounded): n_estimators 408, learning_rate .0221, num_leaves 12, min_child_samples 109, subsample .788, colsample_bytree .592, reg_lambda .0724; unweighted; isotonic on 5-fold OOF scores (fresh pipeline per fold). EBM = 3D configuration (interactions=10), fit in 406 s.
+**Model-card headline metrics (held-out, in-time, 1,000-resample bootstrap):** ROC-AUC .6898 [.6859, .6937]; PR-AUC .2680 [.2626, .2734]; Brier .1188 [.1177, .1200] (raw .1189); ECE .0028 [.0025, .0053] (raw .0041 [.0032, .0063]); log loss .3905; EBM ROC-AUC .6892 [.6853, .6930], ECE .0035.
+**Recalibration schedule:** annual (documented in README and card). *Note on the prompt's "ECE rose 10–25× out of time":* the study data give about 8–13× for isotonic-on-previous-year (.022/.036/.022 vs this model's in-time .0028) and 5–10× for raw scores; the model card states 8–13×.
+
+**Tiers** (held-out split; edges .1112 and .2224 = 0.75π and 1.5π):
+| tier | share | observed default rate [95% CI] | mean PD | observed − PD [95% CI] | within CI |
+|---|---|---|---|---|---|
+| 1: PD < 0.75π | .393 | .0684 [.0663, .0706] | .0692 | −.0008 [−.0031, +.0013] | yes |
+| 2: 0.75π ≤ PD ≤ 1.5π | .417 | .1605 [.1573, .1639] | .1620 | −.0015 [−.0044, +.0015] | yes |
+| 3: PD > 1.5π | .191 | .2858 [.2796, .2916] | .2825 | +.0033 [−.0019, +.0083] | yes |
+Reliability: mean PD matches the observed rate within the bootstrap CI in all three tiers (in-time); the observed default rate is 4.2× higher in tier 3 than tier 1. This says nothing about out-of-time calibration (see limitations).
+
+**Tests** (`python -m pytest`, 39 passed): `tests/test_creditrisk.py` (encoder/pipeline leak-freeness, calibrator monotonicity, tiers cover all PDs incl. edges, direction-aware labels, borrower view hides interest_rate, input validation, loud load failures on missing dir / version / schema / corrupted hash), `tests/test_app.py` (valid/invalid/missing/unknown-category/out-of-range/non-JSON requests, form, schema, health, pages render with the notice, old bands and 0.5 cutoff absent, figure whitelist, refuses to start without a model, no training code in app.py), `tests/test_parity.py` (H24; skipped if `models/deploy` is absent).
+**Not tested:** Docker build/run (not installed here); load/concurrency; any fairness or regulatory property.
 
 ## Phase 6: Paper support
 - [ ] Auto-export results to CSV and LaTeX tables — `TODO`
@@ -363,6 +385,17 @@ Training, calibration and test all restricted to 36-month loans; 5 models × 3 s
 | 2026-10-17 | Q5: primary results stay at default hyperparameters (as pre-registered); tuned results go in a robustness table | Tuning gain ≤.0023 AUC for boosters (H16) |
 | 2026-10-17 | CORRECTION to the Phase 4 pre-registration's "Fixed design choices": it says EBM "interactions=0 as in 3D"; the 3D EBM actually used interactions=10. H20–H22 hypotheses and decision rules are unchanged. Phase 4 used the 3D configuration (interactions=10; each interaction term split equally between its two features) as primary and reports interactions=0 as a sensitivity (H22 .989 vs .989 at k=3) | Keep the explanation model identical to the model that was benchmarked; frozen text left unedited |
 | 2026-10-17 | SHAP "without rate" reported for both cell D (rate out, FICO kept) and cell F (rate and score out); the prompt asked for A vs F | Cell F removes the score as well; D isolates the rate |
+| 2026-10-17 | Phase 5 pre-registered (H23–H24) at f60b319; branch `app-v2` created from journal-extension after 5A; `paper-v1-baseline` untouched | Per instruction; app/template/Docker work only on app-v2 |
+| 2026-10-17 | Q1: 36-month refit run first (H23 supported) | Cheap; removes the training-composition confound |
+| 2026-10-17 | Q2: output = calibrated PD + three review tiers anchored on π (0.75π, 1.5π) | Approve-all is not beaten by any cutoff on mature vintages |
+| 2026-10-17 | Q3: isotonic default, Platt via `--calibrator platt`, annual recalibration documented | Isotonic ≈ Platt on ECE; drift dominates |
+| 2026-10-17 | Q4: direction-aware labels (value vs training median, category-specific, explicit missing); interest_rate in internal codes only, borrower view hides it unless `BORROWER_SHOW_RATE=true` | Lender's own price is not borrower-actionable |
+| 2026-10-17 | Q5: app.py/templates edited on app-v2 only | Baseline stays reproducible at the tag |
+| 2026-10-17 | Q6: tests for creditrisk/ and Flask routes; Dockerfile for the app (not built: Docker absent) | |
+| 2026-10-17 | Interpretation: "D3 200k sample plus the full mature training split" → the full 667k mature population (it contains the 200k sample), 80/20 stratified split | The sample is a subset; 'plus' would double-count |
+| 2026-10-17 | Deployment trained on 80% (20% held out for the model card), EBM interactions=10 as in 3D | Reportable held-out metrics |
+| 2026-10-17 | Required inputs: no defaults or zero-filling; `employment_length` accepts explicit "not reported" (the model has a missing-indicator feature); `emp_length_missing` is derived, not an input; legacy `revolving_utilization`/`credit_score` fields are gone (the study's feature set uses fico_mean and no revolving utilisation) | Serve exactly the features that were trained and benchmarked |
+| 2026-10-17 | Bundle (1.38 MB, under the 5 MB limit) is committed on app-v2 via negation rules `!models/deploy/bundle.joblib` and `!models/deploy/*.csv` in `.gitignore` (no force-add); the legacy `models/*.pkl` stay ignored | Small enough to version; regenerated deterministically by `scripts/train_deploy.py` |
 
 ## Surprising findings (Phase 1)
 - Youden-threshold recall for a single model is unstable to *column order* (RF std .032) — larger than most inter-model recall differences claimed in the paper.
@@ -381,6 +414,23 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | Sec III-F | "Youden gives the best operating point" | **CHANGED** | not profit-optimal; and in mature vintages no cutoff beats approve-all (Phase 3A) |
 | Sec III-B2 | Imputation paragraph | **WRONG** | pandas fill bug: nothing was imputed (6151 NaNs zero-filled); journal version uses in-fold imputation |
 | Sec V | "CatBoost native categorical handling" | **WRONG** | `cat_features` was never passed in the paper's code; fixed in `creditrisk/models.py` |
+
+### Phase 5 changes to the claim table
+| Claim | Status | Evidence |
+|---|---|---|
+| "Default-risk ranking loses to random under capacity constraints" | **WEAKENED, vintage-dependent; no cause established** | H23 supported: restricting train, calibration and test to 36-month loans keeps 2013 (−$21k) below 2014 (+$12k) and 2015 (+$54k) |
+| "Youden / 0.5 cutoff and fixed 15/30/50/70% bands classify applicants" (conference app) | **REPLACED** | app v2 reports calibrated PD and three review tiers anchored on π; tiers are not accept/reject cutoffs |
+| "A deployed model can reproduce the study's predictions" | **SUPPORTED** (H24) | max |Δ| 1.1e-16 reload, 0.0 API vs library, 1,000 loans |
+| In-time reliability per tier | **HOLDS in-time only** | observed − PD within CI in all 3 tiers on the held-out split |
+
+### Limitations added in Phase 5
+- **Prototype status:** not validated for credit decisions; no fairness, stability, security or regulatory review; Docker artefacts were written but not built.
+- **Funded loans only; mature vintages 2010–2015 only** (no 2016+ loans, no 60-month loans after 2013). Out-of-time performance is worse (AUC ≈ −.016; ECE ≈ 8–13× in-time), hence annual recalibration.
+- **Tiers are review tiers, not accept/reject cutoffs** (approve-all is not beaten by any threshold rule on mature vintages).
+- **Held-out test is a random in-time split;** the reliability-per-tier check does not cover drift.
+- **Input policy:** 60 of ~1,060 scanned held-out loans (5.7%) failed validation (missing or out-of-range values), so the parity sample is the first 1,000 valid ones; the app rejects such inputs rather than imputing.
+- **Reason-code wording** is descriptive relative to the training median, not causal; interest_rate hidden from borrower-facing codes by default (`BORROWER_SHOW_RATE`), still present in the internal `reason_codes` field; legal adequacy is out of scope.
+- **Model trained on 80%** of the mature population (20% held out for the card); a production refit on 100% would change the numbers slightly.
 
 ### Phase 4 changes to the claim table
 | Claim | Status | Evidence |
@@ -478,7 +528,7 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 3. **RF/ET "threshold failure" is leaf purity, not weighting.** D3 balanced ET recall@0.5 .006 → .631 (leaf 1 → 20); tuned RF picks min_samples_leaf ≈33. *REPLICATES.*
 4. **Boosted trees are interchangeable; combining or tuning them does not help.** D3 AUC: LightGBM .6832, XGBoost/GB/CatBoost within .0011 (equivalent, H9); voting/stacking +.0002/+.0007 (H17); tuned boosters +.0005…+.0023 (RF +.0224, H16); EBM −.0009 (equivalent), WoE scorecard −.0085 (H18). *SUPPORTED.*
 5. **Youden is not profit-optimal; in mature vintages approving everyone beats every threshold rule.** D3 P2-3% per 1000 applicants: approve-all $763k, Elkan $675k, F1-max $474k, Youden $410k (H5); expected-profit rule not better OOT (H6). Exception: 8% hurdle rate. *SUPPORTED.*
-6. **Default-risk ranking under capacity is vintage-dependent, not a pure default-risk story.** Dollar capacity, k=50%, P2-3%: D3 in-time and OOT 2013 below random (−$106k), 2014 +$53k, 2015 36m +$54k; 36m only 2013 −$33k → 2014 +$3k → 2015 +$54k (H20); expected-profit ranking beats random in every fold (+$22k…+$193k). *WEAKENED; cause untested.*
+6. **Default-risk ranking under capacity is vintage-dependent, not a pure default-risk story.** Dollar capacity, k=50%, P2-3%: D3 in-time and OOT 2013 below random (−$106k), 2014 +$53k, 2015 36m +$54k; 36m only 2013 −$33k → 2014 +$3k → 2015 +$54k (H20); refit on 36m only −$21k → +$12k → +$54k (H23); expected-profit ranking beats random in every fold (+$22k…+$193k). *WEAKENED; cause untested.*
 7. **Interest rate is the lender's own price and carries the result.** D3: removing rate and score costs .0483 AUC and flips the capacity gain −$39.1k → +$49.3k (H11); interest_rate is 29–38% of mean |attribution| and ranked first in all 8 models (H21). *SUPPORTED.*
 8. **Calibration drifts across years and cheap fixes mostly fail.** OOT ECE raw .041/.022/.034; trailing-6-month isotonic helps 1 of 3 folds (H14 rejected); EM prior shift works within a period (|π̂−π| ≤.013) and fails across years. *REJECTED (fix), diagnostic only (cause).*
 9. **Threshold moving matches or beats resampling.** D3, 5 repeats: undersampling ≈ threshold moving (F1 equal); SMOTE moves boosted-tree probabilities little and costs −.009…−.018 AUC for RF/LightGBM/XGBoost (H15 not supported). *WEAKENED.*
