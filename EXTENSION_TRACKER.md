@@ -224,6 +224,17 @@ SHAP (LightGBM, rep 0, 2,000 test rows): cell A interest_rate 36.4% of mean|SHAP
 | CatBoost | .6832 | .6854 | +.0023 [.0011, .0035] | −.0002 | .0050 → .0059 |
 Best parameters are stable for CatBoost (n_estimators 502 cv .02, depth 7 cv .10) and LightGBM (lr .0215, n_estimators 407) but not for regularisation terms (reg_lambda cv >1.3; min_child_samples cv .68). Tuned RF picks min_samples_leaf ≈33 (cv .6) and max_features ≈.38 — the leaf-purity effect again. Tuned RF (.6813) remains .004 below the tuned boosters.
 
+## Phase 4 PRE-REGISTRATION (written 2026-10-17, committed BEFORE tasks A–C; H5–H19 remain frozen)
+_Wording rule: "not equivalent" is not "worse". If a TOST fails but the difference CI includes 0 the cell is labelled INCONCLUSIVE._
+
+| id | Hypothesis | Decision rule (fixed now) |
+|---|---|---|
+| H20 | Restricted to 36-month loans only, the 2013 default-risk-ranking dollar-capacity gain over random (P2-3%, k=50%) is still below the 2014 and 2015 gains, i.e. term mix alone does not explain the sign change | Cells = mean over 5 models × 3 seeds of the OOT score cache, 36m test loans only. SUPPORTED if gain(2014) − gain(2013) and gain(2015) − gain(2013) are both > 0 with 95% bootstrap CIs excluding 0 (independent bootstrap across vintages). INCONCLUSIVE if both point differences are > 0 but a CI includes 0. REJECTED if either point difference is ≤ 0 (term mix explains the sign change). Direction reported either way |
+| H21 | Mean-\|SHAP\| feature-rank Spearman is ≥ .8 for every pair among {LightGBM, XGBoost, CatBoost, GB}, ≥ .6 between each of those four and each of {LR, WoE}, and interest_rate ranks first in every model that includes it | D3, unweighted, raw scores, 3 repeats × 2,000 seeded test rows; with-rate cell is primary. Ranks over original features (one-hot dummies summed within feature before ranking). Spearman computed per repeat then averaged; the threshold applies to the mean. SUPPORTED only if all three clauses hold; each reported separately. Scales differ (log-odds vs probability for RF) — ranks only |
+| H22 | For ≥ 70% of test loans, the top-3 risk-increasing reason codes overlap in ≥ 2 of 3 features between tuned LightGBM (TreeSHAP) and the EBM | 2,000 seeded test rows × 3 repeats, pooled. Primary = interest_rate allowed; the version with interest_rate excluded from reason codes (model still uses it) is reported separately with its own verdict. Risk-increasing = positive contribution to log-odds of default; loans with < 3 positive contributions use the available ones and overlap is capped at their count (reported). SUPPORTED if the pooled share ≥ .70 |
+
+**Fixed design choices.** Term/vintage split uses the existing OOT score cache (`.cache/oot_scores`), rankings default-risk, expected-profit and interest-rate-only; k ∈ {30,50,70}%; paired bootstrap 1,000 draws. SHAP: TreeExplainer (trees; RF tuned with `optuna_params.json` medians), LinearExplainer (LR), native additive term contributions (EBM, interactions=0 as in 3D), exact points (WoE, coef × WoE). Reason-code labels live in `creditrisk/reason_codes.py`. No regulatory-compliance claim is made.
+
 ## Phase 4: Explainability
 - [ ] SHAP on all models with 2000+ samples — `TODO`
 - [ ] Rank correlation of attributions across models — `TODO`
