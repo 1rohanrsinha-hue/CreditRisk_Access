@@ -88,3 +88,8 @@ catboost_info/
 # track small result artefacts without force-adding
 !experiments/results/*.csv
 !experiments/figures/*.png
+
+# paper assets are tracked (small)
+!paper_assets/tables/*.csv
+!paper_assets/*.csv
+!paper_assets/figures/*.png
