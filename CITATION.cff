@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software or its results, please cite it as below."
+type: software
+title: "Calibration, Base Rates and Decision Thresholds in Credit-Risk Classification: A Multi-Dataset Study"
+authors:
+  - given-names: Rohan
+    family-names: Sinha
+  - given-names: Kaliraj
+    family-names: S
+repository-code: "https://github.com/1rohanrsinha-hue/CreditRisk_Access"
+license: MIT
