@@ -3,9 +3,9 @@
 <p class="muted">Companion to a study of 10 machine-learning models on Lending Club loans (2007&ndash;2018). This app serves one pre-trained, calibrated model; it does not train anything.</p>
 <div class="grid">
  <div class="card"><h3>What the study found</h3><ul>
-  <li><b>Calibration, not the cutoff, carries the decision.</b> After calibration the Youden-optimal threshold equals the default prevalence (&pi;), whatever the class weighting.</li>
-  <li><b>No cutoff beats approving everyone</b> on mature vintages (profit, out-of-time): thresholds trade away profitable loans.</li>
-  <li><b>Boosted trees are interchangeable</b>: LightGBM, XGBoost, CatBoost and gradient boosting are statistically equivalent (&plusmn;.005 AUC); ensembling and tuning add &le; .002 AUC.</li>
+  <li><b>Calibration, not the cutoff, carries the decision.</b> After calibration the Youden-optimal threshold lies close to the default prevalence (&pi;), whatever the class weighting (mean |t*&minus;&pi;| .004&ndash;.006 on the three Lending Club sets, .014 on Taiwan, .044 on the 1,000-row German Credit set).</li>
+  <li><b>No cutoff beats approving everyone</b> on mature vintages at 0&ndash;3% discount (in-time, H5), and the expected-profit rule did not beat it out of time (H6); the exception is an 8% hurdle rate.</li>
+  <li><b>Boosted trees are interchangeable</b>: LightGBM, XGBoost, CatBoost and gradient boosting are statistically equivalent (&plusmn;.005 AUC); combining tree ensembles (soft voting, stacking) adds at most +0.0007 AUC (H17); tuning gives no meaningful gain for the boosted models (at most +0.0023), and only random forest gains materially from tuning (+0.0224, H16).</li>
   <li><b>Calibration drifts out of time</b>, so the calibrator must be refit on recent labelled loans (at least annually).</li></ul></div>
  <div class="card"><h3>What this app outputs</h3><ul>
   <li>A <b>calibrated probability of default</b> (PD) from tuned LightGBM.</li>

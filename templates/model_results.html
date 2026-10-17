@@ -1,6 +1,6 @@
 {% extends "base.html" %}{% block title %}Study results{% endblock %}{% block body %}
 <h1>Study results (cached, read-only)</h1>
-<p class="muted">Tables are read from <code>experiments/results/</code>; nothing is retrained. D3 = mature-vintage Lending Club loans.</p>
+<p class="muted">Tables are read from <code>experiments/results/</code>; nothing is retrained. D3 = mature-vintage Lending Club loans, the headline set; every table below is D3 or out-of-time folds of it. Figures say in their caption if they use another sample (the calibration figures are D2).</p>
 <h2>Discrimination: most models are equivalent</h2>
 <div class="card tablewrap"><table><tr><th>Model</th><th>ROC-AUC</th><th>&Delta; vs best</th><th>CI low</th><th>CI high</th><th>Equivalent (&plusmn;.005)</th></tr>
 {% for r in stats_rows %}<tr>{% for c in r %}<td>{{ c }}</td>{% endfor %}</tr>{% endfor %}</table>

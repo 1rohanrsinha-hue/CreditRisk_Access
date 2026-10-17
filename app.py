@@ -21,9 +21,9 @@ from creditrisk.tiers import TIER_NAMES, TIER_DEFINITIONS
 
 FIGURES_DIR = ROOT / "experiments" / "figures"
 SHOWN_FIGURES = {
-    'reliability_diagrams.png': "Reliability diagrams: raw vs Platt/isotonic calibrated scores",
-    'tstar_vs_pi.png': "Youden-optimal threshold t* equals the prevalence pi after calibration",
-    'profit_d3.png': "Mature vintages: no threshold rule earns more than approving everyone",
+    'reliability_diagrams.png': "Reliability diagrams: raw vs isotonic calibrated scores (D2 sample, repeat 0; not the D3 headline set)",
+    'tstar_vs_pi.png': "Youden-optimal threshold t* by calibration (D2 sample, mean ± sd over repeats; not the D3 headline set): after calibration it lies close to the prevalence pi",
+    'profit_d3.png': "D3 (mature vintages), in-time: no threshold rule earns more than approving everyone at 0-3% discount",
     'capacity_v2.png': "Capacity-constrained approval: dollar vs count capacity",
     'drift_fixes.png': "Out-of-time calibration drift and recalibration fixes",
     'phase4_shap_top10.png': "Top-10 features by share of mean |attribution|",
