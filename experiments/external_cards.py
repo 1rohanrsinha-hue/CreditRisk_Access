@@ -10,6 +10,10 @@ OUT = ROOT / "docs" / "data_cards"
 OUT.mkdir(parents=True, exist_ok=True)
 
 
+URLS = {'german.data': 'https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/german.data',
+        'taiwan.xls': 'https://archive.ics.uci.edu/ml/machine-learning-databases/00350/default%20of%20credit%20card%20clients.xls'}
+
+
 def sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
@@ -20,9 +24,9 @@ def common(name, source, file, X, y, spec, label_txt, leak_txt, enc_txt, extra):
     dup = int(pd.concat([X, y.rename('y')], axis=1).duplicated().sum())
     lines = [f"# Data card: {name}", "",
              f"- **Source name:** {source}",
-             "- **Source URL (citation):** FILL IN  (direct-download URL used by `scripts/fetch_external.sh`)",
-             "- **Licence:** FILL IN (not verified)",
-             "- **Access date:** FILL IN",
+             f"- **Source URL (direct download used by `scripts/fetch_external.sh`):** {URLS[file]}",
+             "- **Licence:** UNKNOWN (the downloaded file carries no licence text; not verified against the source page)",
+             "- **Access date:** 2026-10-17 (file modification time of the downloaded copy in `external_data/`; no other record)",
              f"- **File:** `external_data/{file}` (git-ignored); sha256 prefix `{sha(EXT_DIR / file)}`",
              f"- **Rows:** {n:,}   **Feature columns:** {p}   (nominal {len(spec.nominal)}, ordinal {len(spec.ordinal)}, numeric {len(spec.numeric)})",
              f"- **Positive class (bad/default) rate:** {y.mean():.4f}  ({int(y.sum()):,} positives)",

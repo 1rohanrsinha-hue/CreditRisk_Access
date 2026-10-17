@@ -8,7 +8,7 @@
 #
 # DATA AVAILABILITY. The Lending Club accepted-loans file `accepted_2007_to_2018Q4.csv` is NOT redistributed in this
 # repository. Obtain it from its public source and place it at the repository root.
-#   Source / URL / licence / date accessed:  <<< FILL IN (the authors must supply this; no URL is given here) >>>
+#   Source / URL / licence / date accessed:  <<< UNKNOWN (no URL or licence is recorded; see docs/data_cards/lending_club.md) >>>
 # If you only have the .csv.gz, run `python extract_dataset.py` first.
 #
 # ENVIRONMENT. Python 3.13 (results were produced with 3.13.5 on macOS arm64, 10 cores) and the pinned packages in
@@ -83,7 +83,7 @@ stage p4_reason_codes          "1 min"      "$PY experiments/reason_codes_study.
 # ---- Phase 5 / 6 (study side, journal-extension)
 stage p5_term36                "~10 min"    "$PY experiments/term36_refit.py"
 stage p6_deploy_oot            "~10 min (3 folds in parallel)" "for T in 2013 2014 2015; do $PY experiments/deploy_oot.py --stage run --T \$T --n-jobs 3 & done; wait; $PY experiments/deploy_oot.py --stage collect"
-# ---- Phase 7 external datasets (German Credit and Taiwan from UCI; Give Me Some Credit is not used). Data URL/licence/date: FILL IN (see docs/data_cards/)
+# ---- Phase 7 external datasets (German Credit and Taiwan from UCI; Give Me Some Credit is not used). Data URL/licence/date: see (see docs/data_cards/)
 stage p7_fetch_external        "~1 min"     "bash scripts/fetch_external.sh && $PY -m pip install -q xlrd && $PY experiments/external_cards.py"
 stage p7_score_german          "~5 min"     "$PY experiments/external_study.py --stage score --dataset GERMAN --n-jobs 2"
 stage p7_score_taiwan          "~60 min (2 workers)" "for w in 0 1; do $PY experiments/external_study.py --stage score --dataset TAIWAN --worker \$w --n-workers 2 --n-jobs 2 & done; wait"

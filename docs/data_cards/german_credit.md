@@ -1,9 +1,9 @@
 # Data card: Statlog German Credit Data
 
 - **Source name:** UCI Machine Learning Repository, 'Statlog (German Credit Data)' (Hofmann)
-- **Source URL (citation):** FILL IN  (direct-download URL used by `scripts/fetch_external.sh`)
-- **Licence:** FILL IN (not verified)
-- **Access date:** FILL IN
+- **Source URL (direct download used by `scripts/fetch_external.sh`):** https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/german.data
+- **Licence:** UNKNOWN (the downloaded file carries no licence text; not verified against the source page)
+- **Access date:** 2026-10-17 (file modification time of the downloaded copy in `external_data/`; no other record)
 - **File:** `external_data/german.data` (git-ignored); sha256 prefix `b21f3d81db807125`
 - **Rows:** 1,000   **Feature columns:** 20   (nominal 12, ordinal 1, numeric 7)
 - **Positive class (bad/default) rate:** 0.3000  (300 positives)

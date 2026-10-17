@@ -96,3 +96,15 @@ catboost_info/
 
 external_data/
 venv.txt
+
+# archives, exports and local data
+*.zip
+*.parquet
+*.npz
+*.npy
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+catboost_info/
+external_data/

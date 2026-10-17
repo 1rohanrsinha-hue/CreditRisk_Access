@@ -1,9 +1,9 @@
 # Data card: Default of Credit Card Clients (Taiwan)
 
 - **Source name:** UCI Machine Learning Repository, 'Default of Credit Card Clients' (Yeh and Lien, 2009)
-- **Source URL (citation):** FILL IN  (direct-download URL used by `scripts/fetch_external.sh`)
-- **Licence:** FILL IN (not verified)
-- **Access date:** FILL IN
+- **Source URL (direct download used by `scripts/fetch_external.sh`):** https://archive.ics.uci.edu/ml/machine-learning-databases/00350/default%20of%20credit%20card%20clients.xls
+- **Licence:** UNKNOWN (the downloaded file carries no licence text; not verified against the source page)
+- **Access date:** 2026-10-17 (file modification time of the downloaded copy in `external_data/`; no other record)
 - **File:** `external_data/taiwan.xls` (git-ignored); sha256 prefix `30c6be3abd8dcfd3`
 - **Rows:** 30,000   **Feature columns:** 23   (nominal 3, ordinal 6, numeric 14)
 - **Positive class (bad/default) rate:** 0.2212  (6,636 positives)
