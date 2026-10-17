@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{LightGBM and EBM attribution with and without the interest rate.}
+\label{tab:T9c_shap_rate}
+\small
+\begin{tabular}{llrrll}
+\toprule
+model & vs\_cell & spearman\_shared\_features & rate\_share\_with & top3\_with & top3\_without \\
+\midrule
+LightGBM & no\_rate & 0.836 & 0.365 & interest\_rate|annual\_income|loan\_amount & fico\_mean|annual\_income|loan\_amount \\
+LightGBM & no\_rate\_no\_score & 0.829 & 0.365 & interest\_rate|annual\_income|loan\_amount & annual\_income|credit\_inquiries|loan\_amount \\
+EBM & no\_rate & 0.871 & 0.329 & interest\_rate|annual\_income|loan\_amount & fico\_mean|annual\_income|loan\_amount \\
+EBM & no\_rate\_no\_score & 0.837 & 0.329 & interest\_rate|annual\_income|loan\_amount & annual\_income|credit\_inquiries|loan\_amount \\
+\bottomrule
+\end{tabular}
+\end{table}

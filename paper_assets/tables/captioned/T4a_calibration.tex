@@ -1,0 +1,30 @@
+\begin{table}[t]
+\centering
+\caption{Youden threshold t*, prevalence pi, Brier and ECE by weighting and calibration (mean over models and repeats).}
+\label{tab:T4a_calibration}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllrrrrrr}
+\toprule
+dataset & weighting & calibration & t* & pi & |t*$-$$\pi$| & |t*$-$0.5| & Brier & ECE \\
+\midrule
+D1 & balanced & isotonic & 0.1896 & 0.1824 & 0.0071 & 0.3104 & 0.1386 & 0.0092 \\
+D1 & balanced & platt & 0.1856 & 0.1824 & 0.0064 & 0.3144 & 0.1392 & 0.0150 \\
+D1 & balanced & raw & 0.4313 & 0.1824 & 0.2489 & 0.0690 & 0.2040 & 0.2237 \\
+D1 & none & isotonic & 0.1893 & 0.1824 & 0.0069 & 0.3107 & 0.1386 & 0.0091 \\
+D1 & none & platt & 0.1828 & 0.1824 & 0.0033 & 0.3172 & 0.1392 & 0.0150 \\
+D1 & none & raw & 0.1988 & 0.1824 & 0.0223 & 0.3012 & 0.1422 & 0.0318 \\
+D2 & balanced & isotonic & 0.2036 & 0.1994 & 0.0042 & 0.2964 & 0.1466 & 0.0070 \\
+D2 & balanced & platt & 0.2012 & 0.1994 & 0.0049 & 0.2988 & 0.1472 & 0.0130 \\
+D2 & balanced & raw & 0.4368 & 0.1994 & 0.2373 & 0.0642 & 0.2053 & 0.2110 \\
+D2 & none & isotonic & 0.2042 & 0.1994 & 0.0048 & 0.2958 & 0.1466 & 0.0072 \\
+D2 & none & platt & 0.2004 & 0.1994 & 0.0046 & 0.2996 & 0.1472 & 0.0128 \\
+D2 & none & raw & 0.2181 & 0.1994 & 0.0246 & 0.2819 & 0.1499 & 0.0274 \\
+D3 & balanced & isotonic & 0.1515 & 0.1477 & 0.0038 & 0.3485 & 0.1199 & 0.0056 \\
+D3 & balanced & platt & 0.1503 & 0.1477 & 0.0039 & 0.3497 & 0.1203 & 0.0103 \\
+D3 & balanced & raw & 0.4260 & 0.1477 & 0.2784 & 0.0740 & 0.2047 & 0.2539 \\
+D3 & none & isotonic & 0.1520 & 0.1477 & 0.0043 & 0.3480 & 0.1199 & 0.0059 \\
+D3 & none & platt & 0.1490 & 0.1477 & 0.0032 & 0.3510 & 0.1202 & 0.0101 \\
+D3 & none & raw & 0.1681 & 0.1477 & 0.0250 & 0.3319 & 0.1238 & 0.0292 \\
+\bottomrule
+\end{tabular}}
+\end{table}

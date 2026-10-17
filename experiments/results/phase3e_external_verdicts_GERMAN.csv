@@ -1,0 +1,6 @@
+dataset,hyp,n,models_ok,stat,detail,result
+GERMAN,H26,1000,0,0.04357470238577562,mean |t*-pi| over models=0.0436; models with repeat-mean <= .02: 0/6,"n/a (n<20,000: see bootstrap row)"
+GERMAN,"H26 (secondary, balanced)",1000,0,0.0483352713329653,mean |t*-pi| over models=0.0483; models with repeat-mean <= .02: 0/6,"n/a (n<20,000: see bootstrap row)"
+GERMAN,"H26 (bootstrap, n<20,000)",1000,6,1.0,bootstrap 95% CI of t* contains pi for 6/6 models (fraction 1.00),SUPPORTED
+GERMAN,H27,1000,5,0.012037037037036994,"clause1: mean move toward .5 = +0.1043 (5/6 models positive; raw t* none 0.266, balanced 0.379); clause2: mean |tuned recall bal-none| (isotonic) = 0.0120 (limit 0.04); supplementary raw-tuned gap = 0.0126",SUPPORTED
+GERMAN,H28,1000,0,-0.007589065255731886,"best=Random Forest (AUC 0.7816); LightGBM: NOT EQUIVALENT (d=-0.0208, CI [-0.0414,-0.0002], Holm TOST p=1.000, Holm p of the difference=0.190); XGBoost: INCONCLUSIVE (d=-0.0086, CI [-0.0287,+0.0116], Holm TOST p=1.000, Holm p of the difference=1.000); CatBoost: INCONCLUSIVE (d=-0.0076, CI [-0.0250,+0.0098], Holm TOST p=1.000, Holm p of the difference=1.000); Gradient Boosting: INCONCLUSIVE (d=-0.0083, CI [-0.0345,+0.0178], Holm TOST p=1.000, Holm p of the difference=1.000)",NOT SUPPORTED

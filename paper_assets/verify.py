@@ -71,14 +71,69 @@ for r in dep.itertuples():
     chk(f"H25 ECE ratio {r.T} recomputed from seed-level ECE", r.ECE_ratio, seeds['oot'] / seeds['in_time'], 2e-2)
 rc = rd("phase4_reasoncodes.csv").query("rep=='pooled' and ebm=='EBM' and k==3 and version=='rate_allowed'").share_overlap_ge2.iloc[0]
 chk("T13c H22 share", tb("T13c_reason_codes").query("version=='rate_allowed' and k==3")['share with >=2 shared codes'].iloc[0], rc, 1e-6)
-t14 = tb("T14_hypothesis_scorecard"); chk("T14 number of hypotheses", len(t14), 25, 0); chk("T14 H25 verdict present", int((t14.hypothesis == 'H25').sum()), 1, 0)
+EXTD = [d for d in ('GERMAN', 'TAIWAN') if (R / f"phase3e_external_{d}.csv").exists()]
+t14 = tb("T14_hypothesis_scorecard"); chk("T14 number of hypotheses", len(t14), 28 if EXTD else 25, 0); chk("T14 H25 verdict present", int((t14.hypothesis == 'H25').sum()), 1, 0)
+for h in (('H26', 'H27', 'H28') if EXTD else ()):
+    chk(f"T14 {h} present", int((t14.hypothesis == h).sum()), 1, 0)
 for ext in ('csv', 'tex'):
     files = sorted(T.glob(f"*.{ext}")); chk(f"{ext} files exported", len(files), len(list(T.glob('*.csv'))), 0)
+chk("captioned LaTeX files exported", len(list((T / 'captioned').glob('*.tex'))), len(list(T.glob('*.csv'))), 0)
+chk("every captioned table has a label", sum('\\label{tab:' in f.read_text() and '\\caption{' in f.read_text() for f in (T / 'captioned').glob('*.tex')), len(list(T.glob('*.csv'))), 0)
 bad = [f.name for f in T.glob('*.tex') if re.search(r'(^|& )nan( &|\s*\\\\|$)', f.read_text(), re.M)]
 chk("no 'nan' in LaTeX tables", len(bad), 0, 0)
 cl = pd.read_csv(ROOT / "paper_assets" / "claims_parsed_from_tracker.csv"); chk("T15 rows = parsed claims", len(tb("T15_claims")), len(cl.drop_duplicates(subset=['claim', 'tracker_section'])), 0)
 for ext in ('png', 'pdf'):
     chk(f"figures exported ({ext})", len(list((ROOT / 'paper_assets' / 'figures').glob(f'*.{ext}'))), len(list((ROOT / 'paper_assets' / 'figures').glob('*.png'))), 0)
+
+
+# ---------------- external datasets: independent recomputation (own code path, from the cached scores where available)
+from sklearn.isotonic import IsotonicRegression
+from sklearn.metrics import roc_auc_score, roc_curve
+sys.path.insert(0, str(ROOT))
+EXTN = {'GERMAN': 'German Credit', 'TAIWAN': 'Taiwan default'}; BOOST4 = ['LightGBM', 'XGBoost', 'CatBoost', 'Gradient Boosting']
+cross = {}
+for d in EXTD:
+    C = rd(f"phase3e_external_{d}.csv"); iso = C[(C.calib == 'isotonic') & (C.weighting == 'none')]
+    t16 = tb("T16a_external_summary").set_index('dataset').loc[EXTN[d]]
+    chk(f"T16a {d} pi", t16['π'], iso.pi.mean(), 5e-4); chk(f"T16a {d} mean t* isotonic", t16['mean t* (isotonic)'], iso.t_star.mean(), 5e-4)
+    chk(f"T16a {d} mean |t*-pi|", t16['mean |t*−π| (isotonic)'], (iso.t_star - iso.pi).abs().mean(), 5e-4)
+    chk(f"{d} rows = repeats x models x weightings x calibrators", len(C), C.rep.nunique() * 6 * 2 * 3, 0)
+    chk(f"{d} abs_dev_pi column equals |t*-pi|", float((C.abs_dev_pi - (C.t_star - C.pi).abs()).abs().max()), 0, 1e-9)
+    # independent recomputation from cached scores (rep 0, LightGBM, unweighted)
+    z = ROOT / ".cache" / "external" / d / "r00__LightGBM__none.npz"
+    if z.exists():
+        from creditrisk.external import LOADERS
+        _, y, _ = LOADERS[d](); y = y.values; q = np.load(z); ytv, yte = y[q['idx_tv']], y[q['idx_te']]
+        row = C[(C.rep == 0) & (C.model == 'LightGBM') & (C.weighting == 'none')].set_index('calib')
+        chk(f"{d} raw AUC recomputed from cached scores", row.loc['raw', 'ROC_AUC_raw'], roc_auc_score(yte, q['te']), 1e-9)
+        iso_m = IsotonicRegression(y_min=0, y_max=1, out_of_bounds='clip').fit(q['oof'], ytv); so = iso_m.predict(q['oof'])
+        f, t_, th = roc_curve(ytv, so); chk(f"{d} isotonic Youden t* recomputed", row.loc['isotonic', 't_star'], th[np.argmax(t_ - f)], 1e-9)
+        chk(f"{d} pi = training prevalence", row.loc['isotonic', 'pi'], ytv.mean(), 1e-9)
+        chk(f"{d} recall at t* recomputed", row.loc['isotonic', 'Recall_tuned'], float(((iso_m.predict(q['te']) >= th[np.argmax(t_ - f)]) & (yte == 1)).sum() / yte.sum()), 1e-9)
+    else:
+        print(f"[skip] {d}: cached scores not present, independent recomputation skipped")
+    # H27 / H26 verdict numbers recomputed
+    V = rd(f"phase3e_external_verdicts_{d}.csv").set_index('hyp')
+    raw = C[C.calib == 'raw']; tt = raw.groupby(['weighting']).t_star.mean()
+    chk(f"{d} H27 raw t* none vs balanced consistent with verdict text", float(f"{tt['none']:.3f}" in V.loc['H27', 'detail'] and f"{tt['balanced']:.3f}" in V.loc['H27', 'detail']), 1, 0)
+    # criteria C1..C5 (T17)
+    r5 = raw.groupby(['model', 'weighting'])['Recall_0.5'].mean().unstack(); rt = raw.groupby(['model', 'weighting']).Recall_tuned.mean().unstack()
+    t17 = tb("T17_cross_dataset_replication").set_index('claim')
+    chk(f"T17 {d} C1", float(t17.loc['C1', EXTN[d]]), (r5['balanced'] - r5['none']).mean(), 6e-4); chk(f"T17 {d} C2", float(t17.loc['C2', EXTN[d]]), (rt['balanced'] - rt['none']).abs().mean(), 6e-4)
+    chk(f"T17 {d} C3", float(t17.loc['C3', EXTN[d]]), (C[C.calib != 'raw'].t_star - C[C.calib != 'raw'].pi).abs().mean(), 6e-4)
+    au = raw[(raw.weighting == 'none') & raw.model.isin(BOOST4)].groupby('model').ROC_AUC_raw.mean(); chk(f"T17 {d} C5", float(t17.loc['C5', EXTN[d]]), au.max() - au.min(), 6e-4)
+if EXTD:
+    dd = rd("phase2_calibration_D3.csv"); cc = dd[dd.calib != 'raw']
+    chk("T17 D3 C3 recomputed", float(tb("T17_cross_dataset_replication").set_index('claim').loc['C3', 'D3']), (cc.t_star_mean - cc.pi_mean).abs().mean(), 6e-4)
+    ww = rd("phase2_weighting_D3.csv"); a_ = ww[(ww.thr_rule.astype(str) == '0.5')].pivot(index='model', columns='weighting', values='Recall_mean')
+    chk("T17 D3 C1 recomputed", float(tb("T17_cross_dataset_replication").set_index('claim').loc['C1', 'D3']), (a_['balanced'] - a_['none']).mean(), 6e-4)
+    for d in EXTD:   # tracker statements for H26-H28 (numbers must match the verdict CSVs)
+        V = rd(f"phase3e_external_verdicts_{d}.csv").set_index('hyp')
+        for h in ('H27', 'H28'):
+            col = 2 if d == 'GERMAN' else 3     # column of the Phase 7 verdict table in the tracker
+            row = [ln for ln in TR.splitlines() if ln.startswith('| ' + {'H27': 'H27 weighting', 'H28': 'H28 booster equivalence'}[h])]
+            cell = row[0].split(' | ')[col - 1].replace('*', '') if row else ''
+            chk(f"tracker {d} {h} verdict '{V.loc[h, 'result']}' matches the results table", float(cell.strip().startswith(V.loc[h, 'result'])), 1, 0, kind='tracker')
 
 # ---------------- tracker statements vs sources
 tracker_has("H11 delta AUC A-F", ".0483", ac.loc['A', 'ROC_AUC'] - ac.loc['F', 'ROC_AUC'], 4, 1)

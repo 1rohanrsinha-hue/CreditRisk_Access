@@ -1,0 +1,11 @@
+dataset,group,model,best,AUC,best AUC,Δ AUC,CI low,CI high,p (Holm),TOST p (Holm),result
+German Credit,booster,LightGBM,Random Forest,0.76076,0.781594,-0.020834,-0.041419,-0.000249,0.189863,1.0,NOT EQUIVALENT
+German Credit,booster,XGBoost,Random Forest,0.773044,0.781594,-0.00855,-0.028687,0.011586,1.0,1.0,INCONCLUSIVE
+German Credit,booster,CatBoost,Random Forest,0.774005,0.781594,-0.007589,-0.024976,0.009798,1.0,1.0,INCONCLUSIVE
+German Credit,booster,Gradient Boosting,Random Forest,0.773265,0.781594,-0.00833,-0.034465,0.017806,1.0,1.0,INCONCLUSIVE
+German Credit,other,Logistic Regression,Random Forest,0.774303,0.781594,-0.007291,-0.030754,0.016172,0.530062,0.578446,INCONCLUSIVE
+Taiwan default,booster,LightGBM,CatBoost,0.78061,0.782835,-0.002225,-0.00628,0.00183,0.559971,0.153643,INCONCLUSIVE
+Taiwan default,booster,XGBoost,CatBoost,0.781011,0.782835,-0.001825,-0.005199,0.001549,0.559971,0.093209,INCONCLUSIVE
+Taiwan default,booster,Gradient Boosting,CatBoost,0.780443,0.782835,-0.002392,-0.006178,0.001394,0.559971,0.153643,INCONCLUSIVE
+Taiwan default,other,Logistic Regression,CatBoost,0.720348,0.782835,-0.062488,-0.070906,-0.054069,0.0,1.0,NOT EQUIVALENT
+Taiwan default,other,Random Forest,CatBoost,0.762317,0.782835,-0.020518,-0.025608,-0.015428,8e-06,1.0,NOT EQUIVALENT

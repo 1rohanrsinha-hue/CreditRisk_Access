@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Nested-CV Optuna tuning (5 outer folds, 25 trials) against defaults.}
+\label{tab:T12d_tuning}
+\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+model & AUC\_default & AUC\_tuned & $\Delta$ AUC & CI low & CI high & dBrier & abs\_t\_pi\_tuned \\
+\midrule
+Logistic Regression & 0.6786 & 0.6786 & -0.0000 & -0.0001 & 0.0000 & -0.0000 & 0.0080 \\
+LightGBM & 0.6842 & 0.6854 & 0.0012 & 0.0007 & 0.0017 & -0.0001 & 0.0037 \\
+XGBoost & 0.6843 & 0.6848 & 0.0005 & -0.0004 & 0.0015 & -0.0001 & 0.0054 \\
+Random Forest & 0.6589 & 0.6813 & 0.0224 & 0.0208 & 0.0240 & -0.0026 & 0.0080 \\
+CatBoost & 0.6832 & 0.6854 & 0.0023 & 0.0010 & 0.0035 & -0.0002 & 0.0059 \\
+\bottomrule
+\end{tabular}
+\end{table}

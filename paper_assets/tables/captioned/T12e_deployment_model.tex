@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\caption{Held-out (in-time) metrics of the deployment model on 133,405 loans with 95\% bootstrap CIs.}
+\label{tab:T12e_deployment_model}
+\small
+\begin{tabular}{lllrrr}
+\toprule
+model & scores & metric & value & CI low & CI high \\
+\midrule
+LightGBM (tuned) & calibrated PD & ROC-AUC & 0.6898 & 0.6859 & 0.6936 \\
+LightGBM (tuned) & calibrated PD & Brier & 0.1188 & 0.1177 & 0.1200 \\
+LightGBM (tuned) & calibrated PD & ECE & 0.0028 & 0.0025 & 0.0053 \\
+LightGBM (tuned) & raw score & ROC-AUC & 0.6898 & 0.6858 & 0.6936 \\
+LightGBM (tuned) & raw score & Brier & 0.1188 & 0.1177 & 0.1201 \\
+LightGBM (tuned) & raw score & ECE & 0.0041 & 0.0032 & 0.0063 \\
+LightGBM (tuned) & calibrated PD & PR-AUC & 0.2680 & 0.2626 & 0.2734 \\
+LightGBM (tuned) & calibrated PD & LogLoss & 0.3905 & 0.3873 & 0.3937 \\
+EBM (companion) & raw probability & ROC-AUC & 0.6892 & 0.6853 & 0.6930 \\
+EBM (companion) & raw probability & ECE & 0.0035 & 0.0030 & 0.0060 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,14 @@
+\begin{table}[t]
+\centering
+\caption{Mean recall and threshold by threshold-selection protocol (A: tuned on test, B: on validation, C: on out-of-fold scores) and rank correlation of model recall across protocols.}
+\label{tab:T2b_protocols}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrr}
+\toprule
+dataset & mean\_recall\_A\_test & mean\_recall\_B\_val & mean\_recall\_C\_oof & mean\_threshold\_A & mean\_threshold\_B & mean\_threshold\_C & spearman\_recall\_A\_vs\_B & spearman\_recall\_A\_vs\_C \\
+\midrule
+D1 & 0.670 & 0.651 & 0.658 & 0.350 & 0.357 & 0.353 & -0.406 & 0.152 \\
+D2 & 0.661 & 0.690 & 0.671 & 0.371 & 0.355 & 0.364 & -0.018 & 0.055 \\
+\bottomrule
+\end{tabular}}
+\end{table}

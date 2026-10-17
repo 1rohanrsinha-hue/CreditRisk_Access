@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering
+\caption{Recall and AUC spread across the 10 models by weighting and threshold rule.}
+\label{tab:T3_weighting_x_threshold}
+\small
+\begin{tabular}{lllllrr}
+\toprule
+dataset & weighting & threshold & recall spread (mean $\pm$ sd) & AUC spread (mean $\pm$ sd) & mean recall & repeats \\
+\midrule
+D1 & balanced & 0.5 & 0.641 $\pm$ 0.016 & 0.036 $\pm$ 0.003 & 0.534 & 5 \\
+D1 & balanced & tuned & 0.081 $\pm$ 0.029 & 0.036 $\pm$ 0.003 & 0.663 & 5 \\
+D1 & none & 0.5 & 0.046 $\pm$ 0.003 & 0.033 $\pm$ 0.004 & 0.039 & 5 \\
+D1 & none & tuned & 0.080 $\pm$ 0.008 & 0.033 $\pm$ 0.004 & 0.668 & 5 \\
+D2 & balanced & 0.5 & 0.633 $\pm$ 0.018 & 0.027 $\pm$ 0.002 & 0.541 & 10 \\
+D2 & balanced & tuned & 0.065 $\pm$ 0.015 & 0.027 $\pm$ 0.002 & 0.670 & 10 \\
+D2 & none & 0.5 & 0.038 $\pm$ 0.005 & 0.024 $\pm$ 0.001 & 0.058 & 10 \\
+D2 & none & tuned & 0.078 $\pm$ 0.026 & 0.024 $\pm$ 0.001 & 0.669 & 10 \\
+D3 & balanced & 0.5 & 0.671 $\pm$ 0.005 & 0.032 $\pm$ 0.002 & 0.522 & 10 \\
+D3 & balanced & tuned & 0.077 $\pm$ 0.026 & 0.032 $\pm$ 0.002 & 0.661 & 10 \\
+D3 & none & 0.5 & 0.019 $\pm$ 0.001 & 0.031 $\pm$ 0.002 & 0.005 & 10 \\
+D3 & none & tuned & 0.080 $\pm$ 0.020 & 0.031 $\pm$ 0.002 & 0.656 & 10 \\
+\bottomrule
+\end{tabular}
+\end{table}

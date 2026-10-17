@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{EBM and WoE scorecard against the best boosting model, with and without the interest rate.}
+\label{tab:T12c_interpretable}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllrrrrrrl}
+\toprule
+cell & model & best\_boosting & model\_auc & best\_auc & $\Delta$ AUC & CI low & CI high & TOST p (Holm) & label \\
+\midrule
+with\_rate & WoE Scorecard & LightGBM & 0.6757 & 0.6841 & -0.0085 & -0.0105 & -0.0064 & 0.9955 & not equivalent \\
+with\_rate & EBM & LightGBM & 0.6832 & 0.6841 & -0.0009 & -0.0029 & +0.0011 & 0.0049 & equivalent \\
+no\_rate & WoE Scorecard & LightGBM & 0.6415 & 0.6582 & -0.0167 & -0.0199 & -0.0135 & 0.9997 & not equivalent \\
+no\_rate & EBM & LightGBM & 0.6580 & 0.6582 & -0.0002 & -0.0030 & +0.0026 & 0.0089 & equivalent \\
+\bottomrule
+\end{tabular}}
+\end{table}

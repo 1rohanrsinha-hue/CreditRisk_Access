@@ -10,7 +10,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 R = ROOT / "experiments" / "results"; FIGSRC = ROOT / "experiments" / "figures"
 OUT = ROOT / "paper_assets"; TAB = OUT / "tables"; FIG = OUT / "figures"
-TAB.mkdir(parents=True, exist_ok=True); FIG.mkdir(parents=True, exist_ok=True)
+CAP = TAB / "captioned"
+TAB.mkdir(parents=True, exist_ok=True); FIG.mkdir(parents=True, exist_ok=True); CAP.mkdir(parents=True, exist_ok=True)
 ASSETS = []
 TRACKER = (ROOT / "EXTENSION_TRACKER.md").read_text()
 
@@ -68,6 +69,10 @@ def emit(tid, title, df, sources, claim, caption, fmt=None, hyp=''):
     num = df.select_dtypes(include=[float]).columns
     df.assign(**{c: df[c].round(6) for c in num}).to_csv(TAB / f"{tid}.csv", index=False)
     write_tex(df, TAB / f"{tid}.tex", fmt)
+    tab = (TAB / f"{tid}.tex").read_text()
+    wide = len(df.columns) > 8
+    (CAP / f"{tid}.tex").write_text("\\begin{table}[t]\n\\centering\n\\caption{" + esc(caption) + "}\n\\label{tab:" + tid + "}\n" +
+                                    ("\\resizebox{\\textwidth}{!}{%\n" + tab.rstrip('\n') + "}\n" if wide else "\\small\n" + tab) + "\\end{table}\n")
     ASSETS.append(dict(kind='table', id=tid, title=title, sources=sources, claim=claim, caption=caption, hyp=hyp))
     print(f"[table] {tid}  ({len(df)} rows)")
 
@@ -218,12 +223,12 @@ def t9():
 
 def t10():
     o = rd("phase3b_oot_fold_metrics.csv")
-    g = o.groupby(['T', 'calib']).agg(AUC_in_time=('AUC_intime', 'mean'), AUC_oot=('AUC_oot', 'mean'), ECE_next_year=('ECE_test', 'mean'), ECE_calibration_year=('ECE_cal_insample', 'mean'),
+    g = o.groupby(['T', 'calib']).agg(AUC_in_time=('AUC_intime', 'mean'), AUC_oot=('AUC_oot', 'mean'), ECE_next_year=('ECE_test', 'mean'), ECE_next_year_min=('ECE_test', 'min'), ECE_next_year_max=('ECE_test', 'max'), ECE_calibration_year=('ECE_cal_insample', 'mean'),
                                       J_lost=('J_loss', 'mean'), pi_cal=('pi_cal', 'mean'), pi_test=('pi_test', 'mean')).reset_index()
     emit("T10a_oot", "Out-of-time performance (rolling origin)", g.rename(columns={'T': 'test year', 'calib': 'calibration'}), ["phase3b_oot_fold_metrics.csv"],
-         "Out of time AUC falls 0.016-0.021 and calibration on the next year is 10-25x worse than in-sample; stale thresholds lose little Youden J (H4 not supported)",
-         "Mean over 5 models and 3 seeds: AUC in time and out of time, ECE on the next year vs the calibration year, and Youden J lost to a stale threshold.",
-         {c: '{:.4f}' for c in ['AUC_in_time', 'AUC_oot', 'ECE_next_year', 'ECE_calibration_year', 'J_lost', 'pi_cal', 'pi_test']}, hyp="H4")
+         "Out-of-time AUC falls 0.015-0.021; drift is stated as the absolute ECE on the next year (the ratio to in-sample ECE depends on the fold and on the size of the in-time set; H25 not supported); stale thresholds lose little Youden J (H4 not supported)",
+         "Mean over 5 models and 3 seeds: AUC in time and out of time, absolute ECE on the next year (with min-max over the 15 model-seed cells; bootstrap CIs of the deployed configuration are in T12g) vs the calibration-year ECE, and Youden J lost to a stale threshold.",
+         {c: '{:.4f}' for c in ['AUC_in_time', 'AUC_oot', 'ECE_next_year', 'ECE_next_year_min', 'ECE_next_year_max', 'ECE_calibration_year', 'J_lost', 'pi_cal', 'pi_test']}, hyp="H4")
     d = rd("phase3c_drift.csv"); e = d.groupby(['fix', 'T']).ECE.mean().unstack('T')
     base = e.loc['iso_T-1 (baseline)']; imp = (1 - e.div(base, axis=1))
     out = e.copy(); out.columns = [f"ECE {c}" for c in e.columns]
@@ -278,9 +283,9 @@ def t12():
          {c: '{:.4f}' for c in ['share', 'observed_default_rate', 'obs_ci_lo', 'obs_ci_hi', 'mean_pd', 'gap_obs_minus_pd', 'gap_ci_lo', 'gap_ci_hi']})
     if (R / "phase6_deploy_oot.csv").exists():
         d = rd("phase6_deploy_oot.csv", scope='protocol')
-        emit("T12g_deploy_oot", "Deployment configuration out of time (H25)", d[['T', 'n_in_time', 'n_oot', 'AUC_in_time', 'AUC_oot', 'AUC_gap', 'AUC_gap_ci_lo', 'AUC_gap_ci_hi', 'ECE_in_time', 'ECE_oot', 'ECE_ratio', 'ratio_ci_lo', 'ratio_ci_hi']].rename(columns={'T': 'test year'}),
-             ["phase6_deploy_oot.csv"], "The deployed configuration loses AUC and calibration out of time (H25)", "Deployed configuration on rolling-origin folds: in-time vs out-of-time AUC and ECE.",
-             {c: '{:.4f}' for c in ['AUC_in_time', 'AUC_oot', 'AUC_gap', 'AUC_gap_ci_lo', 'AUC_gap_ci_hi', 'ECE_in_time', 'ECE_oot']} | {c: '{:.1f}' for c in ['ECE_ratio', 'ratio_ci_lo', 'ratio_ci_hi']}, hyp="H25")
+        emit("T12g_deploy_oot", "Deployment configuration out of time (H25)", d[['T', 'n_in_time', 'n_oot', 'AUC_in_time', 'AUC_oot', 'AUC_gap', 'AUC_gap_ci_lo', 'AUC_gap_ci_hi', 'ECE_in_time', 'ECE_oot', 'ECE_oot_ci_lo', 'ECE_oot_ci_hi', 'ECE_ratio', 'ratio_ci_lo', 'ratio_ci_hi']].rename(columns={'T': 'test year'}),
+             ["phase6_deploy_oot.csv"], "Out-of-time ECE of the deployed configuration is .018-.039 (absolute, with bootstrap CIs); the ratio to in-time ECE is fold-dependent (2.4/2.4/5.8) and H25 is not supported", "Deployed configuration on rolling-origin folds: in-time vs out-of-time AUC and ECE; absolute out-of-time ECE with 95% bootstrap CIs; the ratio is fold-dependent.",
+             {c: '{:.4f}' for c in ['AUC_in_time', 'AUC_oot', 'AUC_gap', 'AUC_gap_ci_lo', 'AUC_gap_ci_hi', 'ECE_in_time', 'ECE_oot', 'ECE_oot_ci_lo', 'ECE_oot_ci_hi']} | {c: '{:.1f}' for c in ['ECE_ratio', 'ratio_ci_lo', 'ratio_ci_hi']}, hyp="H25")
 
 
 def t13():
@@ -300,15 +305,119 @@ def t13():
          {c: '{:.3f}' for c in ['share with >=2 shared codes', 'share_overlap_ge2_strict', 'mean_jaccard', 'share_lt_k_codes']}, hyp="H22")
 
 
+# ------------------------------------------------------------------------------------------ external datasets (Phase 7)
+EXT = {'GERMAN': 'German Credit', 'TAIWAN': 'Taiwan default'}
+BOOST4 = ['LightGBM', 'XGBoost', 'CatBoost', 'Gradient Boosting']
+
+
+def ext_have():
+    return [d for d in EXT if (R / f"phase3e_external_{d}.csv").exists() and (R / f"phase3e_external_verdicts_{d}.csv").exists()]
+
+
+def crit_lending(ds):
+    """C1-C5 for D1/D2/D3 from the Phase 2 CSVs (10 models)."""
+    w = rd(f"phase2_weighting_{ds}.csv"); c = rd(f"phase2_calibration_{ds}.csv")
+    r5 = w[w.thr_rule.astype(str) == '0.5'].pivot(index='model', columns='weighting', values='Recall_mean')
+    rt = w[w.thr_rule == 'tuned'].pivot(index='model', columns='weighting', values='Recall_mean')
+    cc = c[c.calib != 'raw']; rb = c[(c.calib == 'raw') & (c.weighting == 'balanced')]
+    au = w[(w.weighting == 'none') & (w.thr_rule == 'tuned') & w.model.isin(BOOST4)].set_index('model').ROC_AUC_mean
+    n = {'D1': 100000, 'D2': 200000, 'D3': 200000}[ds]
+    return dict(n=n, pi=float(c.pi_mean.mean()), C1=float((r5['balanced'] - r5['none']).mean()), C2=float((rt['balanced'] - rt['none']).abs().mean()),
+                C3=float(cc.dev_pi_mean.abs().mean()), C4=float((rb.dev_half_mean.abs() <= .05).mean()), C5=float(au.max() - au.min()))
+
+
+def crit_external(ds):
+    C = pd.read_csv(R / f"phase3e_external_{ds}.csv"); raw = C[C.calib == 'raw']
+    r5 = raw.groupby(['model', 'weighting'])['Recall_0.5'].mean().unstack(); rt = raw.groupby(['model', 'weighting']).Recall_tuned.mean().unstack()
+    cc = C[C.calib != 'raw']; rb = raw[raw.weighting == 'balanced'].groupby('model').abs_dev_half.mean()
+    au = raw[(raw.weighting == 'none') & raw.model.isin(BOOST4)].groupby('model').ROC_AUC_raw.mean()
+    return dict(n=int(C.n_train.iloc[0] + C.n_test.iloc[0]), pi=float(C.pi.mean()), C1=float((r5['balanced'] - r5['none']).mean()), C2=float((rt['balanced'] - rt['none']).abs().mean()),
+                C3=float(cc.abs_dev_pi.mean()), C4=float((rb <= .05).mean()), C5=float(au.max() - au.min()))
+
+
+def t16():
+    ds_list = ext_have()
+    if not ds_list:
+        print("[table] T16 skipped (no external results)"); return
+    V = pd.concat([pd.read_csv(R / f"phase3e_external_verdicts_{d}.csv") for d in ds_list])
+    C = pd.concat([pd.read_csv(R / f"phase3e_external_{d}.csv") for d in ds_list])
+    rows = []
+    for d in ds_list:
+        v = V[V.dataset == d].set_index('hyp'); c = C[(C.dataset == d) & (C.calib == 'isotonic') & (C.weighting == 'none')]
+        b = v[v.index.str.startswith('H26 (bootstrap')]
+        rows.append({'dataset': EXT[d], 'n': int(v.n.iloc[0]), 'repeats': int(c.rep.nunique()), 'π': c.pi.mean(), 'mean t* (isotonic)': c.t_star.mean(), 'mean |t*−π| (isotonic)': c.abs_dev_pi.mean(),
+                     'models with |t*−π| ≤ .02': f"{int(v.loc['H26', 'models_ok'])}/6", 'bootstrap CI contains π': (f"{int(b.models_ok.iloc[0])}/6" if len(b) else 'n/a'),
+                     'H26': (b.result.iloc[0] if len(b) else v.loc['H26', 'result']), 'H27': v.loc['H27', 'result'], 'H28': v.loc['H28', 'result']})
+    emit("T16a_external_summary", "External datasets: threshold theory, weighting and model-family verdicts", pd.DataFrame(rows), [f"phase3e_external_{d}.csv" for d in ds_list] + [f"phase3e_external_verdicts_{d}.csv" for d in ds_list],
+         "t* tracks the base rate on external datasets (H26), balanced weighting moves raw t* toward 0.5 without changing tuned recall (H27); booster equivalence (H28) is dataset-dependent",
+         "Pre-registered H26-H28 verdicts per external dataset (isotonic on OOF scores, unweighted; 10 repeats Taiwan, 30 repeats German Credit).",
+         {'π': '{:.3f}', 'mean t* (isotonic)': '{:.3f}', 'mean |t*−π| (isotonic)': '{:.3f}'}, hyp="H26, H27, H28")
+    vv = V[['dataset', 'hyp', 'result', 'detail']].copy(); vv['dataset'] = vv.dataset.map(EXT)
+    emit("T16b_external_verdict_detail", "External datasets: numbers behind each verdict", vv, [f"phase3e_external_verdicts_{d}.csv" for d in ds_list],
+         "Numbers behind every H26-H28 verdict, including the clause-level results", "Clause-level results of H26-H28 per external dataset.", hyp="H26, H27, H28")
+    m = C.groupby(['dataset', 'model', 'weighting', 'calib']).agg(ROC_AUC=('ROC_AUC', 'mean'), ROC_AUC_sd=('ROC_AUC', 'std'), PR_AUC=('PR_AUC', 'mean'), Brier=('Brier', 'mean'), ECE=('ECE', 'mean'), pi=('pi', 'mean'),
+                                                              t_star=('t_star', 'mean'), t_star_sd=('t_star', 'std'), abs_dev_pi=('abs_dev_pi', 'mean'), abs_dev_half=('abs_dev_half', 'mean'),
+                                                              recall_0_5=('Recall_0.5', 'mean'), recall_tuned=('Recall_tuned', 'mean')).reset_index()
+    m['dataset'] = m.dataset.map(EXT)
+    emit("T16c_external_models", "External datasets: per-model results", m.rename(columns={'abs_dev_pi': '|t*−π|', 'abs_dev_half': '|t*−0.5|', 'recall_0_5': 'recall at 0.5', 'recall_tuned': 'recall at t*', 'ROC_AUC': 'ROC-AUC', 'PR_AUC': 'PR-AUC', 't_star': 't*', 'pi': 'π', 'ROC_AUC_sd': 'ROC-AUC sd', 't_star_sd': 't* sd'}),
+         [f"phase3e_external_{d}.csv" for d in ds_list], "Per-model ROC-AUC, PR-AUC, Brier, ECE, t*, |t*−π|, |t*−0.5| and recall for raw, Platt and isotonic scores, unweighted and balanced",
+         "Mean over repeats (10 Taiwan, 30 German Credit) per model, weighting and calibration; ROC-AUC of calibrated scores (isotonic has ties).", {c: '{:.4f}' for c in ['ROC-AUC', 'ROC-AUC sd', 'PR-AUC', 'Brier', 'ECE', 'π', 't*', 't* sd', '|t*−π|', '|t*−0.5|', 'recall at 0.5', 'recall at t*']}, hyp="H26, H27")
+    B = pd.concat([pd.read_csv(R / f"phase3e_external_tstar_ci_{d}.csv") for d in ds_list]); B['dataset'] = B.dataset.map(EXT)
+    emit("T16d_external_tstar_ci", "External datasets: bootstrap CI of t* (isotonic, unweighted)", B[['dataset', 'model', 'pi', 't_star_boot_mean', 'ci_lo', 'ci_hi', 'pi_in_ci', 'n_boot']].rename(columns={'pi': 'π', 't_star_boot_mean': 'bootstrap mean t*', 'ci_lo': 'CI low', 'ci_hi': 'CI high', 'pi_in_ci': 'π in CI'}),
+         [f"phase3e_external_tstar_ci_{d}.csv" for d in ds_list], "On German Credit the bootstrap CI of t* contains π for every model although the mean t* sits above π; the CI is wide",
+         "Percentile CI of t* from 1,000 resamples of the out-of-fold (score, label) pairs of repeat 0, refitting isotonic calibration and the Youden threshold in each resample.",
+         {'π': '{:.3f}', 'bootstrap mean t*': '{:.3f}', 'CI low': '{:.3f}', 'CI high': '{:.3f}'}, hyp="H26")
+    T = pd.concat([pd.read_csv(R / f"phase3e_external_tests_{d}.csv") for d in ds_list]); T['dataset'] = T.dataset.map(EXT)
+    emit("T16e_external_equivalence", "External datasets: AUC equivalence to the best model", T[['dataset', 'group', 'model', 'best', 'mean_auc', 'best_auc', 'mean_delta', 'ci_lo', 'ci_hi', 'p_holm', 'tost_p_holm', 'result']].rename(columns={'mean_auc': 'AUC', 'best_auc': 'best AUC', 'mean_delta': 'Δ AUC', 'ci_lo': 'CI low', 'ci_hi': 'CI high', 'p_holm': 'p (Holm)', 'tost_p_holm': 'TOST p (Holm)'}),
+         [f"phase3e_external_tests_{d}.csv" for d in ds_list], "Nadeau-Bengio corrected TOST (margin 0.005 AUC); failed TOST with a CI including 0 is INCONCLUSIVE, not 'worse'",
+         "Corrected resampled TOST against the best model (raw AUC, unweighted); boosters enter H28, other models are reported for context.", {'AUC': '{:.4f}', 'best AUC': '{:.4f}', 'Δ AUC': '{:+.4f}', 'CI low': '{:+.4f}', 'CI high': '{:+.4f}', 'p (Holm)': '{:.4f}', 'TOST p (Holm)': '{:.4f}'}, hyp="H28")
+    rr = []
+    for d in ds_list:
+        r = C[(C.dataset == d) & (C.calib == 'raw')]
+        for (w, lab, col) in [(w, l, c) for w in ('none', 'balanced') for l, c in (('0.5', 'Recall_0.5'), ('tuned', 'Recall_tuned'))]:
+            g = r[r.weighting == w].groupby('rep').agg(sp=(col, lambda v: v.max() - v.min()), mu=(col, 'mean'))
+            rr.append({'dataset': EXT[d], 'weighting': w, 'threshold': lab, 'recall spread across models (mean ± sd)': f"{g.sp.mean():.3f} ± {g.sp.std():.3f}", 'mean recall': g.mu.mean(), 'repeats': len(g)})
+    emit("T16f_external_recall_spread", "External datasets: recall spread across models", pd.DataFrame(rr), [f"phase3e_external_{d}.csv" for d in ds_list],
+         "Balanced-weighting spread across models halves when thresholds are tuned (as in T3), but the unweighted spread does not shrink and the tuned spread (.13-.19) exceeds D3's (.08)", "Recall spread (max - min across 6 models) by weighting and threshold, raw scores, mean ± sd over repeats.", {'mean recall': '{:.3f}'}, hyp="H27")
+
+
+def t17():
+    ds_list = ext_have()
+    if not ds_list:
+        print("[table] T17 skipped (no external results)"); return
+    cols = {'D1': crit_lending('D1'), 'D2': crit_lending('D2'), 'D3': crit_lending('D3')}
+    for d in ds_list:
+        cols[EXT[d]] = crit_external(d)
+    def surv(k, v, n):
+        if k == 'C1': return v >= .20
+        if k == 'C2': return v <= (.04 if n < 5000 else .02)
+        if k == 'C3': return v <= (.05 if n < 5000 else .02)
+        if k == 'C4': return v >= .70
+        if k == 'C5': return v <= .010
+    names = {'C1': 'recall@0.5 rises with balanced weighting (balanced − none)', 'C2': 'tuned-recall gap |balanced − none|', 'C3': 'calibrated |t*−π|', 'C4': 'share of raw balanced models with |t*−0.5| ≤ .05', 'C5': 'AUC spread across boosters'}
+    crit = {'C1': '≥ .20', 'C2': '≤ .02 (≤ .04 if n < 5,000)', 'C3': '≤ .02 (≤ .05 if n < 5,000)', 'C4': '≥ .70', 'C5': '≤ .010'}
+    rows = []
+    for k in names:
+        r = {'claim': k, 'quantity': names[k], 'survives if': crit[k]}
+        for ds, v in cols.items():
+            r[ds] = f"{v[k]:.3f}"; r[f"{ds} verdict"] = 'SURVIVES' if surv(k, v[k], v['n']) else 'CHANGES'
+        rows.append(r)
+    out = pd.DataFrame(rows)
+    emit("T17_cross_dataset_replication", "Cross-dataset replication of the main claims", out, ["phase2_weighting_D*.csv", "phase2_calibration_D*.csv"] + [f"phase3e_external_{d}.csv" for d in ds_list],
+         "Which Lending Club claims survive on the external datasets (criteria fixed before the external analysis)", "Replication table: value of each claim's statistic per dataset and SURVIVES/CHANGES against criteria fixed before the external analysis (tracker, Phase 7).",
+         hyp="H26, H27, H28")
+    return cols
+
+
 # ------------------------------------------------------------------------------------------ T14 scorecard
 PREREG = {'H1-H3': 'none frozen (stated in the Phase 2 task; first committed with results at b7a4fee)', 'H4': 'none frozen (Phase 3A task; results at 7ac7a5d)',
-          'H5-H8': '4f86f74', 'H9-H14': '158e212', 'H15-H19': '6fa9d00', 'H20-H22': 'b3240f4', 'H23-H24': 'f60b319', 'H25': 'e647452'}
+          'H5-H8': '4f86f74', 'H9-H14': '158e212', 'H15-H19': '6fa9d00', 'H20-H22': 'b3240f4', 'H23-H24': 'f60b319', 'H25': 'e647452', 'H26-H28': 'a23c443 (clarifications b6ae301, before scoring)'}
 
 
 def pre(h):
     n = int(h[1:])
     return PREREG['H1-H3'] if n <= 3 else PREREG['H4'] if n == 4 else PREREG['H5-H8'] if n <= 8 else PREREG['H9-H14'] if n <= 14 else PREREG['H15-H19'] if n <= 19 else \
-        PREREG['H20-H22'] if n <= 22 else PREREG['H23-H24'] if n <= 24 else PREREG['H25']
+        PREREG['H20-H22'] if n <= 22 else PREREG['H23-H24'] if n <= 24 else PREREG['H25'] if n == 25 else PREREG['H26-H28']
 
 
 def t14():
@@ -355,10 +464,22 @@ def t14():
         P = d25.set_index('T'); c1 = int((P.ECE_ratio >= 5).sum()); c2 = bool(((P.AUC_gap >= .01) & (P.AUC_gap <= .03)).all())
         rows.append(('H25', 'deployed configuration out of time: ECE >=5x in >=2/3 folds and AUC gap .010-.030', 'SUPPORTED' if (c1 >= 2 and c2) else 'NOT SUPPORTED',
                      f"ECE ratios {', '.join(f'{k}: {v:.1f}' for k, v in P.ECE_ratio.items())}; AUC gaps {', '.join(f'{k}: {v:.4f}' for k, v in P.AUC_gap.items())}", 'phase6_deploy_oot.csv'))
+    if ext_have():
+        V = pd.concat([pd.read_csv(R / f"phase3e_external_verdicts_{d}.csv") for d in ext_have()])
+        for h, st in (('H26', 'external: isotonic-calibrated Youden t* within .02 of the training prevalence (n >= 20,000) / bootstrap CI contains pi (German Credit)'),
+                      ('H27', 'external: balanced weighting moves raw t* toward 0.5 and changes tuned recall by < .02 (< .04 if n < 5,000)'),
+                      ('H28', 'external: LightGBM, XGBoost, CatBoost and GB equivalent to the best model on ROC-AUC (TOST +/-.005, N-B, Holm)')):
+            g = V[(V.hyp == h) | ((h == 'H26') & V.hyp.str.startswith('H26 (bootstrap'))]
+            if h == 'H26':
+                g = V[(V.hyp == 'H26') | V.hyp.str.startswith('H26 (bootstrap')]
+                g = g[~((g.hyp == 'H26') & (g.n < 20000))]
+            verdict = '; '.join(f"{EXT[r.dataset]}: {r.result}" for r in g.itertuples())
+            num = ' | '.join(f"{EXT[r.dataset]}: {r.detail}" for r in g.itertuples())
+            rows.append((h, st, verdict, num, 'phase3e_external_verdicts_*.csv'))
     df = pd.DataFrame(rows, columns=['hypothesis', 'statement', 'verdict', 'number behind the verdict', 'source']); df['pre-registration commit'] = [pre(h) for h in df.hypothesis]
-    emit("T14_hypothesis_scorecard", "Hypothesis scorecard H1-H25", df, ["multiple CSVs (see source column)", "EXTENSION_TRACKER.md for H6, H7, H12, H13, H24"],
+    emit("T14_hypothesis_scorecard", "Hypothesis scorecard H1-H28", df, ["multiple CSVs (see source column)", "EXTENSION_TRACKER.md for H6, H7, H12, H13, H24"],
          "Every pre-registered hypothesis with its verdict, the number behind it and its frozen pre-registration commit (H1-H4 were not frozen before running)",
-         "Scorecard of all hypotheses; verdicts are reported against the frozen pre-registered wording.")
+         "Scorecard of all hypotheses (H26-H28 verdicts are per external dataset); verdicts are reported against the frozen pre-registered wording.")
 
 
 # ------------------------------------------------------------------------------------------ T15 claims
@@ -530,6 +651,49 @@ def figures():
     save(fig, "F9_term_vintage", "Default-risk-ranking capacity gain over random by test year and term (P2-3%, k=50%): the sign change across vintages persists within 36-month loans and under a 36-month-only refit.", ["phase4_term_vintage.csv", "phase5_term36.csv"], "Vintage dependence without a term-mix explanation (H20, H23)")
 
 
+def figures_ext():
+    ds_list = ext_have()
+    if not ds_list:
+        print("[figure] F10/F11 skipped (no external results)"); return
+    import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+    plt.rcParams.update({'font.size': 8, 'axes.titlesize': 9, 'figure.dpi': 100, 'pdf.fonttype': 42})
+    C = ['#4c78a8', '#f58518', '#54a24b', '#e45756', '#72b7b2', '#b279a2']
+    s = pd.concat([rd(f"phase2_calibration_summary_{x}.csv") for x in ('D1', 'D2', 'D3')])[['dataset', 'weighting', 'calib', 't_star', 'pi']]
+    e = pd.concat([pd.read_csv(R / f"phase3e_external_{d}.csv") for d in ds_list]).groupby(['dataset', 'weighting', 'calib']).agg(t_star=('t_star', 'mean'), pi=('pi', 'mean')).reset_index()
+    e['dataset'] = e.dataset.map(EXT); a = pd.concat([s, e], ignore_index=True)
+    fig, ax = plt.subplots(figsize=(5.2, 4.0)); mk = {'raw': 'x', 'platt': 'o', 'isotonic': 's'}
+    for (w, cal), g in a.groupby(['weighting', 'calib']):
+        ax.scatter(g.pi, g.t_star, marker=mk[cal], s=34, color=C[0] if w == 'none' else C[1], label=f"{w}, {cal}", alpha=.85, linewidths=1.2 if cal == 'raw' else .6, edgecolors='none' if cal == 'raw' else 'k')
+    xs = np.linspace(.1, .32, 2); ax.plot(xs, xs, 'k:', lw=.8, label='t* = π'); ax.axhline(.5, color='grey', lw=.6, ls='--')
+    for ds, g in a.groupby('dataset'):
+        ax.annotate(ds, (g.pi.mean(), g.t_star.max()), xytext=(0, 6), textcoords='offset points', ha='center', fontsize=7)
+    ax.set_xlabel('training prevalence π'); ax.set_ylabel('Youden threshold t* (mean over models and repeats)'); ax.set_ylim(0, .66)
+    ax.legend(frameon=False, fontsize=6, ncol=3, loc='upper left'); fig.tight_layout()
+    save(fig, "F10_tstar_vs_pi_all", "Youden-optimal threshold against prevalence for Lending Club (D1-D3) and the external datasets: calibrated scores lie near t* = π (German Credit sits above it, with a wide CI), raw balanced scores lie toward 0.5 (0.38-0.47 on the external datasets); raw unweighted scores lie near π on Lending Club and Taiwan and below it on German Credit.",
+         ["phase2_calibration_summary_D*.csv"] + [f"phase3e_external_{d}.csv" for d in ds_list], "t* tracks the base rate across datasets after calibration (H1, H26)")
+    # F11 reliability on Taiwan (cached scores, repeat 0)
+    d = 'TAIWAN' if 'TAIWAN' in ds_list else ds_list[0]
+    try:
+        from creditrisk.external import LOADERS
+        from creditrisk.calibration import make_calibrators, apply_cal, reliability_curve
+        import experiments.external_study as ES
+    except Exception:
+        sys.path.insert(0, str(ROOT / "experiments")); import external_study as ES
+        from creditrisk.external import LOADERS
+        from creditrisk.calibration import make_calibrators, apply_cal, reliability_curve
+    _, y, _ = LOADERS[d](); yv = y.values
+    fig, axes = plt.subplots(1, 4, figsize=(11, 2.9), sharex=True, sharey=True)
+    for ax, m in zip(axes, ['Logistic Regression', 'Random Forest', 'LightGBM', 'CatBoost']):
+        z = ES.load(d, 0, m, 'balanced'); cals = make_calibrators(z['oof'], yv[z['idx_tv']]); y_te = yv[z['idx_te']]
+        ax.plot([0, 1], [0, 1], 'k:', lw=.8)
+        for (cn, lab), col in zip([('raw', 'raw (balanced)'), ('platt', 'Platt'), ('isotonic', 'isotonic')], C):
+            px, py = reliability_curve(y_te, apply_cal(cals[cn], z['te']), 15); ax.plot(px, py, 'o-', ms=2.5, lw=1, color=col, label=lab)
+        ax.set_title(m); ax.set_xlabel('mean predicted probability')
+    axes[0].set_ylabel('observed default rate'); axes[0].legend(frameon=False); fig.tight_layout()
+    save(fig, "F11_reliability_external", f"Reliability diagrams of class-balanced models before and after Platt/isotonic calibration on {EXT[d]} (held-out test set of repeat 0, 15 equal-frequency bins).",
+         [f"cached scores .cache/external/{d} (rep 0)"], "Calibration repairs the probability scale distorted by class weighting on an external dataset as well")
+
+
 # ------------------------------------------------------------------------------------------ manifest
 def git(*a):
     for g in ('git', '/Library/Developer/CommandLineTools/usr/bin/git'):
@@ -545,15 +709,15 @@ def git(*a):
 def manifest():
     head = git('log', '-1', '--format=%h', '--', 'experiments/export_paper_assets.py'); dirty = 'script not yet committed' if not head else 'script as committed'
     L = ["# Paper assets manifest", "", f"Produced by `experiments/export_paper_assets.py` (last commit touching the script: `{head or 'uncommitted'}`; inputs are the result CSVs and EXTENSION_TRACKER.md of the commit that adds this manifest). Verify with `python paper_assets/verify.py`.",
-         "Tables are in `tables/` (CSV with full precision; LaTeX booktabs with display rounding); figures in `figures/` (PNG 300 dpi and PDF). Wording rule: \"not equivalent\" is not \"worse\"; a failed TOST with a CI including 0 is INCONCLUSIVE.", "",
+         "Tables are in `tables/` (CSV with full precision; bare LaTeX booktabs `tabular` with display rounding; `tables/captioned/` holds the same tables wrapped in `table` with caption and label, needing booktabs and graphicx); figures in `figures/` (PNG 300 dpi and PDF). Wording rule: \"not equivalent\" is not \"worse\"; a failed TOST with a CI including 0 is INCONCLUSIVE.", "",
          "| id | kind | files | source(s) | hypotheses | paper claim it supports | caption suggestion |", "|---|---|---|---|---|---|---|"]
     for a in ASSETS:
-        fl = f"tables/{a['id']}.csv, tables/{a['id']}.tex" if a['kind'] == 'table' else f"figures/{a['id']}.png, figures/{a['id']}.pdf"
+        fl = f"tables/{a['id']}.csv, tables/{a['id']}.tex, tables/captioned/{a['id']}.tex" if a['kind'] == 'table' else f"figures/{a['id']}.png, figures/{a['id']}.pdf"
         L.append(f"| {a['id']} | {a['kind']} | {fl} | {'; '.join(a['sources'])} | {a['hyp']} | {a['claim']} | {a['caption']} |")
     (OUT / "MANIFEST.md").write_text("\n".join(L) + "\n")
 
 
 if __name__ == "__main__":
-    for f in (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15):
+    for f in (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t16, t17, t14, t15):
         f()
-    figures(); claims_audit(); manifest(); print("done:", len(ASSETS), "assets")
+    figures(); figures_ext(); claims_audit(); manifest(); print("done:", len(ASSETS), "assets")

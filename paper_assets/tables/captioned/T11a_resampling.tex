@@ -1,0 +1,28 @@
+\begin{table}[t]
+\centering
+\caption{Raw-score Youden threshold, recall, F1 and AUC by resampling method (none = unweighted) on D3, 5 repeats.}
+\label{tab:T11a_resampling}
+\small
+\begin{tabular}{llrrrrr}
+\toprule
+model & method & t* (raw Youden) & recall (Youden) & F1 (Youden) & ROC-AUC & F1 at 0.5 \\
+\midrule
+LightGBM & balanced & 0.495 & 0.662 & 0.333 & 0.683 & 0.334 \\
+LightGBM & none & 0.155 & 0.629 & 0.336 & 0.684 & 0.006 \\
+LightGBM & smote & 0.173 & 0.679 & 0.322 & 0.667 & 0.007 \\
+LightGBM & undersample & 0.506 & 0.653 & 0.334 & 0.682 & 0.333 \\
+Logistic Regression & balanced & 0.488 & 0.661 & 0.331 & 0.678 & 0.332 \\
+Logistic Regression & none & 0.144 & 0.655 & 0.331 & 0.678 & 0.011 \\
+Logistic Regression & smote & 0.493 & 0.650 & 0.330 & 0.675 & 0.331 \\
+Logistic Regression & undersample & 0.486 & 0.667 & 0.331 & 0.678 & 0.332 \\
+Random Forest & balanced & 0.148 & 0.647 & 0.317 & 0.656 & 0.007 \\
+Random Forest & none & 0.158 & 0.671 & 0.317 & 0.658 & 0.015 \\
+Random Forest & smote & 0.204 & 0.630 & 0.313 & 0.649 & 0.043 \\
+Random Forest & undersample & 0.498 & 0.661 & 0.320 & 0.665 & 0.321 \\
+XGBoost & balanced & 0.499 & 0.654 & 0.334 & 0.683 & 0.334 \\
+XGBoost & none & 0.147 & 0.664 & 0.334 & 0.683 & 0.004 \\
+XGBoost & smote & 0.178 & 0.673 & 0.322 & 0.666 & 0.009 \\
+XGBoost & undersample & 0.505 & 0.654 & 0.333 & 0.682 & 0.333 \\
+\bottomrule
+\end{tabular}
+\end{table}

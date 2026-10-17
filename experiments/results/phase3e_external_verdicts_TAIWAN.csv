@@ -1,0 +1,5 @@
+dataset,hyp,n,models_ok,stat,detail,result
+TAIWAN,H26,30000,5,0.013606646446497879,mean |t*-pi| over models=0.0136; models with repeat-mean <= .02: 5/6,SUPPORTED
+TAIWAN,"H26 (secondary, balanced)",30000,6,0.011230522352373934,mean |t*-pi| over models=0.0112; models with repeat-mean <= .02: 6/6,SUPPORTED
+TAIWAN,H27,30000,5,0.006141672946495869,"clause1: mean move toward .5 = +0.1957 (5/6 models positive; raw t* none 0.243, balanced 0.469); clause2: mean |tuned recall bal-none| (isotonic) = 0.0061 (limit 0.02); supplementary raw-tuned gap = 0.0061",SUPPORTED
+TAIWAN,H28,30000,0,-0.001824894441621483,"best=CatBoost (AUC 0.7828); LightGBM: INCONCLUSIVE (d=-0.0022, CI [-0.0063,+0.0018], Holm TOST p=0.154, Holm p of the difference=0.560); XGBoost: INCONCLUSIVE (d=-0.0018, CI [-0.0052,+0.0015], Holm TOST p=0.093, Holm p of the difference=0.560); Gradient Boosting: INCONCLUSIVE (d=-0.0024, CI [-0.0062,+0.0014], Holm TOST p=0.154, Holm p of the difference=0.560)",INCONCLUSIVE

@@ -1,0 +1,9 @@
+dataset,weighting,threshold,recall spread across models (mean ± sd),mean recall,repeats
+German Credit,none,0.5,0.102 ± 0.034,0.455247,30
+German Credit,none,tuned,0.187 ± 0.083,0.713704,30
+German Credit,balanced,0.5,0.320 ± 0.060,0.574506,30
+German Credit,balanced,tuned,0.179 ± 0.074,0.703827,30
+Taiwan default,none,0.5,0.141 ± 0.011,0.350779,10
+Taiwan default,none,tuned,0.126 ± 0.029,0.599359,10
+Taiwan default,balanced,0.5,0.283 ± 0.016,0.579879,10
+Taiwan default,balanced,tuned,0.139 ± 0.027,0.595579,10

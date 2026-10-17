@@ -1,0 +1,40 @@
+\begin{table}[t]
+\centering
+\caption{Scorecard of all hypotheses (H26-H28 verdicts are per external dataset); verdicts are reported against the frozen pre-registered wording.}
+\label{tab:T14_hypothesis_scorecard}
+\small
+\begin{tabular}{lp{5.2cm}p{5.2cm}p{5.2cm}lp{5.2cm}}
+\toprule
+hypothesis & statement & verdict & number behind the verdict & source & pre-registration commit \\
+\midrule
+H1 & calibrated =$>$ t*~pi & SUPPORTED & mean |t*-pi| 0.0059/0.0046/0.0038 (D1/D2/D3) & phase2\_calibration\_hypotheses\_D*.csv & none frozen (stated in the Phase 2 task; first committed with results at b7a4fee) \\
+H2 & balanced raw =$>$ t*~0.5 & SUPPORTED & share within .05: 0.80/0.80/0.80 (RF/ET fail: leaf purity) & phase2\_calibration\_hypotheses\_D*.csv & none frozen (stated in the Phase 2 task; first committed with results at b7a4fee) \\
+H3 & weighting invariance after calibration & SUPPORTED & mean |t*\_none - t*\_bal| 0.0059/0.0046/0.0038 & phase2\_calibration\_hypotheses\_D*.csv & none frozen (stated in the Phase 2 task; first committed with results at b7a4fee) \\
+H4 & stale thresholds under drift & NOT SUPPORTED & sign agreement of delta-pi and delta-t* 13\% over 45 (fold, model, seed) cells; Youden J lost to a stale threshold: fold means 2013: 0.0021, 2014: 0.0040, 2015: 0.0035, worst single cell 0.0146 (6.5\% of J\_max) & phase3b\_oot\_fold\_metrics.csv & none frozen (Phase 3A task; results at 7ac7a5d) \\
+H5 & approve-all optimal in-time on D3 & SUPPORTED & 0 (model, rule) pairs beat approve-all with CI lower bound $>$0 at P1/0\%/3\% & phase3b\_profit\_d3\_bootstrap.csv & 4f86f74 \\
+H6 & expected-profit rule not better than approve-all out of time & SUPPORTED & CI lower bound $<$= 0 in every fold/scenario/seed (tracker, Phase 3B) & phase3b\_expprofit\_oot.csv; tracker & 4f86f74 \\
+H7 & capacity: model family irrelevant and all beat random (default-risk ranking) & NOT SUPPORTED & (a) 3/7 acceptance levels, (b) 0/7 (default-risk ranking below random) (tracker, Phase 3B) & phase3b\_capacity\_summary.csv; tracker & 4f86f74 \\
+H8 & Phase 2 calibration/weighting results replicate on D3 & SUPPORTED & all six replication criteria pass (REPLICATES) & phase3b\_replication.csv & 4f86f74 \\
+H9 & majority of boosting models equivalent to best & SUPPORTED & 3/3 of GB, XGBoost, CatBoost equivalent to LightGBM (+/-.005); plus LightGBM itself = 4 of 5 boosting models & phase3c\_stats.csv & 158e212 \\
+H10 & t*~pi in all ablation cells & SUPPORTED & max mean |t*-pi| over cells/models/calibrators (Platt, isotonic) 0.0121 & phase3c\_ablation.csv & 158e212 \\
+H11 & removing rate+score: dAUC$>$.005, larger capacity gain & SUPPORTED & dAUC(A-F) 0.0483; default-risk capacity gain -39,140 -$>$ 49,313 & phase3c\_ablation\_cells.csv & 158e212 \\
+H12 & dollar capacity gain $<$ count capacity gain & SUPPORTED & \$191.6k vs \$102.5k per 1000 (-46\%) (tracker, Phase 3C) & phase3c\_capacity.csv; tracker & 158e212 \\
+H13 & default-risk $<$ random under ROI; rate-only ~ best & REJECTED & (a) holds (10/10 models negative ROI gain); (b) fails: rate-only ROI -0.0092 vs best, CI excludes 0 (tracker) & phase3c\_capacity.csv; tracker & 158e212 \\
+H14 & cheap recalibration fix cuts ECE $>$=30\% in $>$=2 of 3 folds & REJECTED & trailing-6m isotonic reduction 37.6\%/-3.8\%/23.5\% & phase3c\_drift.csv & 158e212 \\
+H15 & resampling equivalent to unweighted & NOT SUPPORTED & 4 of 8 (method, model) cells not equivalent & phase3d\_resampling\_auc\_tests.csv & 6fa9d00 \\
+H16 & tuning: boosters $<$.005, RF gains most, spread shrinks & SUPPORTED & dAUC LightGBM +0.0012, XGBoost +0.0005, CatBoost +0.0023, RF +0.0224 & phase3d\_optuna\_summary.csv & 6fa9d00 \\
+H17 & ensembles equivalent to best single model & SUPPORTED & voting +0.0002, stacking +0.0007 vs LightGBM & phase3d\_ensembles\_tests.csv & 6fa9d00 \\
+H18 & EBM equivalent; WoE $>$=.005 below & SUPPORTED & EBM -0.0009; WoE -0.0085 & phase3d\_interp\_tests.csv & 6fa9d00 \\
+H19 & 667k scale: calibration, weighting, AUC conclusions unchanged & SUPPORTED & max calibrated |t*-pi| on the 667k population 0.0056 & phase3d\_scale.csv & 6fa9d00 \\
+H20 & 36m-only 2013 gain below 2014 and 2015 & SUPPORTED & gain(2014)-gain(2013) +36,138 [25,982, 46,715]; gain(2015)-gain(2013) +87,556 [77,817, 97,143] & phase4\_h20.csv & b3240f4 \\
+H21 & attribution rank agreement & SUPPORTED & booster pairs min Spearman 0.961; booster vs LR/WoE min 0.845; interest\_rate first everywhere & phase4\_h21.csv & b3240f4 \\
+H22 & EBM vs LightGBM top-3 reason codes overlap $>$=2/3 for $>$=70\% & SUPPORTED & 0.989 (rate allowed), 0.987 (excluded) & phase4\_reasoncodes.csv & b3240f4 \\
+H23 & 36m refit keeps 2013 $<$ 2014, 2015 & SUPPORTED & gain(2014)-gain(2013) +32,826 [21,799, 43,208]; gain(2015)-gain(2013) +75,487 [65,550, 84,850] & phase5\_h23.csv & f60b319 \\
+H24 & serving parity (reload and API vs library) & SUPPORTED & max |diff| 1.1e-16 (reload), 0.0 (API) on 1,000 held-out loans (tracker, Phase 5; app-v2 tests/test\_parity.py) & app-v2 models/deploy; tracker & f60b319 \\
+H25 & deployed configuration out of time: ECE $>$=5x in $>$=2/3 folds and AUC gap .010-.030 & NOT SUPPORTED & ECE ratios 2013: 2.4, 2014: 2.4, 2015: 5.8; AUC gaps 2013: 0.0228, 2014: 0.0063, 2015: -0.0116 & phase6\_deploy\_oot.csv & e647452 \\
+H26 & external: isotonic-calibrated Youden t* within .02 of the training prevalence (n $>$= 20,000) / bootstrap CI contains pi (German Credit) & German Credit: SUPPORTED; Taiwan default: SUPPORTED & German Credit: bootstrap 95\% CI of t* contains pi for 6/6 models (fraction 1.00) | Taiwan default: mean |t*-pi| over models=0.0136; models with repeat-mean $<$= .02: 5/6 & phase3e\_external\_verdicts\_*.csv & a23c443 (clarifications b6ae301, before scoring) \\
+H27 & external: balanced weighting moves raw t* toward 0.5 and changes tuned recall by $<$ .02 ($<$ .04 if n $<$ 5,000) & German Credit: SUPPORTED; Taiwan default: SUPPORTED & German Credit: clause1: mean move toward .5 = +0.1043 (5/6 models positive; raw t* none 0.266, balanced 0.379); clause2: mean |tuned recall bal-none| (isotonic) = 0.0120 (limit 0.04); supplementary raw-tuned gap = 0.0126 | Taiwan default: clause1: mean move toward .5 = +0.1957 (5/6 models positive; raw t* none 0.243, balanced 0.469); clause2: mean |tuned recall bal-none| (isotonic) = 0.0061 (limit 0.02); supplementary raw-tuned gap = 0.0061 & phase3e\_external\_verdicts\_*.csv & a23c443 (clarifications b6ae301, before scoring) \\
+H28 & external: LightGBM, XGBoost, CatBoost and GB equivalent to the best model on ROC-AUC (TOST +/-.005, N-B, Holm) & German Credit: NOT SUPPORTED; Taiwan default: INCONCLUSIVE & German Credit: best=Random Forest (AUC 0.7816); LightGBM: NOT EQUIVALENT (d=-0.0208, CI [-0.0414,-0.0002], Holm TOST p=1.000, Holm p of the difference=0.190); XGBoost: INCONCLUSIVE (d=-0.0086, CI [-0.0287,+0.0116], Holm TOST p=1.000, Holm p of the difference=1.000); CatBoost: INCONCLUSIVE (d=-0.0076, CI [-0.0250,+0.0098], Holm TOST p=1.000, Holm p of the difference=1.000); Gradient Boosting: INCONCLUSIVE (d=-0.0083, CI [-0.0345,+0.0178], Holm TOST p=1.000, Holm p of the difference=1.000) | Taiwan default: best=CatBoost (AUC 0.7828); LightGBM: INCONCLUSIVE (d=-0.0022, CI [-0.0063,+0.0018], Holm TOST p=0.154, Holm p of the difference=0.560); XGBoost: INCONCLUSIVE (d=-0.0018, CI [-0.0052,+0.0015], Holm TOST p=0.093, Holm p of the difference=0.560); Gradient Boosting: INCONCLUSIVE (d=-0.0024, CI [-0.0062,+0.0014], Holm TOST p=0.154, Holm p of the difference=0.560) & phase3e\_external\_verdicts\_*.csv & a23c443 (clarifications b6ae301, before scoring) \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -83,6 +83,11 @@ stage p4_reason_codes          "1 min"      "$PY experiments/reason_codes_study.
 # ---- Phase 5 / 6 (study side, journal-extension)
 stage p5_term36                "~10 min"    "$PY experiments/term36_refit.py"
 stage p6_deploy_oot            "~10 min (3 folds in parallel)" "for T in 2013 2014 2015; do $PY experiments/deploy_oot.py --stage run --T \$T --n-jobs 3 & done; wait; $PY experiments/deploy_oot.py --stage collect"
+# ---- Phase 7 external datasets (German Credit and Taiwan from UCI; Give Me Some Credit is not used). Data URL/licence/date: FILL IN (see docs/data_cards/)
+stage p7_fetch_external        "~1 min"     "bash scripts/fetch_external.sh && $PY -m pip install -q xlrd && $PY experiments/external_cards.py"
+stage p7_score_german          "~5 min"     "$PY experiments/external_study.py --stage score --dataset GERMAN --n-jobs 2"
+stage p7_score_taiwan          "~60 min (2 workers)" "for w in 0 1; do $PY experiments/external_study.py --stage score --dataset TAIWAN --worker \$w --n-workers 2 --n-jobs 2 & done; wait"
+stage p7_analyze_external      "~10 min"    "$PY experiments/external_study.py --stage analyze --dataset GERMAN && $PY experiments/external_study.py --stage analyze --dataset TAIWAN"
 # ---- Phase 5 deployment (branch app-v2 only): `git checkout app-v2`, then
 #      $PY scripts/train_deploy.py   (~8 min; writes models/deploy/)   and   $PY -m pytest   (39 tests, ~35 s)
 # ---- Paper assets (journal-extension)

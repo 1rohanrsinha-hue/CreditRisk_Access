@@ -1,0 +1,14 @@
+\begin{table}[t]
+\centering
+\caption{Pre-registered H26-H28 verdicts per external dataset (isotonic on OOF scores, unweighted; 10 repeats Taiwan, 30 repeats German Credit).}
+\label{tab:T16a_external_summary}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrlllll}
+\toprule
+dataset & n & repeats & $\pi$ & mean t* (isotonic) & mean |t*$-$$\pi$| (isotonic) & models with |t*$-$$\pi$| $\leq$ .02 & bootstrap CI contains $\pi$ & H26 & H27 & H28 \\
+\midrule
+German Credit & 1000 & 30 & 0.300 & 0.344 & 0.044 & 0/6 & 6/6 & SUPPORTED & SUPPORTED & NOT SUPPORTED \\
+Taiwan default & 30,000 & 10 & 0.221 & 0.235 & 0.014 & 5/6 & n/a & SUPPORTED & SUPPORTED & INCONCLUSIVE \\
+\bottomrule
+\end{tabular}}
+\end{table}

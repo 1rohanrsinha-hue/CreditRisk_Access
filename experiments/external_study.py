@@ -160,7 +160,7 @@ def verdicts(ds, C, B, TT):
         if n < 20000 and res == 'SUPPORTED':
             res = 'SUPPORTED (n<20,000)'
         out.append(dict(dataset=ds, hyp='H28', n=n, models_ok=int((b.result == 'EQUIVALENT').sum()), stat=float(b.mean_auc.max() - b.best_auc.iloc[0]),
-                        detail=f"best={b.best.iloc[0]} (AUC {b.best_auc.iloc[0]:.4f}); " + "; ".join(f"{r.model}: {r.result} (d={r.mean_delta:+.4f}, CI [{r.ci_lo:+.4f},{r.ci_hi:+.4f}], Holm TOST p={r.tost_p_holm:.3f})" for r in b.itertuples()),
+                        detail=f"best={b.best.iloc[0]} (AUC {b.best_auc.iloc[0]:.4f}); " + "; ".join(f"{r.model}: {r.result} (d={r.mean_delta:+.4f}, CI [{r.ci_lo:+.4f},{r.ci_hi:+.4f}], Holm TOST p={r.tost_p_holm:.3f}, Holm p of the difference={r.p_holm:.3f})" for r in b.itertuples()),
                         result=res))
     return out
 

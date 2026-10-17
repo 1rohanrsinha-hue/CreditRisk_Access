@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Mean over 5 models and 3 seeds: AUC in time and out of time, absolute ECE on the next year (with min-max over the 15 model-seed cells; bootstrap CIs of the deployed configuration are in T12g) vs the calibration-year ECE, and Youden J lost to a stale threshold.}
+\label{tab:T10a_oot}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rlrrrrrrrrr}
+\toprule
+test year & calibration & AUC\_in\_time & AUC\_oot & ECE\_next\_year & ECE\_next\_year\_min & ECE\_next\_year\_max & ECE\_calibration\_year & J\_lost & pi\_cal & pi\_test \\
+\midrule
+2013 & isotonic & 0.6817 & 0.6663 & 0.0224 & 0.0200 & 0.0242 & 0.0026 & 0.0021 & 0.1620 & 0.1560 \\
+2013 & raw & 0.6817 & 0.6666 & 0.0413 & 0.0320 & 0.0637 & 0.0192 & 0.0029 & 0.1620 & 0.1560 \\
+2014 & isotonic & 0.6966 & 0.6757 & 0.0361 & 0.0281 & 0.0392 & 0.0010 & 0.0040 & 0.1560 & 0.1845 \\
+2014 & raw & 0.6966 & 0.6759 & 0.0217 & 0.0186 & 0.0235 & 0.0280 & 0.0044 & 0.1560 & 0.1845 \\
+2015 & isotonic & 0.6909 & 0.6733 & 0.0218 & 0.0134 & 0.0255 & 0.0016 & 0.0035 & 0.1373 & 0.1489 \\
+2015 & raw & 0.6909 & 0.6735 & 0.0344 & 0.0188 & 0.0409 & 0.0171 & 0.0042 & 0.1373 & 0.1489 \\
+\bottomrule
+\end{tabular}}
+\end{table}

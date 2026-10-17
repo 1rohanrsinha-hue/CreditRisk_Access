@@ -1,0 +1,13 @@
+dataset,model,π,bootstrap mean t*,CI low,CI high,π in CI,n_boot
+German Credit,Logistic Regression,0.3,0.352124,0.284305,0.46324,True,1000
+German Credit,Random Forest,0.3,0.364607,0.285714,0.5,True,1000
+German Credit,LightGBM,0.3,0.352705,0.282609,0.481141,True,1000
+German Credit,XGBoost,0.3,0.348639,0.285714,0.466103,True,1000
+German Credit,CatBoost,0.3,0.346321,0.289838,0.425205,True,1000
+German Credit,Gradient Boosting,0.3,0.382172,0.285714,0.518888,True,1000
+Taiwan default,Logistic Regression,0.221208,0.2343,0.219442,0.268669,True,1000
+Taiwan default,Random Forest,0.221208,0.2389,0.220338,0.271559,True,1000
+Taiwan default,LightGBM,0.221208,0.235678,0.219512,0.266379,True,1000
+Taiwan default,XGBoost,0.221208,0.235221,0.219664,0.271912,True,1000
+Taiwan default,CatBoost,0.221208,0.240186,0.220123,0.273999,True,1000
+Taiwan default,Gradient Boosting,0.221208,0.234182,0.220055,0.257637,True,1000

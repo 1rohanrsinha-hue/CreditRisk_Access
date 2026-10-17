@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering
+\caption{Recall spread (max - min across 6 models) by weighting and threshold, raw scores, mean $\pm$ sd over repeats.}
+\label{tab:T16f_external_recall_spread}
+\small
+\begin{tabular}{llllrr}
+\toprule
+dataset & weighting & threshold & recall spread across models (mean $\pm$ sd) & mean recall & repeats \\
+\midrule
+German Credit & none & 0.5 & 0.102 $\pm$ 0.034 & 0.455 & 30 \\
+German Credit & none & tuned & 0.187 $\pm$ 0.083 & 0.714 & 30 \\
+German Credit & balanced & 0.5 & 0.320 $\pm$ 0.060 & 0.575 & 30 \\
+German Credit & balanced & tuned & 0.179 $\pm$ 0.074 & 0.704 & 30 \\
+Taiwan default & none & 0.5 & 0.141 $\pm$ 0.011 & 0.351 & 10 \\
+Taiwan default & none & tuned & 0.126 $\pm$ 0.029 & 0.599 & 10 \\
+Taiwan default & balanced & 0.5 & 0.283 $\pm$ 0.016 & 0.580 & 10 \\
+Taiwan default & balanced & tuned & 0.139 $\pm$ 0.027 & 0.596 & 10 \\
+\bottomrule
+\end{tabular}
+\end{table}

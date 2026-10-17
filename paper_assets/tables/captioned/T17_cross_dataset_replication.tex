@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Replication table: value of each claim's statistic per dataset and SURVIVES/CHANGES against criteria fixed before the external analysis (tracker, Phase 7).}
+\label{tab:T17_cross_dataset_replication}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lp{5.2cm}lllllllllll}
+\toprule
+claim & quantity & survives if & D1 & D1 verdict & D2 & D2 verdict & D3 & D3 verdict & German Credit & German Credit verdict & Taiwan default & Taiwan default verdict \\
+\midrule
+C1 & recall@0.5 rises with balanced weighting (balanced $-$ none) & $\geq$ .20 & 0.495 & SURVIVES & 0.483 & SURVIVES & 0.517 & SURVIVES & 0.119 & CHANGES & 0.229 & SURVIVES \\
+C2 & tuned-recall gap |balanced $-$ none| & $\leq$ .02 ($\leq$ .04 if n $<$ 5,000) & 0.014 & SURVIVES & 0.006 & SURVIVES & 0.009 & SURVIVES & 0.013 & SURVIVES & 0.006 & SURVIVES \\
+C3 & calibrated |t*$-$$\pi$| & $\leq$ .02 ($\leq$ .05 if n $<$ 5,000) & 0.006 & SURVIVES & 0.005 & SURVIVES & 0.004 & SURVIVES & 0.043 & SURVIVES & 0.018 & SURVIVES \\
+C4 & share of raw balanced models with |t*$-$0.5| $\leq$ .05 & $\geq$ .70 & 0.800 & SURVIVES & 0.800 & SURVIVES & 0.800 & SURVIVES & 0.167 & CHANGES & 0.667 & CHANGES \\
+C5 & AUC spread across boosters & $\leq$ .010 & 0.002 & SURVIVES & 0.001 & SURVIVES & 0.001 & SURVIVES & 0.013 & CHANGES & 0.002 & SURVIVES \\
+\bottomrule
+\end{tabular}}
+\end{table}

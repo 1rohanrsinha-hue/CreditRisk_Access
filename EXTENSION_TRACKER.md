@@ -386,6 +386,61 @@ Reading: the configuration's calibration is clearly worse on the new year (ECE .
 8. Rerun `scripts/reproduce_all.sh` on a clean checkout before submission (the commands marked [inferred] were never re-run in this audit).
 9. Placeholder title: "Calibration, Base Rates and Decision Thresholds in Credit-Risk Classification: A Multi-Dataset Study" (authors decide).
 
+## Phase 7: External datasets  (done 2026-10-17; H26–H28 frozen at a23c443, clarifications at b6ae301 before any scoring, replication criteria at 7ff57a7 before any external analysis; no manuscript prose written)
+- [x] Data acquisition — `DONE` — German Credit (`german.data`, 1,000 rows) and Taiwan Default (`taiwan.xls`, 30,000 rows) downloaded from UCI by `scripts/fetch_external.sh`; Give Me Some Credit was not placed in `external_data/` and is not used. Data cards: `docs/data_cards/` (licence, URL, access date: FILL IN).
+- [x] Loaders and leak-free preprocessing — `DONE` — `creditrisk/external.py` (encoder fitted inside the pipeline; same estimators and defaults as the main study).
+- [x] Core study — `DONE` — `experiments/external_study.py` → `experiments/results/phase3e_external_{GERMAN,TAIWAN}.csv` (+ `_tstar_ci_`, `_tests_`, `_verdicts_`). German: 30 repeats, stratified 70/30 (≈ 210 train / 90 test positives); Taiwan: 10 repeats, stratified 80/20; 5-fold OOF on the training part; 6 models × {none, balanced} × {raw, Platt, isotonic}.
+- [x] Cross-dataset replication table T17, tables T16a–f, figures F10 (t* vs π, all datasets) and F11 (reliability, Taiwan) — `DONE` — `paper_assets/`, `verify.py` extended (independent recomputation of t*, AUC and recall from the cached scores).
+
+### Phase 7 results (outcomes against the frozen H26–H28 block; wording rule: "not equivalent" is not "worse")
+| dataset | n | π | mean isotonic t* | mean \|t*−π\| (isotonic, unweighted) | models ≤ .02 | bootstrap CI of t* contains π | 
+|---|---|---|---|---|---|---|
+| German Credit | 1,000 | .300 | .344 | .0436 | 0/6 | 6/6 |
+| Taiwan default | 30,000 | .2212 | .2348 | .0136 | 5/6 (random forest .0203) | 6/6 (supplementary) |
+
+| hypothesis | German Credit | Taiwan default |
+|---|---|---|
+| H26 base-rate theory | **SUPPORTED** by the pre-registered small-n rule (bootstrap CI contains π for 6/6 models); the point estimate is above π: mean t* .344, \|t*−π\| .044, CIs about .28–.47 wide | **SUPPORTED**: mean \|t*−π\| .0136, 5/6 models ≤ .02 (random forest .0203); balanced weighting 6/6 (secondary) |
+| H27 weighting | **SUPPORTED**: raw t* moves toward .5 (none .266 → balanced .379; +.104, 5/6 models, random forest moves away); isotonic tuned-recall gap .0120 (limit .04) | **SUPPORTED**: raw t* none .243 → balanced .469 (+.196, 5/6 models, random forest moves away); isotonic tuned-recall gap .0061 (limit .02) |
+| H28 booster equivalence | **NOT SUPPORTED** under the pre-registered rule: best = random forest (AUC .7816); LightGBM −.0208 [−.0414, −.0002] is NOT EQUIVALENT (the CI excludes 0 by .0002; Holm p of the difference .19); XGBoost, CatBoost, GB INCONCLUSIVE. n = 1,000 is underpowered: no booster could be shown equivalent | **INCONCLUSIVE**: best = CatBoost (AUC .7828); LightGBM −.0022, XGBoost −.0018, GB −.0024, CIs include 0 and the TOST fails (Holm TOST p .09–.15); the deficits are small but equivalence is not shown |
+
+Details and clause-level numbers: `paper_assets/tables/T16a–T16f`. The Lending Club claims were checked on the external data against criteria C1–C5 fixed beforehand (table T17):
+| claim | D1 | D2 | D3 | German Credit | Taiwan default |
+|---|---|---|---|---|---|
+| C1 recall@0.5 rises with balanced weighting (≥ .20) | .495 S | .483 S | .517 S | .119 **CHANGES** | .229 S |
+| C2 tuned-recall gap ≤ .02 (≤ .04 if n < 5,000) | .014 S | .006 S | .009 S | .013 S | .006 S |
+| C3 calibrated \|t*−π\| ≤ .02 (≤ .05 if n < 5,000) | .006 S | .005 S | .004 S | .043 S | .018 S |
+| C4 share of raw balanced models within .05 of .5 (≥ .70) | .80 S | .80 S | .80 S | .17 **CHANGES** | .67 **CHANGES** |
+| C5 booster AUC spread ≤ .010 | .002 S | .001 S | .001 S | .013 **CHANGES** | .002 S |
+(S = SURVIVES.) Recall spread across models (T16f): with balanced weighting it roughly halves when thresholds are tuned (German .32 → .18, Taiwan .28 → .14), but it does not shrink for unweighted models (German .10 → .19, Taiwan .14 → .13), and the tuned spread (.13–.19) is larger than on D3 (.08).
+
+**Claims that do not replicate, with explanations — all labelled HYPOTHESIS, none tested.** (1) *C1 on German Credit (.119):* with π = .30, unweighted models already flag many positives at 0.5 (recall .45), and the balancing weights are smaller (about 2.3:1 versus 5.7:1 on D3), leaving less to gain. (2) *C4 (German .17, Taiwan .67):* the raw balanced t* is near .5 for CatBoost, XGBoost, LightGBM and LR on Taiwan (.50/.50/.50/.56) but not for the random forest (.25, the same leaf-purity pattern as on Lending Club, tested there in the Phase 3B leaf sweep and not re-tested here) or, on German Credit, for most models (.30–.46); with 700 training rows, default boosters give score distributions that balancing does not centre (not diagnosed). (3) *C5 on German Credit (.013):* the spread is driven by default LightGBM (−.021), which may overfit at n = 700; other boosters are within .001. (4) *German Credit t* above π:* isotonic calibration fitted on 700 OOF scores is a step function and Youden is then taken in the same sample, which may bias t* upward (the bootstrap CI still contains π). (5) *Tuned-recall spread larger than on D3:* on Taiwan the logistic regression is clearly weaker in AUC (.72 vs .78), which may keep its recall apart from the boosters.
+
+**What replicates.** Calibrated t* tracks the base rate on Taiwan (|t*−π| .018, π = .22; the H26 pre-registered .02 criterion is met for 5/6 models) and, within wide bootstrap CIs, on German Credit; weighting leaves tuned recall unchanged (C2, gap ≤ .013) on every dataset; weighting moves raw t* toward .5 on both external datasets (random forest excepted); balanced weighting raises recall at 0.5 on both external datasets (by .12 and .23); model family differences in AUC among the boosters are ≤ .0024 on Taiwan.
+
+**Pre-registration audit (for the methods sentence).** Verified against `git log` on 2026-10-17: the commits that froze H5–H8 (4f86f74), H9–H14 (158e212), H15–H19 (6fa9d00), H20–H22 (b3240f4), H23–H24 (f60b319), H25 (e647452) and H26–H28 (a23c443) each precede the commit that contains their results (0073165, b921084, 406c952, 60d849c, a3880df, fc185f2, and the Phase 7 results commit). H1–H3 and H4 have no earlier commit: they were stated in the task prompts for Phases 2 and 3A and first committed together with their results (b7a4fee, 7ac7a5d). Qualifications: H5–H8 were formulated after the Phase 3A results on D1/D2 had been seen (they are tested on the new population D3); and for H26–H28 only dataset summaries (row counts, positive rates, label coding, missing values) had been looked at when the block was committed, no model had been fitted.
+**Methods-sentence suggestion (not manuscript prose; authors to adapt).** "Hypotheses H1–H4 were formulated during exploratory analysis and were not registered before they were run; hypotheses H5 onward were written into a version-controlled tracker and committed before the analyses that test them. Outcomes are reported against the wording frozen in those commits, including hypotheses that were not supported."
+
+**Drift wording (Phase 6 item applied).** T10a now carries the absolute ECE on the next year with the min–max over the 15 (model, seed) cells, and T12g carries the deployed configuration's out-of-time ECE with 95% bootstrap CIs (.0344 [.0325, .0364], .0179 [.0160, .0192], .0387 [.0374, .0400]); the claim table states drift in absolute ECE and notes that the ratio is fold-dependent (H25 not supported). The model card on `app-v2` is untouched.
+**LaTeX (Phase 6 item applied).** `paper_assets/tables/captioned/*.tex` wrap every table in `table` + `\caption` + `\label{tab:<id>}` (tables of more than 8 columns in a `\resizebox`; needs `booktabs` and `graphicx`); the bare `tabular` files are unchanged. `venv.txt` is now git-ignored; the co-author's `.venv` was not touched.
+
+### Limitations added in Phase 7
+- **Two external datasets only;** Give Me Some Credit was not available. Licences, URLs and access dates are unverified (FILL IN in the data cards).
+- **Small n (German Credit, 1,000 rows, 300 positives):** wide CIs, repeats share the same data (Nadeau–Bengio correction applied), TOST has little power, and H28/H26 use the small-n rules. Verdicts there are weak evidence.
+- **Different label definitions, features and populations:** German Credit is an application-time loan dataset (bad credit risk); Taiwan is next-month card default with six months of billing history (PAY_0 is very predictive); neither has Lending Club's fields. Base rates are .30 and .22 versus .15–.20.
+- **No time variable and no cash flows:** random stratified splits only (no out-of-time or drift check) and no profit analysis.
+- **Default hyperparameters, one split protocol per dataset;** German uses 70/30 (not the 64/16/20 of the main study) to keep positives in the test set; Taiwan uses 80/20 with OOF on the 80%.
+- **Taiwan contains 35 exact duplicate rows (kept);** EDUCATION/MARRIAGE contain undocumented codes (kept as nominal levels); sensitive attributes (sex, age, marital status, foreign worker) are used as features as in the standard benchmarks, with no fairness review.
+- **C1–C5 thresholds were chosen by us (before the analysis);** other cut-offs could reclassify borderline rows (e.g. Taiwan C4 = .667 vs .70).
+
+### Phase 7 open items before manuscript drafting
+1. Fill in data URL, licence and access date for both external datasets and for Lending Club (data cards, `reproduce_all.sh`).
+2. Decide whether a third dataset (Give Me Some Credit, Kaggle login required, or another) is wanted; if so, place the file in `external_data/` and add a loader.
+3. Decide how to present H28 on German Credit (borderline NOT SUPPORTED vs underpowered) and H26 on German Credit (supported by the CI rule while the mean sits .04 above π).
+4. Clean-clone rerun of `scripts/reproduce_all.sh` (fast stages) is deferred by decision; commands marked [inferred] remain unverified.
+5. Table budget: main text T1 (compact), T3, T4, T6, T8, T10, T14, plus the replication table T17 if the authors agree; the rest in the supplement.
+6. Phase 6 open items 1–3, 5, 6 (T7a width) and 9 remain open.
+
 ## Decisions log
 | Date | Decision | Reason |
 |------|----------|--------|
@@ -455,6 +510,13 @@ Reading: the configuration's calibration is clearly worse on the new year (ECE .
 | 2026-10-17 | T15 / claims audit are parsed mechanically from the tracker's claim tables; the category mapping (WRONG = WRONG/REJECTED/WITHDRAWN/NOT SUPPORTED, etc.) is documented in `claims_audit.md` | Avoids a second hand-maintained list |
 | 2026-10-17 | T14: H1–H4 carry no frozen pre-registration commit (stated in the Phase 2/3A task prompts; first committed with results at b7a4fee and 7ac7a5d) | Honest disclosure |
 | 2026-10-17 | Verification corrections: H4 J-lost wording, H12 labelled as a mean over k, 3A AUC-drop range (see Phase 6 results) | Found by `paper_assets/verify.py` |
+| 2026-10-17 | Phase 7 pre-registration (H26–H28) at a23c443; clarifications at b6ae301 before scoring; replication criteria C1–C5 at 7ff57a7 before external analysis | Pre-registration discipline |
+| 2026-10-17 | Main-text tables: T1 (compact), T3, T4, T6, T8, T10, T14; others in the supplement | Author decision (Phase 6 answers) |
+| 2026-10-17 | Drift stated as absolute out-of-time ECE with CIs (T10a, T12g, claim table); ratio is fold-dependent | Author decision; H25 not supported |
+| 2026-10-17 | Captions and labels added to LaTeX tables (`paper_assets/tables/captioned/`), bare tabulars kept | Author decision |
+| 2026-10-17 | Data URL, licence and access date left as FILL IN for the authors | Author decision; direct-download URLs only in `scripts/fetch_external.sh` |
+| 2026-10-17 | Clean-clone rerun of `reproduce_all.sh` deferred until after Phase 7 | Author decision |
+| 2026-10-17 | `venv.txt` git-ignored; co-author's `.venv` untouched; commit-history author left as is | Author decision |
 
 ## Surprising findings (Phase 1)
 - Youden-threshold recall for a single model is unstable to *column order* (RF std .032) — larger than most inter-model recall differences claimed in the paper.
@@ -477,10 +539,20 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 ### Phase 6 changes to the claim table
 | Claim | Status | Evidence |
 |---|---|---|
-| "Calibration drifts out of time, so recalibrate annually" (model card / app) | **SUPPORTED, but the size is revised** | H25 NOT SUPPORTED as a ratio claim: deployed configuration's ECE on the new year is .034/.018/.039 (6–14× the 133k in-time ECE .0028) but only 2.4/2.4/5.8× its own small in-window hold-out ECE |
+| "Calibration drifts out of time, so recalibrate annually" (model card / app) | **SUPPORTED, but the size is revised** | H25 NOT SUPPORTED as a ratio claim. State drift as the absolute ECE on the new year: deployed configuration .0344 [.0325, .0364] (2013), .0179 [.0160, .0192] (2014), .0387 [.0374, .0400] (2015, 36m), bootstrap 95% CIs. The ratio to in-time ECE is fold-dependent (2.4/2.4/5.8× its small in-window hold-out; 6–14× the 133k in-time ECE .0028) and should not be quoted as a single multiple |
 | "Out-of-time AUC is about .016 lower" (model card, from Phase 3) | **WEAKENED for the deployed configuration** | AUC gap vs in-window hold-out +.023/+.006/−.012; no consistent drop |
 | "J lost to a stale threshold is at most .007" (Phase 3B table) | **CORRECTED** | fold means ≤ .004; worst single cell .0146 (6.5% of J_max) |
 | "Expected-profit gain falls from $191.6k to $102.5k with dollar capacity" | **CLARIFIED** | means over k = 30–90%; at k = 50% $242.1k → $122.9k (−49%) |
+
+### Phase 7 changes to the claim table
+| Claim | Status | Evidence |
+|---|---|---|
+| "Calibrated Youden t* ≈ training prevalence" on other datasets | **SURVIVES on Taiwan; SURVIVES on German Credit by the CI rule only** | H26 SUPPORTED on both; Taiwan mean \|t*−π\| .0136 (5/6 models ≤ .02); German mean t* .344 vs π .30 with bootstrap CIs that contain π for 6/6 models |
+| "Balanced weighting pushes raw t* toward 0.5 and leaves tuned recall unchanged" on other datasets | **SURVIVES (random forest excepted)** | H27 SUPPORTED on both; tuned-recall gap .012 (German) and .006 (Taiwan) |
+| "Recall at 0.5 rises sharply with balanced weighting" on other datasets | **WEAKENED on German Credit** | rise .119 on German Credit (below the pre-set .20), .229 on Taiwan |
+| "Raw balanced t* lies near 0.5" on other datasets | **WEAKENED** | share of models within .05 of .5: German .17, Taiwan .67 (random forest .25 on Taiwan) |
+| "Boosting models are interchangeable in AUC" on other datasets | **NOT ESTABLISHED externally** | H28 NOT SUPPORTED on German Credit (LightGBM −.021, borderline CI, n = 1,000), INCONCLUSIVE on Taiwan (deficits ≤ .0024, equivalence not shown) |
+| "Spread of recall across models collapses once thresholds are tuned" on other datasets | **WEAKENED** | balanced spread halves, unweighted spread does not shrink; tuned spread .13–.19 vs .08 on D3 |
 
 ### Phase 5 changes to the claim table
 | Claim | Status | Evidence |
@@ -492,7 +564,7 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 
 ### Limitations added in Phase 5
 - **Prototype status:** not validated for credit decisions; no fairness, stability, security or regulatory review; Docker artefacts were written but not built.
-- **Funded loans only; mature vintages 2010–2015 only** (no 2016+ loans, no 60-month loans after 2013). Out-of-time performance is worse (AUC ≈ −.016; ECE ≈ 8–13× in-time), hence annual recalibration.
+- **Funded loans only; mature vintages 2010–2015 only** (no 2016+ loans, no 60-month loans after 2013). Out-of-time performance is worse (AUC ≈ −.016; absolute ECE on the next year .018–.039 for the deployed configuration, ratio to in-time ECE fold-dependent, H25), hence annual recalibration.
 - **Tiers are review tiers, not accept/reject cutoffs** (approve-all is not beaten by any threshold rule on mature vintages).
 - **Held-out test is a random in-time split;** the reliability-per-tier check does not cover drift.
 - **Input policy:** 60 of ~1,060 scanned held-out loans (5.7%) failed validation (missing or out-of-range values), so the parity sample is the first 1,000 valid ones; the app rejects such inputs rather than imputing.
@@ -536,7 +608,7 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 | Phase 2 profit magnitudes (profit-max accepts ~87%, +$162k over Youden) | **SUPERSEDED** | censored-vintage artefact; on D3 profit-max accepts ≥99.8% at ≤5% and equals approve-all |
 | "Youden gives the best operating point" | **CHANGED (stronger)** | D3 3%: Youden earns 54% less than approve-all ($410k vs $763k per 1000; CI excludes 0); no cutoff beats approve-all at ≤5% |
 | "Thresholds learned on older data go stale under drift" (H4) | **NOT SUPPORTED** | \|Δπ\| up to .029 but t* moves opposite (sign agreement 13%); Youden J lost to a stale threshold: fold means .0021/.0040/.0035 (≤1.6% of J_max), worst single (fold, model, seed) cell .0146 (6.5% of J_max; CatBoost/RF). *[Phase 6 correction: the earlier "≤ .007" was the seed-42 maximum]* |
-| "Isotonic calibration on a recent vintage remains valid" | **WEAKENED** | ECE on next vintage .022–.036 vs .001–.003 in-sample (10–25× worse); worse than raw in 2014 |
+| "Isotonic calibration on a recent vintage remains valid" | **WEAKENED** | ECE on next vintage .022–.036 (absolute; 5 models × 3 seeds, isotonic on the previous year) vs .001–.003 in-sample; the multiple is fold-dependent (H25) so quote the absolute values; worse than raw in 2014 *(wording updated in Phase 7: absolute ECE instead of a 10–25× ratio)* |
 | "Ranking by default risk is useful for capacity-constrained lending" | **CHANGED** | all 10 models earn less than random selection at k=30–70% (lower-risk loans carry lower interest); expected-profit ranking beats random by +$66k…+$266k per 1000 |
 | "Model family matters little" | **CONFIRMED** for AUC (spread .027–.036) and expected-profit ranking; **WEAKENED** as a ranking (Spearman .17 across folds) | |
 | Phase 2 calibration/weighting/leaf-purity results | **CONFIRMED on 3 datasets** | H8 replicates |

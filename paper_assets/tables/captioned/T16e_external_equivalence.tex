@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\caption{Corrected resampled TOST against the best model (raw AUC, unweighted); boosters enter H28, other models are reported for context.}
+\label{tab:T16e_external_equivalence}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllrrrrrrrl}
+\toprule
+dataset & group & model & best & AUC & best AUC & $\Delta$ AUC & CI low & CI high & p (Holm) & TOST p (Holm) & result \\
+\midrule
+German Credit & booster & LightGBM & Random Forest & 0.7608 & 0.7816 & -0.0208 & -0.0414 & -0.0002 & 0.1899 & 1.0000 & NOT EQUIVALENT \\
+German Credit & booster & XGBoost & Random Forest & 0.7730 & 0.7816 & -0.0086 & -0.0287 & +0.0116 & 1.0000 & 1.0000 & INCONCLUSIVE \\
+German Credit & booster & CatBoost & Random Forest & 0.7740 & 0.7816 & -0.0076 & -0.0250 & +0.0098 & 1.0000 & 1.0000 & INCONCLUSIVE \\
+German Credit & booster & Gradient Boosting & Random Forest & 0.7733 & 0.7816 & -0.0083 & -0.0345 & +0.0178 & 1.0000 & 1.0000 & INCONCLUSIVE \\
+German Credit & other & Logistic Regression & Random Forest & 0.7743 & 0.7816 & -0.0073 & -0.0308 & +0.0162 & 0.5301 & 0.5784 & INCONCLUSIVE \\
+Taiwan default & booster & LightGBM & CatBoost & 0.7806 & 0.7828 & -0.0022 & -0.0063 & +0.0018 & 0.5600 & 0.1536 & INCONCLUSIVE \\
+Taiwan default & booster & XGBoost & CatBoost & 0.7810 & 0.7828 & -0.0018 & -0.0052 & +0.0015 & 0.5600 & 0.0932 & INCONCLUSIVE \\
+Taiwan default & booster & Gradient Boosting & CatBoost & 0.7804 & 0.7828 & -0.0024 & -0.0062 & +0.0014 & 0.5600 & 0.1536 & INCONCLUSIVE \\
+Taiwan default & other & Logistic Regression & CatBoost & 0.7203 & 0.7828 & -0.0625 & -0.0709 & -0.0541 & 0.0000 & 1.0000 & NOT EQUIVALENT \\
+Taiwan default & other & Random Forest & CatBoost & 0.7623 & 0.7828 & -0.0205 & -0.0256 & -0.0154 & 0.0000 & 1.0000 & NOT EQUIVALENT \\
+\bottomrule
+\end{tabular}}
+\end{table}
