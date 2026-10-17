@@ -93,3 +93,6 @@ catboost_info/
 !paper_assets/tables/*.csv
 !paper_assets/*.csv
 !paper_assets/figures/*.png
+
+external_data/
+venv.txt
