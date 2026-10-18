@@ -539,7 +539,7 @@ _Mapped to the manuscript sections by the author (2026-10-15)._
 ### Phase 6 changes to the claim table
 | Claim | Status | Evidence |
 |---|---|---|
-| "Calibration drifts out of time, so recalibrate annually" (model card / app) | **SUPPORTED, but the size is revised** | H25 NOT SUPPORTED as a ratio claim. State drift as the absolute ECE on the new year: deployed configuration .0344 [.0325, .0364] (2013), .0179 [.0160, .0192] (2014), .0387 [.0374, .0400] (2015, 36m), bootstrap 95% CIs. The ratio to in-time ECE is fold-dependent (2.4/2.4/5.8× its small in-window hold-out; 6–14× the 133k in-time ECE .0028) and should not be quoted as a single multiple |
+| "Calibration drifts out of time, so recalibrate annually" (model card / app) | **SUPPORTED, stated as absolute ECE** | H25 NOT SUPPORTED as a ratio claim. State drift as the absolute ECE on the new year: deployed configuration .0344 [.0325, .0364] (2013), .0179 [.0160, .0192] (2014), .0387 [.0374, .0400] (2015, 36m), bootstrap 95% CIs, against in-time ECE .0141 / .0074 / .0067. The ratio is fold-dependent and is not quoted as a multiple |
 | "Out-of-time AUC is about .016 lower" (model card, from Phase 3) | **WEAKENED for the deployed configuration** | AUC gap vs in-window hold-out +.023/+.006/−.012; no consistent drop |
 | "J lost to a stale threshold is at most .007" (Phase 3B table) | **CORRECTED** | fold means ≤ .004; worst single cell .0146 (6.5% of J_max) |
 | "Expected-profit gain falls from $191.6k to $102.5k with dollar capacity" | **CLARIFIED** | means over k = 30–90%; at k = 50% $242.1k → $122.9k (−49%) |

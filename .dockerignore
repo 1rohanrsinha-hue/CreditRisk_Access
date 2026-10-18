@@ -1,0 +1,23 @@
+# data and caches (never in the image)
+accepted_2007_to_2018Q4.csv
+*.csv.gz
+.cache/
+catboost_info/
+venv/
+.venv/
+venv.txt
+__pycache__/
+*.pyc
+.git/
+.gitignore
+# legacy pickles; only models/deploy/ is shipped
+models/*.pkl
+models/*.joblib
+# not needed at runtime
+tests/
+scripts/
+experiments/*.py
+experiments/results/*.json
+EXTENSION_TRACKER.md
+requirements.txt
+requirements-lock.txt

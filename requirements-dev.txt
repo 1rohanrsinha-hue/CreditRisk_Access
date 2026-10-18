@@ -1,0 +1,2 @@
+# test dependencies (not needed to reproduce the study)
+pytest==9.1.1
